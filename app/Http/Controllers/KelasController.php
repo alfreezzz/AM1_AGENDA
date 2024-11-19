@@ -103,7 +103,7 @@ class KelasController extends Controller
      */
     public function edit(string $id)
     {
-        $kelas = Kelas::findOrFail($id);
+        $kelas = Kelas::with('dataGuruKelas')->findOrFail($id);
         $jurusan = Jurusan::all();
         return view('admin.kelas.edit', compact('kelas', 'jurusan'),  ['title' => 'Edit Data Kelas']);
     }

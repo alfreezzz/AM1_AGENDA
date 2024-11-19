@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Kelas;
-use App\Models\Data_guru;
+use App\Models\Mapel;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -27,20 +27,16 @@ class UserController extends Controller
             $userQuery->where('name', 'like', '%' . $search . '%');
         }
 
-        $user = $userQuery->get();
+        $user = $userQuery->with('kelas')->get();
 
         // Mendapatkan data kelas dan data guru dengan pengurutan kode_guru
         $kelas = Kelas::all();
-        $data_guru = Data_guru::all()->sort(function ($a, $b) {
-            preg_match('/(\d+)([a-z]*)/', $a->kode_guru, $matchesA);
-            preg_match('/(\d+)([a-z]*)/', $b->kode_guru, $matchesB);
 
-            return $matchesA[1] === $matchesB[1]
-                ? strcmp($matchesA[2], $matchesB[2])
-                : $matchesA[1] - $matchesB[1];
-        });
+        $data_guru = User::with('mapels')->get();
+        $data_guru = $data_guru->toArray();
+        $data_guru = collect($data_guru);
 
-        return view('admin.user.index', compact('user', 'kelas', 'data_guru'), ['title' => 'Data Pengguna']);
+        return view('admin.user.index', compact('user', 'kelas'), ['title' => 'Data Pengguna']);
     }
 
     public function create()
@@ -62,16 +58,9 @@ class UserController extends Controller
             ->orderBy('kelas_id', 'asc')
             ->get();
 
-        $data_guru = Data_guru::all()->sort(function ($a, $b) {
-            preg_match('/(\d+)([a-z]*)/', $a->kode_guru, $matchesA);
-            preg_match('/(\d+)([a-z]*)/', $b->kode_guru, $matchesB);
+        $mapel = Mapel::all();
 
-            return $matchesA[1] === $matchesB[1]
-                ? strcmp($matchesA[2], $matchesB[2])
-                : $matchesA[1] - $matchesB[1];
-        });
-
-        return view('admin.user.create', compact('user', 'kelas', 'data_guru'), ['title' => 'Tambah Pengguna']);
+        return view('admin.user.create', compact('user', 'kelas', 'mapel'), ['title' => 'Tambah Pengguna']);
     }
 
     public function store(Request $request)
@@ -81,16 +70,13 @@ class UserController extends Controller
             'password' => 'required|min:6',
             'role' => 'required',
             'kelas_id' => 'nullable|exists:kelas,id|required_if:role,Sekretaris',
-            'kode_guru' => 'nullable|exists:data_gurus,id|required_if:role,Guru',
+            'mapel_ids' => 'nullable|required_if:role,Guru|array',
+            'kelas_ids' => 'nullable|required_if:role,Guru|array',
         ]);
 
         // Pastikan kelas_id hanya bisa diisi oleh Sekretaris
         if ($request->role !== 'Sekretaris' && $request->filled('kelas_id')) {
             return redirect()->back()->withErrors(['kelas_id' => 'Kelas hanya dapat dipilih oleh pengguna dengan peran Sekretaris.']);
-        }
-
-        if ($request->role !== 'Guru' && $request->filled('kode_guru')) {
-            return redirect()->back()->withErrors(['kode_guru' => 'Kode guru hanya dapat dipilih oleh pengguna dengan peran Guru.']);
         }
 
         $add = new User;
@@ -102,12 +88,18 @@ class UserController extends Controller
 
         $add->save();
 
+        if ($request->role === 'Guru') {
+            $add->mapels()->sync($request->mapel_ids);
+            $add->dataKelas()->sync($request->kelas_ids);
+        }
+
         return redirect('user')->with('status', 'Data berhasil ditambah');
     }
 
     public function edit(string $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('mapels')->findOrFail($id);
+        $mapel = Mapel::all();
 
         $currentMonth = date('m');
         $currentYear = date('Y');
@@ -124,16 +116,7 @@ class UserController extends Controller
             ->orderBy('kelas_id', 'asc')
             ->get();
 
-        $data_guru = Data_guru::all()->sort(function ($a, $b) {
-            preg_match('/(\d+)([a-z]*)/', $a->kode_guru, $matchesA);
-            preg_match('/(\d+)([a-z]*)/', $b->kode_guru, $matchesB);
-
-            return $matchesA[1] === $matchesB[1]
-                ? strcmp($matchesA[2], $matchesB[2])
-                : $matchesA[1] - $matchesB[1];
-        });
-
-        return view('admin.user.edit', compact('user', 'kelas', 'data_guru'), ['title' => 'Edit Pengguna']);
+        return view('admin.user.edit', compact('user', 'kelas', 'mapel'), ['title' => 'Edit Pengguna']);
     }
 
     public function update(Request $request, string $id)
@@ -143,16 +126,13 @@ class UserController extends Controller
             'password' => 'nullable|min:6',
             'role' => 'required',
             'kelas_id' => 'nullable|exists:kelas,id|required_if:role,Sekretaris',
-            'kode_guru' => 'nullable|exists:data_gurus,id|required_if:role,Guru',
+            'mapel_ids' => 'nullable|required_if:role,Guru|array',
+            'kelas_ids' => 'nullable|required_if:role,Guru|array',
         ]);
 
         // Pastikan kelas_id hanya bisa diisi oleh Sekretaris
         if ($request->role !== 'Sekretaris' && $request->filled('kelas_id')) {
             return redirect()->back()->withErrors(['kelas_id' => 'Kelas hanya dapat dipilih oleh pengguna dengan peran Sekretaris.']);
-        }
-
-        if ($request->role !== 'Guru' && $request->filled('kode_guru')) {
-            return redirect()->back()->withErrors(['kode_guru' => 'Kode guru hanya dapat dipilih oleh pengguna dengan peran Guru.']);
         }
 
         $user = User::findOrFail($id);
@@ -164,8 +144,13 @@ class UserController extends Controller
 
         $user->role = $request->role;
         $user->kelas_id = $request->kelas_id;
-        $user->kode_guru = $request->kode_guru;
+
         $user->save();
+
+        if ($request->role === 'Guru') {
+            $user->mapels()->sync($request->mapel_ids);
+            $user->dataKelas()->sync($request->kelas_ids);
+        }
 
         return redirect('user')->with('status', 'Data berhasil diupdate');
     }

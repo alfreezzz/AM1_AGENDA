@@ -20,7 +20,6 @@
                 <thead class="sticky top-0 bg-green-500 text-white">
                     <tr class="text-center">
                         <th class="py-3 px-6">Nama Mapel</th>
-                        <th class="py-3 px-6">Nama Guru</th>
                         <th class="py-3 px-6">Kode Guru</th>
                         <th class="py-3 px-6">Aksi</th>
                     </tr>
@@ -29,14 +28,9 @@
                     @foreach ($mapel as $item)
                     <tr class="border-t border-gray-200 hover:bg-gray-100 text-center transition duration-200">
                         <td class="py-3 px-6">{{ $item->nama_mapel }}</td>
-                        <td class="py-3 px-6 text-left">
-                            @foreach ($item->dataGurus as $guru)
-                                {{ $guru->nama_guru }}{{ !$loop->last ? ',' : '' }}<br>
-                            @endforeach
-                        </td>
                         <td class="py-3 px-6">
                             @foreach ($item->dataGurus as $guru)
-                                {{ $guru->kode_guru }}{{ !$loop->last ? ',' : '' }}<br>
+                                {{ $guru->name }}{{ !$loop->last ? ',' : '' }}<br>
                             @endforeach
                         </td>
                         <td class="px-4 py-2 text-center">

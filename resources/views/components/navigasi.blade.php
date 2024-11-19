@@ -15,10 +15,10 @@
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M6.012 18H21V4a2 2 0 0 0-2-2H6c-1.206 0-3 .799-3 3v14c0 2.201 1.794 3 3 3h15v-2H6.012C5.55 19.988 5 19.805 5 19s.55-.988 1.012-1zM8 6h9v2H8V6z"></path></svg>
         <span>Mapel</span>
       </a>
-      <a href="{{ url('data_guru') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('data_guru') || Request::is('data_guru/create') || Request::is('data_guru/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
+      {{-- <a href="{{ url('data_guru') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('data_guru') || Request::is('data_guru/create') || Request::is('data_guru/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M160 64c0-35.3 28.7-64 64-64L576 0c35.3 0 64 28.7 64 64l0 288c0 35.3-28.7 64-64 64l-239.2 0c-11.8-25.5-29.9-47.5-52.4-64l99.6 0 0-32c0-17.7 14.3-32 32-32l64 0c17.7 0 32 14.3 32 32l0 32 64 0 0-288L224 64l0 49.1C205.2 102.2 183.3 96 160 96l0-32zm0 64a96 96 0 1 1 0 192 96 96 0 1 1 0-192zM133.3 352l53.3 0C260.3 352 320 411.7 320 485.3c0 14.7-11.9 26.7-26.7 26.7L26.7 512C11.9 512 0 500.1 0 485.3C0 411.7 59.7 352 133.3 352z"/></svg>
         <span>Guru</span>
-      </a>
+      </a> --}}
       <a href="{{ url('jurusan') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('jurusan') || Request::is('jurusan/create') || Request::is('jurusan/*/edit') || Request::is('jurusan/*/kelas') || Request::is('kelas/create') || Request::is('kelas/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" ><path fill="currentColor" d="M224 128v704h576V128zm-32-64h640a32 32 0 0 1 32 32v768a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32V96a32 32 0 0 1 32-32"></path><path fill="currentColor" d="M64 832h896v64H64zm256-640h128v96H320z"></path><path fill="currentColor" d="M384 832h256v-64a128 128 0 1 0-256 0zm128-256a192 192 0 0 1 192 192v128H320V768a192 192 0 0 1 192-192M320 384h128v96H320zm256-192h128v96H576zm0 192h128v96H576z"></path></svg>
         <span>Kelas & Jurusan</span>

@@ -37,17 +37,36 @@
                 </div>
 
                 <div id="kode-guru-section" style="display: none;">
-                    <label for="kode_guru" class="block text-sm font-medium text-gray-700">Kode Guru</label>
-                    <select class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('kode_guru') border-red-500 @enderror" name="kode_guru" id="kode_guru" style="padding-left: 10px;">
-                        <option value="">--Pilih--</option>
-                        @foreach ($data_guru as $item)
-                            <option value="{{ $item->id }}" {{ old('kode_guru', $user->kode_guru) == $item->id ? 'selected' : '' }}>{{ $item->kode_guru }}</option>
+                    <label for="mata_pelajaran" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
+                    <div class="mt-2 space-y-2">
+                        @foreach($mapel as $item)
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" name="mapel_ids[]" value="{{ $item->id }}" 
+                                    class="text-green-500 focus:ring-green-500"
+                                    {{ in_array($item->id, $user->mapels->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                <span>{{ $item->nama_mapel }}</span>
+                            </label>
                         @endforeach
-                    </select>
-                    @error('kode_guru')
+                    </div>
+                    @error('mapel_ids')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                </div>
+
+                    <label for="kelas" class="block text-sm font-medium text-gray-700 mt-3">Kelas Mengajar</label>
+                    <div class="mt-2 space-y-2">
+                        @foreach($kelas as $item)
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" name="kelas_ids[]" value="{{ $item->id }}" 
+                                    class="text-green-500 focus:ring-green-500"
+                                    {{ in_array($item->id, $user->dataKelas->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                <span>{{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('kelas_ids')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div> 
 
                 <!-- Dropdown Kelas -->
                 <div id="kelas-section" style="display: none;">

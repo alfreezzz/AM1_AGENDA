@@ -28,8 +28,13 @@ class User extends Authenticatable
         return $this->belongsTo(Kelas::class, 'kelas_id');
     }
 
-    public function data_guru()
+    public function mapels()
     {
-        return $this->belongsTo(Data_guru::class, 'kode_guru');
+        return $this->belongsToMany(Mapel::class, 'guru_mapel', 'user_id', 'mapel_id');
+    }
+
+    public function dataKelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'guru_kelas', 'user_id', 'kelas_id');
     }
 }

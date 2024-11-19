@@ -29,7 +29,7 @@
                         <th class="py-3 px-6">No</th>
                         <th class="py-3 px-6">Username</th>
                         <th class="py-3 px-6">Role</th>
-                        <th class="py-3 px-6">Kode</th>
+                        <th class="py-3 px-6">Mapel & Kelas Mengajar</th>
                         <th class="py-3 px-6">Kelas</th>
                         <th class="py-3 px-6">Aksi</th>
                     </tr>
@@ -41,12 +41,18 @@
                         <td class="py-3 px-6 text-left">{{ $item->name }}</td>
                         <td class="py-3 px-6">{{ $item->role }}</td>
                         <td class="py-3 px-6">
-                            @if($item->data_guru)
-                                {{ $item->data_guru->kode_guru }}
-                            @else
+                            @forelse ($item['mapels'] as $mapel)
+                                {{ $mapel['nama_mapel'] }}{{ !$loop->last ? ',' : '' }}<br>
+                            @empty
                                 -
-                            @endif
-                        </td>
+                            @endforelse
+                            <hr class="border-t-2 border-green-300">
+                            @forelse ($item['dataKelas'] as $kelas)
+                                {{ $kelas['kelas'] }} {{ $kelas->jurusan->jurusan_id }} {{ $kelas->kelas_id }} ({{ $kelas->thn_ajaran }}) {{ !$loop->last ? ',' : '' }}<br>
+                            @empty
+                                -
+                            @endforelse
+                        </td>                        
                         <td class="py-3 px-6">
                             @if($item->kelas)
                                 {{ $item->kelas->kelas }} {{ $item->kelas->jurusan->jurusan_id }} {{ $item->kelas->kelas_id }} ({{ $item->kelas->thn_ajaran }})
