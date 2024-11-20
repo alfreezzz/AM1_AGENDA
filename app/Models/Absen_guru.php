@@ -13,12 +13,12 @@ class Absen_guru extends Model
 
     public function dataGurus()
     {
-        return $this->belongsToMany(Data_guru::class, 'guru_mapel', 'mapel_id', 'data_guru_id');
+        return $this->belongsToMany(Data_guru::class, 'guru_mapel', 'mapel_id', 'user_id');
     }
 
     public function mapels()
     {
-        return $this->belongsToMany(Mapel::class, 'guru_mapel', 'data_guru_id', 'mapel_id');
+        return $this->belongsToMany(Mapel::class, 'guru_mapel', 'user_id', 'mapel_id');
     }
 
     public function mapel()
@@ -29,6 +29,11 @@ class Absen_guru extends Model
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'added_by');
     }
 
     protected $fillable = [

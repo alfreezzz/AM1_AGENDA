@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('aktivitas');
             $table->time('jam_msk');
             $table->time('jam_keluar');
+            $table->unsignedBigInteger('added_by')->nullable(); // Tambahkan kolom di sini
+            $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade'); // Tambahkan relasi
             $table->timestamps();
         });
     }

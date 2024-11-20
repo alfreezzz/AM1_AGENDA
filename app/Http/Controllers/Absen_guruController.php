@@ -33,25 +33,34 @@ class Absen_guruController extends Controller
 
         $currentAcademicYear = "$startYear/$endYear";
 
-        // Periksa apakah admin ingin melihat semua data
+        // Cek apakah admin ingin melihat semua data atau hanya tahun ajaran sekarang
         $showAll = $request->query('show_all', false);
 
-        if (auth()->user()->role === 'Admin' && $showAll) {
-            // Admin dapat melihat semua data
+        if (auth()->user()->role === 'Guru') {
+            // Guru hanya melihat kelas yang diajarkan
+            $kelas = auth()->user()->dataKelas()
+                ->where('thn_ajaran', $currentAcademicYear)
+                ->with('jurusan')
+                ->get();
+        } elseif (auth()->user()->role === 'Admin' && $showAll) {
+            // Admin dapat melihat semua kelas
             $kelas = Kelas::with('jurusan')->get();
         } else {
-            // Guru atau admin default melihat data tahun ajaran berjalan
+            // Default untuk admin tanpa `show_all`
             $kelas = Kelas::with('jurusan')
                 ->where('thn_ajaran', $currentAcademicYear)
                 ->get();
         }
 
-        return view('guru.absen_guru.index', compact('kelas'), ['title' => 'Daftar Kelas']);
+        return view('guru.absen_guru.index', compact('kelas'), [
+            'title' => 'Daftar Kelas',
+            'currentAcademicYear' => $currentAcademicYear,
+        ]);
     }
 
     public function absen_guruByClass(Request $request, $id)
     {
-        $kelas = Kelas::find($id);
+        $kelas = Kelas::findOrFail($id);
 
         $userRole = auth()->user()->role;
 
@@ -60,18 +69,21 @@ class Absen_guruController extends Controller
 
         $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
 
-        $absenGuruQuery = Absen_guru::where('kelas_id', $id)->orderBy('tgl', 'desc');
+        $absenGuruQuery = Absen_guru::where('kelas_id', $id)
+            ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
+            ->orderBy('tgl', 'desc');
 
         if ($filterDate) {
             $absenGuruQuery->whereDate('tgl', $filterDate);
         }
 
         if (auth()->user()->role === 'Guru') {
-            $kode_guru = auth()->user()->kode_guru;
+            $user = auth()->user(); // Ambil data user yang login
             $assignedMapels = DB::table('guru_mapel')
-                ->where('data_guru_id', $kode_guru)
+                ->where('user_id', auth()->user()->id)
                 ->pluck('mapel_id');
 
+            // Filter agenda berdasarkan mapel yang diajarkan
             $absenGuruQuery->whereIn('mapel_id', $assignedMapels);
         }
 
@@ -85,13 +97,8 @@ class Absen_guruController extends Controller
      */
     public function create($kelas_id)
     {
-        $kode_guru = auth()->user()->kode_guru;
-        $assignedMapels = DB::table('guru_mapel')
-            ->where('data_guru_id', $kode_guru)
-            ->pluck('mapel_id');
-
-        // Retrieve subjects based on the IDs from `guru_mapel`
-        $mapel = Mapel::whereIn('id', $assignedMapels)->get();
+        $user = auth()->user();
+        $mapel = $user->mapels;
 
         $kelas = Kelas::findOrFail($kelas_id);
 
@@ -143,6 +150,7 @@ class Absen_guruController extends Controller
         // Simpan array file path sebagai JSON
         $absen_guru->tugas = json_encode($tugasFiles);
 
+        $absen_guru->added_by = auth()->id();
         $absen_guru->save();
 
         // Data notifikasi
@@ -178,13 +186,9 @@ class Absen_guruController extends Controller
     public function edit(string $id)
     {
         $absen_guru = Absen_guru::findOrFail($id);
-        $kode_guru = auth()->user()->kode_guru;
-        $assignedMapels = DB::table('guru_mapel')
-            ->where('data_guru_id', $kode_guru)
-            ->pluck('mapel_id');
+        $user = auth()->user();
+        $mapel = $user->mapels;
 
-        // Retrieve subjects based on the IDs from `guru_mapel`
-        $mapel = Mapel::whereIn('id', $assignedMapels)->get();
         $kelas = Kelas::findOrFail($absen_guru->kelas_id);
         $kelas_id = $kelas->id;
 

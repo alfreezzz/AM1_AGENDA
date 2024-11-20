@@ -13,7 +13,7 @@
                     {{ request()->query('show_all') ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-gray-300 text-gray-800 hover:bg-gray-400' }}">
                 Semua Tahun Ajaran
             </a>
-        </div>        
+        </div>       
     @endif
     @if($kelas->isEmpty())
         <p class="text-center mt-4">Petugas belum menambahkan kelas.</p>

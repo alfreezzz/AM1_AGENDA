@@ -20,7 +20,7 @@
                 <thead class="sticky top-0 bg-green-500 text-white">
                     <tr class="text-center">
                         <th class="py-3 px-6">Nama Mapel</th>
-                        <th class="py-3 px-6">Kode Guru</th>
+                        <th class="py-3 px-6">Nama Guru</th>
                         <th class="py-3 px-6">Aksi</th>
                     </tr>
                 </thead>

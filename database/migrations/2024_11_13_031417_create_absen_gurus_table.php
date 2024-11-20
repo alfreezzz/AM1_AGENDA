@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade')->onUpdate('cascade');
             $table->string('keterangan');
             $table->string('tugas')->nullable();
+            $table->unsignedBigInteger('added_by')->nullable(); // Tambahkan kolom di sini
+            $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade'); // Tambahkan relasi
             $table->timestamps();
         });
     }
