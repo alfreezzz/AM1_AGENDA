@@ -48,8 +48,8 @@ class User extends Authenticatable
         return $this->hasMany(Absen_guru::class, 'user_id');
     }
 
-    public function absensiswa__gurus()
+    public function absensi()
     {
-        return $this->hasMany(Absensiswa_Guru::class, 'user_id');
+        return $this->hasMany(Absensiswa_Guru::class, 'added_by', 'user_id');
     }
 }

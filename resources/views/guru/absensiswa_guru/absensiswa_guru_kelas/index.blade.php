@@ -36,9 +36,9 @@
             <thead class="sticky top-0 bg-green-500 text-white">
                 <tr class="text-center">
                     <th class="py-3 px-6">No</th>
-                    @if(Auth::user()->role == 'Admin')
+                    {{-- @if(Auth::user()->role == 'Admin')
                     <th class="py-3 px-6">Nama Guru</th>
-                    @endif
+                    @endif --}}
                     <th class="py-3 px-6">Mapel</th>
                     <th class="py-3 px-6">Nama Siswa</th>
                     <th class="py-3 px-6">Keterangan</th>
@@ -54,9 +54,9 @@
                 @foreach ($absensiGroup as $item)
                     <tr class="border-t border-gray-200 hover:bg-gray-100 text-center">
                         <td class="py-3 px-6">{{ $loop->iteration }}</td>
-                        @if(Auth::user()->role == 'Admin')
-                        <td class="px-4 py-2">{{ $item->user->name }}</td>
-                        @endif
+                        {{-- @if(Auth::user()->role == 'Admin')
+                        <td class="px-4 py-2">{{ $item->user->name ?? 'Tidak diketahui' }}</td>
+                        @endif --}}
                         <td class="py-3 px-6">{{ $item->mapel->nama_mapel }}</td>
                         <td class="px-4 py-2 text-left">{{ $item->data_siswa->nama_siswa }}</td>
                         <td class="px-4 py-2">{{ $item->keterangan }}</td>
