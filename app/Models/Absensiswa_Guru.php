@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Agenda extends Model
+class Absensiswa_Guru extends Model
 {
     use HasFactory;
 
-    protected $table = 'agendas';
+    protected $table = 'absensiswa__gurus';
+
+    protected $fillable = ['tgl', 'keterangan', 'kelas_id', 'nis_id', 'mapel_id'];
 
     public function kelas()
     {
@@ -29,5 +31,10 @@ class Agenda extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'added_by');
+    }
+
+    public function data_siswa()
+    {
+        return $this->belongsTo(Data_siswa::class, 'nis_id');
     }
 }
