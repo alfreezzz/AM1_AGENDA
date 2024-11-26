@@ -11,6 +11,11 @@ class Absen_guru extends Model
 
     protected $table = 'absen_gurus';
 
+    public function dataGurus()
+    {
+        return $this->belongsToMany(Data_guru::class, 'guru_mapel', 'mapel_id', 'user_id');
+    }
+
     public function mapels()
     {
         return $this->belongsToMany(Mapel::class, 'guru_mapel', 'user_id', 'mapel_id');

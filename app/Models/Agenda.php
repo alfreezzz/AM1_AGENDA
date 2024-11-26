@@ -11,6 +11,11 @@ class Agenda extends Model
 
     protected $table = 'agendas';
 
+    public function dataGurus()
+    {
+        return $this->belongsToMany(Data_guru::class, 'guru_mapel', 'mapel_id', 'user_id');
+    }
+
     public function kelas()
     {
         return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
