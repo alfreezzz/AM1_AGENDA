@@ -11,6 +11,7 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Data_siswaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\JadwalPelajaranController;
 
 // Halaman Guru
 use App\Http\Controllers\GuruController;
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::resource('data_siswa', Data_siswaController::class);
     Route::resource('user', UserController::class);
     Route::get('jurusan/{id}/kelas', [KelasController::class, 'kelasByJurusan'])->name('jurusan.kelas');
+    Route::resource('jadwal_pelajaran', JadwalPelajaranController::class);
 });
 
 // Halaman Guru
