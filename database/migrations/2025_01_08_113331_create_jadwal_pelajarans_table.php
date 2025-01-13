@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat']);
             $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade');
-            $table->foreignId('guru_id')->constrained('data_guru')->onDelete('cascade');
-            $table->foreignId('mapel_id')->constrained('mapel')->onDelete('cascade');
+            $table->foreignId('guru_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('mapel_id')->constrained('mapels')->onDelete('cascade');
             $table->json('jam_ke');
             $table->string('thn_ajaran');
             $table->timestamps();

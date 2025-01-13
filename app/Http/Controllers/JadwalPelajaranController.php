@@ -2,63 +2,84 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JadwalPelajaran;
+use App\Models\Kelas;
+use App\Models\Mapel;
+use App\Models\Data_guru;
 use Illuminate\Http\Request;
 
 class JadwalPelajaranController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $jadwal = JadwalPelajaran::with(['kelas', 'mapel', 'guru'])->get();
+        return view('admin.jadwal_pelajaran.index', compact('jadwal'), ['title' => 'Jadwal Pelajaran']);
+        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $kelas = Kelas::all();
+        $mapel = Mapel::all();
+        $guru = Data_guru::all();
+        return view('jadwal_pelajaran.create', compact('kelas', 'mapel', 'guru'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'hari' => 'required|string',
+            'kelas_id' => 'required|exists:kelas,id',
+            'guru_id' => 'required|exists:data_guru,id',
+            'mapel_id' => 'required|exists:mapel,id',
+            'jam_ke' => 'required|array',
+            'jam_ke.*' => 'integer|min:1',
+            'thn_ajaran' => 'required|string',
+        ]);
+
+        $validatedData['jam_ke'] = implode(',', $validatedData['jam_ke']);
+
+        JadwalPelajaran::create($validatedData);
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $jadwal = JadwalPelajaran::findOrFail($id);
+        $kelas = Kelas::all();
+        $mapel = Mapel::all();
+        $guru = Data_guru::all();
+        $jadwal->jam_ke = explode(',', $jadwal->jam_ke);
+
+        return view('jadwal.edit', compact('jadwal', 'kelas', 'mapel', 'guru'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'hari' => 'required|string',
+            'kelas_id' => 'required|exists:kelas,id',
+            'guru_id' => 'required|exists:data_guru,id',
+            'mapel_id' => 'required|exists:mapel,id',
+            'jam_ke' => 'required|array',
+            'jam_ke.*' => 'integer|min:1',
+            'thn_ajaran' => 'required|string',
+        ]);
+
+        $validatedData['jam_ke'] = implode(',', $validatedData['jam_ke']);
+
+        $jadwal = JadwalPelajaran::findOrFail($id);
+        $jadwal->update($validatedData);
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $jadwal = JadwalPelajaran::findOrFail($id);
+        $jadwal->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
     }
 }
