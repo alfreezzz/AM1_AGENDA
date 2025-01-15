@@ -24,13 +24,13 @@
     </div>
 
     <!-- Footer Logos -->
-    <div class="flex justify-center space-x-4 py-6">
-        <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="h-10">
-        <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-10">
-        <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="h-10">
-        <img src="{{ asset('assets/images/LOGO-AKL-01-500x500.png') }}" alt="AKL" class="h-10">
-        <img src="{{ asset('assets/images/BR-500x500.png') }}" alt="BR" class="h-10">
-        <img src="{{ asset('assets/images/Logo-TB-OK-01-500x500.png') }}" alt="DPB" class="h-10">
-        <img src="{{ asset('assets/images/LOGO-LPS-01-500x500.png') }}" alt="LPS" class="h-10">
-        <img src="{{ asset('assets/images/MP-Baru-500x500.png') }}" alt="MP" class="h-10">
+    <div class="flex justify-center space-x-4 py-6 items-center ">
+        <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="h-8">
+        <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-6">
+        <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="h-8">
+        <img src="{{ asset('assets/images/LOGO-AKL-01-500x500.png') }}" alt="AKL" class="h-8">
+        <img src="{{ asset('assets/images/BR-500x500.png') }}" alt="BR" class="h-8">
+        <img src="{{ asset('assets/images/Logo-TB-OK-01-500x500.png') }}" alt="DPB" class="h-8">
+        <img src="{{ asset('assets/images/LOGO-LPS-01-500x500.png') }}" alt="LPS" class="h-8">
+        <img src="{{ asset('assets/images/MP-Baru-500x500.png') }}" alt="MP" class="h-8">
     </div>

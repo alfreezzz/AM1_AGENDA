@@ -10,9 +10,12 @@
   @vite('resources/css/app.css')
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    
+  </style>
 </head>
 <body class="bg-gray-100 font-sans antialiased h-screen overflow-y-auto">
-  <div x-data="{ sidebarOpen: false }" class="flex h-full">
+  <div x-data="{ sidebarOpen: false }" class="back flex h-full">
     
     <!-- Sidebar -->
     <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform transition-transform duration-200 ease-in-out md:translate-x-0 flex flex-col z-30">
