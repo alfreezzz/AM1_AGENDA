@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class JadwalPelajaran extends Model
 {
+    protected $table = 'jadwal_pelajarans';
+
     protected $fillable = [
         'id' ,
         'hari',
@@ -23,11 +25,11 @@ class JadwalPelajaran extends Model
 
     public function mapel()
     {
-        return $this->belongsTo(Mapel::class);
+        return $this->belongsTo(Mapel::class, 'mapel_id');
     }
 
-    public function guru()
+    public function user()
     {
-        return $this->belongsTo(Data_guru::class);
+        return $this->belongsTo(User::class);
     }
 }
