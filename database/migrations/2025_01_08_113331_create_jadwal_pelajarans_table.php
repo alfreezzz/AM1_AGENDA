@@ -24,8 +24,10 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('jadwal_pelajarans');
+        Schema::table('jadwal_pelajarans', function (Blueprint $table) {
+            $table->string('jam_ke')->change(); // Sesuaikan dengan tipe data awal
+        });
     }
 };
