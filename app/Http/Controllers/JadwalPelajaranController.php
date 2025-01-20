@@ -27,7 +27,6 @@ class JadwalPelajaranController extends Controller
         $user = User::all();
         return view('admin/jadwal_pelajaran/create', compact('kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
     }
-
     public function store(Request $request)
     {
         // Validasi data yang diterima dari form
@@ -55,13 +54,19 @@ class JadwalPelajaranController extends Controller
 
     public function edit($id)
     {
+        // Ambil data jadwal berdasarkan ID
         $jadwal = JadwalPelajaran::findOrFail($id);
+
+        // Ambil data kelas, mapel, dan guru untuk dropdown
         $kelas = Kelas::all();
         $mapel = Mapel::all();
-        $guru = Data_guru::all();
-        $jadwal->jam_ke = explode(',', $jadwal->jam_ke);
+        $user = User::all();
 
-        return view('jadwal.edit', compact('jadwal', 'kelas', 'mapel', 'guru'));
+        // Konversi 'jam_ke' dari JSON ke array agar checkbox dapat diisi
+        $jadwal->jam_ke = json_decode($jadwal->jam_ke, true);
+
+        // Tampilkan halaman edit dengan data
+        return view('admin.jadwal_pelajaran.edit', compact('jadwal', 'kelas', 'mapel', 'user'), ['title' => 'Edit Jadwal Pelajaran']);
     }
 
     public function update(Request $request, $id)
@@ -86,9 +91,13 @@ class JadwalPelajaranController extends Controller
 
     public function destroy($id)
     {
+        // Ambil data jadwal berdasarkan ID
         $jadwal = JadwalPelajaran::findOrFail($id);
+
+        // Hapus data
         $jadwal->delete();
 
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
     }
 }

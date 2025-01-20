@@ -27,14 +27,15 @@
                 <td>{{ $item->kelas->kelas }} {{ $item->kelas->jurusan->jurusan_id }} {{ $item->kelas->kelas_id }} ({{ $item->kelas->thn_ajaran }})</td>
                 <td>{{ $item->mapel->nama_mapel }}</td>
                 <td>{{ $item->user->name}}</td>
-                <td>{{ implode(", ", $item->jam_ke) }}</td>
+                <td>{{ implode(" ", explode(",", $item->jam_ke)) }}</td>
                 <td>{{ $item->thn_ajaran }}</td>
                 <td>
-                    <a href="{{ url('jadwal.edit', $item->id) }}" class="btn btn-warning">Edit</a>
-                    <form action="{{ url('jadwal.destroy', $item->id) }}" method="POST" style="display:inline;">
+                <a href="{{ url('jadwal_pelajaran/' . $item->id . '/edit') }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 transition duration-200">Edit</a>
+                <form action="{{ url('jadwal_pelajaran/' . $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                         @csrf
                         @method('DELETE')
-                        <form action="{{ url('jadwal_pelajaran/' . $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                        <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200">Delete</button>
+
                     </form>
                 </td>
             </tr>
