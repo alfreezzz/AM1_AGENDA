@@ -4,6 +4,40 @@
     <h2>Jadwal Pelajaran</h2>
 
     <a href="{{ url('jadwal_pelajaran/create') }}" class="btn btn-primary mb-3">Tambah Jadwal</a>
+    <link href="{{ asset('css/jadwal.css') }}" rel="stylesheet">
+    <div class="overflow-x-auto">
+    <table class="table-auto w-full text-center border-collapse border border-gray-300">
+        <thead class="bg-blue-700 text-white">
+            <tr>
+                <th class="border border-gray-400 p-2">No</th>
+                <th class="border border-gray-400 p-2">Waktu</th>
+                <th class="border border-gray-400 p-2">Kelas X</th>
+                <th class="border border-gray-400 p-2">Kelas XI</th>
+                <th class="border border-gray-400 p-2">Kelas XII</th>
+            </tr>
+        </thead>
+        <tbody class="text-sm">
+            <!-- Example row -->
+            <tr>
+                <td class="border border-gray-400 p-2">1</td>
+                <td class="border border-gray-400 p-2">07:00 - 08:00</td>
+                <td class="border border-gray-400 p-2 bg-yellow-200">Upacara</td>
+                <td class="border border-gray-400 p-2 bg-yellow-200">Upacara</td>
+                <td class="border border-gray-400 p-2 bg-yellow-200">Upacara</td>
+            </tr>
+            <tr>
+                <td class="border border-gray-400 p-2">2</td>
+                <td class="border border-gray-400 p-2">08:15 - 09:15</td>
+                <td class="border border-gray-400 p-2">Mapel 1</td>
+                <td class="border border-gray-400 p-2">Mapel 2</td>
+                <td class="border border-gray-400 p-2">Mapel 3</td>
+            </tr>
+            <!-- Add more rows as per data -->
+        </tbody>
+    </table>
+</div>
+
+
 
    
 
