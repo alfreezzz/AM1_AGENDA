@@ -58,9 +58,9 @@ class Absen_guruController extends Controller
         ]);
     }
 
-    public function absen_guruByClass(Request $request, $id)
+    public function absen_guruByClass(Request $request, $slug)
     {
-        $kelas = Kelas::findOrFail($id);
+        $kelas = Kelas::where('slug', $slug)->firstOrFail();
 
         $userRole = auth()->user()->role;
 
@@ -69,7 +69,7 @@ class Absen_guruController extends Controller
 
         $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
 
-        $absenGuruQuery = Absen_guru::where('kelas_id', $id)
+        $absenGuruQuery = Absen_guru::where('kelas_id', $kelas->id)
             ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
             ->orderBy('tgl', 'desc');
 
@@ -153,11 +153,14 @@ class Absen_guruController extends Controller
         $absen_guru->added_by = auth()->id();
         $absen_guru->save();
 
+        // Ambil slug kelas
+        $kelas = Kelas::findOrFail($request->kelas_id);
+
         // Data notifikasi
         $data = [
             'title' => 'Absensi Terbaru',
             'message' => 'Absensi baru telah ditambahkan untuk kelas Anda.',
-            'link' => url('/absen_guru/kelas/' . $request->kelas_id),
+            'link' => url('/absen_guru/kelas/' . $kelas->slug), // Gunakan slug
         ];
 
         // Kirim notifikasi ke Sekretaris
@@ -169,7 +172,7 @@ class Absen_guruController extends Controller
             $user->notify(new YourCustomNotification($data));
         }
 
-        return redirect('absen_guru/kelas/' . $request->kelas_id)->with('status', 'Data berhasil ditambah');
+        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
     }
 
     /**
@@ -231,7 +234,8 @@ class Absen_guruController extends Controller
         $absen_guru->tugas = json_encode($existingTugas);
 
         $absen_guru->save();
-        return redirect('absen_guru/kelas/' . $request->kelas_id)->with('status', 'Data berhasil diupdate');
+        $kelas = Kelas::findOrFail($request->kelas_id);
+        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil Diedit');
     }
 
     /**
@@ -243,6 +247,7 @@ class Absen_guruController extends Controller
         $kelas_id = $absen_guru->kelas_id;
         $absen_guru->delete();
 
-        return redirect('absen_guru/kelas/' . $kelas_id)->with('status', 'Data berhasil dihapus');
+        $kelas = Kelas::findOrFail($kelas_id);
+        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
     }
 }

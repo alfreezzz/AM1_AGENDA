@@ -40,47 +40,22 @@ class JadwalPelajaranController extends Controller
             'jam_ke.*' => 'integer|min:1',
             'thn_ajaran' => 'required|string',
         ]);
-<<<<<<< HEAD
-    
-        $validatedData['jam_ke'] = json_encode($validatedData['jam_ke']);
-=======
 
-        // Konversi array ke JSON
         $validatedData['jam_ke'] = json_encode($validatedData['jam_ke']);
-
->>>>>>> 0c05d5382c14b1f903406cd0b436d7913c3cf44c
         JadwalPelajaran::create($validatedData);
 
         return redirect('jadwal_pelajaran')->with('success', 'Jadwal berhasil ditambahkan');
     }
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 0c05d5382c14b1f903406cd0b436d7913c3cf44c
 
     public function edit($id)
     {
         $jadwal = JadwalPelajaran::findOrFail($id);
-<<<<<<< HEAD
-=======
-
-        // Ambil data kelas, mapel, dan guru untuk dropdown
->>>>>>> 0c05d5382c14b1f903406cd0b436d7913c3cf44c
         $kelas = Kelas::all();
         $mapel = Mapel::all();
         $user = User::all();
 
-<<<<<<< HEAD
-        $jadwal->jam_ke = json_decode($jadwal->jam_ke, true);
-    
-=======
-        // Konversi 'jam_ke' dari JSON ke array agar checkbox dapat diisi
         $jadwal->jam_ke = json_decode($jadwal->jam_ke, true);
 
-        // Tampilkan halaman edit dengan data
->>>>>>> 0c05d5382c14b1f903406cd0b436d7913c3cf44c
         return view('admin.jadwal_pelajaran.edit', compact('jadwal', 'kelas', 'mapel', 'user'), ['title' => 'Edit Jadwal Pelajaran']);
     }
 
@@ -103,20 +78,9 @@ class JadwalPelajaranController extends Controller
 
     public function destroy($id)
     {
-<<<<<<< HEAD
         $jadwal = JadwalPelajaran::findOrFail($id);
         $jadwal->delete();
 
         return redirect('jadwal_pelajaran')->with('success', 'Jadwal berhasil dihapus');
-=======
-        // Ambil data jadwal berdasarkan ID
-        $jadwal = JadwalPelajaran::findOrFail($id);
-
-        // Hapus data
-        $jadwal->delete();
-
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
->>>>>>> 0c05d5382c14b1f903406cd0b436d7913c3cf44c
     }
 }

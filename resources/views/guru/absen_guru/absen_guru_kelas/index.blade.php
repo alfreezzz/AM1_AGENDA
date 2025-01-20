@@ -10,11 +10,11 @@
         @endif
 
         <!-- Date Filter Form -->
-        <form method="GET" action="{{ url('absen_guru/kelas/' . $kelas->id) }}" class="flex items-center space-x-2">
+        <form method="GET" action="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
             <input type="date" id="date" name="date" value="{{ $filterDate ?? '' }}" class="py-2 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
             <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Filter
             </button>
-            <a href="{{ url('absen_guru/kelas/' . $kelas->id) }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200">Reset</a>
+            <a href="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200">Reset</a>
         </form>
     </div>
 

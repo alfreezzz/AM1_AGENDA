@@ -9,7 +9,7 @@
         <!-- Main Text -->
         <div class="text-center mx-4 md:mx-10 w-full md:w-2/6">
             <img src="{{ asset('assets/images/icon.png') }}" alt="School Logo" class="mx-auto mb-4">
-            <h2 class="text-lg md:text-xl font-serif">SMK Amaliah 1 & 2 Ciawi</h2>
+            <h2 class="text-lg md:text-xl font-serif">SMK Amaliah 1&2 Ciawi Bogor</h2>
             <p class="italic">Tauhid is Our Fundament</p>
         </div>
 

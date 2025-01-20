@@ -20,10 +20,10 @@
     <!-- Sidebar -->
     <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform transition-transform duration-200 ease-in-out md:translate-x-0 flex flex-col z-30">
       <div class="flex items-center justify-center mt-3 mb-5 mx-3">
-        <div class="flex items-center space-x-4">
-          <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" class="w-12 h-12">
+        <div class="flex items-center space-x-2">
+          <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" class="w-10 h-10">
           <div>
-              <h1 class="text-xs font-semibold leading-tight">SMK Amaliah 1&2 Ciawi</h1>
+              <h1 class="text-xs font-semibold leading-tight">SMK Amaliah 1&2 Ciawi Bogor</h1>
               <p class="italic text-left" style="font-size: 0.5rem;">Tauhid is Our Fundament</p>
           </div>
         </div>
@@ -74,6 +74,7 @@
                             <p class="text-sm font-medium text-gray-800">{{ $notification->data['title'] }}</p>
                             <p class="text-xs text-gray-500">{{ $notification->data['message'] }}</p>
                             <a href="{{ $notification->data['link'] ?? '#' }}" class="text-blue-500 text-xs mt-1 inline-block">Lihat Detail</a>
+
                             <button onclick="deleteNotification('{{ $notification->id }}')" class="text-red-500 text-xs ml-2">Hapus</button>
                         </div>
                     @empty

@@ -30,7 +30,7 @@
             <div class="grid grid-cols-3 gap-4 mb-8 relative">
                 @foreach ($kelas as $item)
                     @if (Str::startsWith(trim($item->kelas), 'X') && !Str::startsWith(trim($item->kelas), 'XI') && !Str::startsWith(trim($item->kelas), 'XII'))
-                        <a href="{{ url('absen_guru/kelas/' . $item->id) }}" class="block text-center py-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
+                        <a href="{{ url('absen_guru/kelas/' . $item->slug) }}" class="block text-center py-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
                             {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})
                         </a>
                     @endif
@@ -44,7 +44,7 @@
             <div class="grid grid-cols-3 gap-4 mb-8 relative">
                 @foreach ($kelas as $item)
                     @if (Str::startsWith(trim($item->kelas), 'XI') && !Str::startsWith(trim($item->kelas), 'XII'))
-                        <a href="{{ url('absen_guru/kelas/' . $item->id) }}" class="block text-center py-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
+                        <a href="{{ url('absen_guru/kelas/' . $item->slug) }}" class="block text-center py-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
                             {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})
                         </a>
                     @endif
@@ -58,7 +58,7 @@
             <div class="grid grid-cols-3 gap-4 relative">
                 @foreach ($kelas as $item)
                     @if (Str::startsWith(trim($item->kelas), 'XII'))
-                        <a href="{{ url('absen_guru/kelas/' . $item->id) }}" class="block text-center py-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
+                        <a href="{{ url('absen_guru/kelas/' . $item->slug) }}" class="block text-center py-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
                             {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})
                         </a>
                     @endif
