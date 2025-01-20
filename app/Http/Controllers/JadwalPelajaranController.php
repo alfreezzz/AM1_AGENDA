@@ -28,43 +28,46 @@ class JadwalPelajaranController extends Controller
         $user = User::all();
         return view('admin/jadwal_pelajaran/create', compact('kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
     }
-
     public function store(Request $request)
-{
-    // Validasi data yang diterima dari form
-    $validatedData = $request->validate([
-        'hari' => 'required|string',
-        'kelas_id' => 'required|exists:kelas,id',
-        'guru_id' => 'required|exists:data_gurus,id', // Pastikan menggunakan nama tabel yang benar
-        'mapel_id' => 'required|exists:mapel,id',
-        'jam_ke' => 'required|array',
-        'jam_ke.*' => 'integer|min:1',
-        'thn_ajaran' => 'required|string',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'hari' => 'required|string',
+            'kelas_id' => 'required|exists:kelas,id',
+            'guru_id' => 'required|exists:users,id',
+            'mapel_id' => 'required|exists:mapels,id',
+            'jam_ke' => 'required|array',
+            'jam_ke.*' => 'integer|min:1',
+            'thn_ajaran' => 'required|string',
+        ]);
     
-    // Menyimpan data 'jam_ke' sebagai string (misalnya "1,2,3")
-    $validatedData['jam_ke'] = implode(',', $validatedData['jam_ke']);
+        // Konversi array ke JSON
+        $validatedData['jam_ke'] = json_encode($validatedData['jam_ke']);
     
-    // Simpan jadwal pelajaran ke database
-    JadwalPelajaran::create($validatedData);
+        JadwalPelajaran::create($validatedData);
     
-    // Kembali ke halaman index dengan pesan sukses
-    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
-}
+        return redirect('jadwal_pelajaran')->with('success', 'Jadwal berhasil ditambahkan');
+    }
+    
 
     
 
     public function edit($id)
     {
+        // Ambil data jadwal berdasarkan ID
         $jadwal = JadwalPelajaran::findOrFail($id);
+    
+        // Ambil data kelas, mapel, dan guru untuk dropdown
         $kelas = Kelas::all();
         $mapel = Mapel::all();
-        $guru = Data_guru::all();
-        $jadwal->jam_ke = explode(',', $jadwal->jam_ke);
-
-        return view('jadwal.edit', compact('jadwal', 'kelas', 'mapel', 'guru'));
+        $user = User::all();
+    
+        // Konversi 'jam_ke' dari JSON ke array agar checkbox dapat diisi
+        $jadwal->jam_ke = json_decode($jadwal->jam_ke, true);
+    
+        // Tampilkan halaman edit dengan data
+        return view('admin.jadwal_pelajaran.edit', compact('jadwal', 'kelas', 'mapel', 'user'), ['title' => 'Edit Jadwal Pelajaran']);
     }
-
+    
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -86,10 +89,15 @@ class JadwalPelajaranController extends Controller
     }
 
     public function destroy($id)
-    {
-        $jadwal = JadwalPelajaran::findOrFail($id);
-        $jadwal->delete();
+{
+    // Ambil data jadwal berdasarkan ID
+    $jadwal = JadwalPelajaran::findOrFail($id);
 
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
-    }
+    // Hapus data
+    $jadwal->delete();
+
+    // Redirect ke halaman index dengan pesan sukses
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
+}
+
 }
