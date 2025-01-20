@@ -32,7 +32,7 @@
 
                 <div>
                     <label for="kelas_id" class="block text-sm font-medium text-gray-700">No Kelas</label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('kelas_id') border-red-500 @enderror" id="kelas_id" name="kelas_id" value="{{ old('kelas_id', $kelas->kelas_id) }}" style="padding-left: 10px;">
+                    <input type="number" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('kelas_id') border-red-500 @enderror" id="kelas_id" name="kelas_id" value="{{ old('kelas_id', $kelas->kelas_id) }}" style="padding-left: 10px;">
                     @error('kelas_id')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror

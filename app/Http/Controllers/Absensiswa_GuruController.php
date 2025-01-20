@@ -56,12 +56,12 @@ class Absensiswa_GuruController extends Controller
         ]);
     }
 
-    public function absensiswa_guruByClass(Request $request, $id)
+    public function absensiswa_guruByClass(Request $request, $slug)
     {
-        $kelas = Kelas::findOrFail($id);
+        $kelas = Kelas::where('slug', $slug)->firstOrFail();
         $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
 
-        $absensiQuery = Absensiswa_Guru::where('kelas_id', $id)
+        $absensiQuery = Absensiswa_Guru::where('kelas_id', $kelas->id)
             ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
             ->orderBy('tgl', 'desc');
 
@@ -152,7 +152,8 @@ class Absensiswa_GuruController extends Controller
             ]);
         }
 
-        return redirect('absensiswa_guru/kelas/' . $request->kelas_id)->with('status', 'Data berhasil ditambah');
+        $kelas = Kelas::findOrFail($request->kelas_id);
+        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
     }
 
     /**
@@ -200,7 +201,8 @@ class Absensiswa_GuruController extends Controller
 
         $absensi->save();
 
-        return redirect('absensiswa_guru/kelas/' . $request->kelas_id)->with('status', 'Data berhasil diupdate');
+        $kelas = Kelas::findOrFail($request->kelas_id);
+        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil Diedit');
     }
 
     /**
@@ -212,6 +214,7 @@ class Absensiswa_GuruController extends Controller
         $kelas_id = $absensi->kelas_id;
         $absensi->delete();
 
-        return redirect('absensiswa_guru/kelas/' . $kelas_id)->with('status', 'Data berhasil dihapus');
+        $kelas = Kelas::findOrFail($kelas_id);
+        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
     }
 }

@@ -28,15 +28,16 @@ class KelasController extends Controller
     //     return view('admin.kelas.index', compact('kelas', 'jurusan'), ['title' => 'Data Kelas & Jurusan']);
     // }
 
-    public function kelasByJurusan($id, Request $request)
+    public function kelasByJurusan($slug, Request $request)
     {
-        $jurusan = Jurusan::findOrFail($id);
+        // Cari jurusan berdasarkan slug
+        $jurusan = Jurusan::where('slug', $slug)->firstOrFail();
 
         // Ambil nilai pencarian dari request
         $search = $request->input('search');
 
         // Query untuk data kelas
-        $kelas = Kelas::where('jurusan_id', $id)
+        $kelas = Kelas::where('jurusan_id', $jurusan->id) // Gunakan ID jurusan
             ->with('jurusan')
             ->when($search, function ($query, $search) {
                 return $query->where('thn_ajaran', 'like', '%' . $search . '%'); // Filter berdasarkan tahun ajaran
@@ -64,30 +65,29 @@ class KelasController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'kelas' => 'required',
-                'thn_ajaran' => 'required',
-                'kelas_id' => 'required',
-                'jurusan' => 'required',
-            ],
-            [
-                'kelas.required' => 'Kelas tidak boleh kosong',
-                'thn_ajaran.required' => 'Tahun ajaran tidak boleh kosong',
-                'kelas_id.required' => 'No kelas tidak boleh kosong',
-                'jurusan.required' => 'Jurusan tidak boleh kosong',
-            ]
-        );
+        $request->validate([
+            'kelas' => 'required',
+            'thn_ajaran' => 'required',
+            'kelas_id' => 'required',
+            'jurusan' => 'required',
+        ], [
+            'kelas.required' => 'Kelas tidak boleh kosong',
+            'thn_ajaran.required' => 'Tahun ajaran tidak boleh kosong',
+            'kelas_id.required' => 'No kelas tidak boleh kosong',
+            'jurusan.required' => 'Jurusan tidak boleh kosong',
+        ]);
 
-        $add = new Kelas;
-        $add->kelas = $request->kelas;
-        $add->thn_ajaran = $request->thn_ajaran;
-        $add->kelas_id = $request->kelas_id;
-        $add->jurusan_id = $request->jurusan; // perbaiki ke jurusan_id
+        $kelas = new Kelas([
+            'kelas' => $request->kelas,
+            'thn_ajaran' => $request->thn_ajaran,
+            'kelas_id' => $request->kelas_id,
+            'jurusan_id' => $request->jurusan,
+        ]);
 
-        $add->save();
+        $kelas->load('jurusan'); // Pastikan relasi jurusan dimuat
+        $kelas->save();
 
-        return redirect('jurusan/' . $add->jurusan_id . '/kelas')->with('status', 'Data berhasil ditambah');
+        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Data berhasil ditambah');
     }
 
     /**
@@ -118,20 +118,22 @@ class KelasController extends Controller
             'thn_ajaran' => 'required',
             'kelas_id' => 'required',
         ], [
-            'kelas' => 'Kelas tidak boleh kosong',
-            'thn_ajaran' => 'Tahun ajaran tidak boleh kosong',
-            'kelas_id' => 'No kelas tidak boleh kosong',
+            'kelas.required' => 'Kelas tidak boleh kosong',
+            'thn_ajaran.required' => 'Tahun ajaran tidak boleh kosong',
+            'kelas_id.required' => 'No kelas tidak boleh kosong',
         ]);
 
         $kelas = Kelas::findOrFail($id);
+        $kelas->update([
+            'kelas' => $request->kelas,
+            'thn_ajaran' => $request->thn_ajaran,
+            'kelas_id' => $request->kelas_id,
+        ]);
 
-        $kelas->kelas = $request->kelas;
-        $kelas->thn_ajaran = $request->thn_ajaran;
-        $kelas->kelas_id = $request->kelas_id;
-
+        $kelas->load('jurusan'); // Pastikan relasi jurusan dimuat
         $kelas->save();
 
-        return redirect('jurusan/' . $kelas->jurusan_id . '/kelas')->with('status', 'Data berhasil diupdate');
+        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Data berhasil diupdate');
     }
 
     /**
@@ -143,6 +145,6 @@ class KelasController extends Controller
         $jurusanId = $kelas->jurusan_id;
         $kelas->delete();
 
-        return redirect('jurusan/' . $jurusanId . '/kelas')->with('status', 'Data berhasil dihapus');
+        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Data berhasil dihapus');
     }
 }

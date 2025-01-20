@@ -55,12 +55,16 @@ class AgendaController extends Controller
         ]);
     }
 
-    public function agendaByClass(Request $request, $id)
+    public function agendaByClass(Request $request, $slug)
     {
-        $kelas = Kelas::findOrFail($id);
+        // Cari kelas berdasarkan slug
+        $kelas = Kelas::where('slug', $slug)->firstOrFail();
+
+        // Ambil tanggal filter dari query string atau gunakan tanggal hari ini
         $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
 
-        $agendaQuery = Agenda::where('kelas_id', $id)
+        // Buat query agenda menggunakan kelas_id
+        $agendaQuery = Agenda::where('kelas_id', $kelas->id) // Gunakan $kelas->id, bukan $slug
             ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
             ->orderBy('tgl', 'desc');
 
@@ -69,19 +73,21 @@ class AgendaController extends Controller
             $agendaQuery->whereDate('tgl', $filterDate);
         }
 
-        // Jika user adalah Guru, terapkan filter berdasarkan `mapel_id` dari `guru_mapel`
+        // Jika user adalah Guru, terapkan filter berdasarkan mapel yang diajarkan
         if (auth()->user()->role === 'Guru') {
             $user = auth()->user(); // Ambil data user yang login
             $assignedMapels = DB::table('guru_mapel')
-                ->where('user_id', auth()->user()->id)
+                ->where('user_id', $user->id)
                 ->pluck('mapel_id');
 
             // Filter agenda berdasarkan mapel yang diajarkan
             $agendaQuery->whereIn('mapel_id', $assignedMapels);
         }
 
+        // Eksekusi query dan ambil data
         $agenda = $agendaQuery->get();
 
+        // Return ke view dengan data
         return view('guru.agenda.agenda_kelas.index', compact('agenda', 'kelas', 'filterDate'), [
             'title' => 'Agenda Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
         ]);
@@ -137,7 +143,8 @@ class AgendaController extends Controller
         $add->added_by = auth()->id();
         $add->save();
 
-        return redirect('agenda/kelas/' . $request->kelas_id)->with('status', 'Data berhasil ditambah');
+        $kelas = Kelas::findOrFail($request->kelas_id);
+        return redirect('agenda/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
     }
 
     /**
@@ -188,7 +195,8 @@ class AgendaController extends Controller
 
         $agenda->save();
 
-        return redirect('agenda/kelas/' . $request->kelas_id)->with('status', 'Data berhasil diupdate');
+        $kelas = Kelas::findOrFail($request->kelas_id);
+        return redirect('agenda/kelas/' . $kelas->slug)->with('status', 'Data berhasil diupdate');
     }
 
     /**
@@ -200,6 +208,7 @@ class AgendaController extends Controller
         $kelas_id = $agenda->kelas_id;
         $agenda->delete();
 
-        return redirect('agenda/kelas/' . $kelas_id)->with('status', 'Data berhasil dihapus');
+        $kelas = Kelas::findOrFail($kelas_id);
+        return redirect('agenda/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
     }
 }

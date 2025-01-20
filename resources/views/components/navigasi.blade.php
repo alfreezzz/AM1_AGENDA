@@ -1,7 +1,8 @@
 @php
-  $kelasId = Auth::user()->kelas_id ?? null;
+    // Ambil slug dari kelas terkait pengguna, jika tersedia
+    $kelasSlug = Auth::user()->kelas ? Auth::user()->kelas->slug : null;
 @endphp
-<nav class="flex flex-col mt-4 space-y-2 px-4">
+<nav class="flex flex-col space-y-2 px-4">
     <!-- Conditional Navigation Links based on User Role -->
     @if (Auth::user()->role == 'Admin')
       <a href="{{ url('admin') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('admin') ? 'bg-green-500' : 'hover:bg-green-500' }}">
@@ -117,6 +118,10 @@
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21"/></svg>
         <span>Absensi Siswa (Sekretaris)</span>
       </a>
+      <a href="{{ url('jadwal_pelajaran') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('jadwal_pelajaran') || Request::is('jadwal_pelajaran/create') || Request::is('jadwal_pelajaran/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
+        <svg class="w-5 h-5 mr-2"  mlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff"   d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/></svg>
+        <span>Jadwal Pelajaran</span>
+      </a>
     @elseif (Auth::user()->role == 'Sekretaris')
       <a href="{{ url('siswa') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('siswa') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -129,9 +134,14 @@
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21"/></svg>
         <span>Absensi</span>
       </a>
-      <a href="{{ $kelasId ? url('absen_guru/kelas/' . $kelasId) : '#' }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_guru/kelas/' . $kelasId) ? 'bg-green-500' : 'hover:bg-green-500' }}">
+      <a href="{{ $kelasSlug ? url('absen_guru/kelas/' . $kelasSlug) : '#' }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_guru/kelas/' . $kelasSlug) ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="m438-240 226-226-58-58-169 169-84-84-57 57 142 142ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
         <span>Tugas</span>
-      </a>
+    </a>
+    <hr class="my-4 border-t-1 border-gray-300">
+    <a href="{{ url('jadwal_pelajaran') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('jadwal_pelajaran') || Request::is('jadwal_pelajaran/create') || Request::is('jadwal_pelajaran/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
+      <svg class="w-5 h-5 mr-2"  mlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff"   d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/></svg>
+      <span>Jadwal Pelajaran</span>
+    </a>
     @endif
 </nav>

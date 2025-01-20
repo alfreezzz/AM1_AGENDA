@@ -72,14 +72,15 @@ class Data_siswaController extends Controller
         $request->validate(
             [
                 'nama_siswa' => 'required',
-                'nis_id' => 'required|max:10',
+                'nis_id' => 'required|min:7|max:10',
                 'gender' => 'required',
                 'kelas_id' => 'required',
             ],
             [
                 'nama_siswa.required' => 'Nama siswa tidak boleh kosong',
                 'nis_id.required' => 'NIS tidak boleh kosong',
-                'nis_id.max' => 'NIS tidak boleh lebih dari 10 karakter',
+                'nis_id.min' => 'NIS harus lebih dari 7 digit',
+                'nis_id.max' => 'NIS tidak boleh lebih dari 10 digit',
                 'gender.required' => 'Gender tidak boleh kosong',
                 'kelas_id.required' => 'Kelas tidak boleh kosong',
             ]
@@ -138,13 +139,15 @@ class Data_siswaController extends Controller
         $request->validate(
             [
                 'nama_siswa' => 'required',
-                'nis_id' => 'required|max:10',
+                'nis_id' => 'required|min:7|max:10',
                 'gender' => 'required',
                 'kelas_id' => 'required',
             ],
             [
                 'nama_siswa.required' => 'Nama siswa tidak boleh kosong',
-                'nis_id.max' => 'NIS tidak boleh lebih dari 10 karakter',
+                'nis_id.required' => 'NIS tidak boleh kosong',
+                'nis_id.min' => 'NIS minimal 7 digit',
+                'nis_id.max' => 'NIS tidak boleh lebih dari 10 digit',
                 'gender.required' => 'Gender tidak boleh kosong',
                 'kelas_id.required' => 'Kelas tidak boleh kosong',
             ]

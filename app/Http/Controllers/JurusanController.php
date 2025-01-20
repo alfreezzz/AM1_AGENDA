@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Jurusan;
+use Illuminate\Http\Request;
 
 class JurusanController extends Controller
 {
@@ -28,9 +29,10 @@ class JurusanController extends Controller
 
         $jurusan = new Jurusan;
         $jurusan->jurusan_id = $request->jurusan_id;
+        $jurusan->slug = Str::slug($request->jurusan_id);
         $jurusan->save();
 
-        return redirect('jurusan/' . $jurusan->id . '/kelas')->with('status', 'Jurusan berhasil ditambah');
+        return redirect('jurusan/' . $jurusan->slug . '/kelas')->with('status', 'Jurusan berhasil ditambah');
     }
 
     public function edit($id)
@@ -47,6 +49,7 @@ class JurusanController extends Controller
 
         $jurusan = Jurusan::findOrFail($id);
         $jurusan->jurusan_id = $request->jurusan_id;
+        $jurusan->slug = Str::slug($request->jurusan_id);
         $jurusan->save();
 
         return redirect('jurusan')->with('status', 'Jurusan berhasil diupdate');
