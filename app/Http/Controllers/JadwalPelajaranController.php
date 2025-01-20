@@ -18,7 +18,6 @@ class JadwalPelajaranController extends Controller
         $user = User::all();
 
         return view('admin.jadwal_pelajaran.index', compact('jadwal'), ['title' => 'Jadwal Pelajaran']);
-        
     }
 
     public function create()
@@ -30,29 +29,29 @@ class JadwalPelajaranController extends Controller
     }
 
     public function store(Request $request)
-{
-    // Validasi data yang diterima dari form
-    $validatedData = $request->validate([
-        'hari' => 'required|string',
-        'kelas_id' => 'required|exists:kelas,id',
-        'guru_id' => 'required|exists:data_gurus,id', // Pastikan menggunakan nama tabel yang benar
-        'mapel_id' => 'required|exists:mapel,id',
-        'jam_ke' => 'required|array',
-        'jam_ke.*' => 'integer|min:1',
-        'thn_ajaran' => 'required|string',
-    ]);
-    
-    // Menyimpan data 'jam_ke' sebagai string (misalnya "1,2,3")
-    $validatedData['jam_ke'] = implode(',', $validatedData['jam_ke']);
-    
-    // Simpan jadwal pelajaran ke database
-    JadwalPelajaran::create($validatedData);
-    
-    // Kembali ke halaman index dengan pesan sukses
-    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
-}
+    {
+        // Validasi data yang diterima dari form
+        $validatedData = $request->validate([
+            'hari' => 'required|string',
+            'kelas_id' => 'required|exists:kelas,id',
+            'guru_id' => 'required|exists:data_gurus,id', // Pastikan menggunakan nama tabel yang benar
+            'mapel_id' => 'required|exists:mapel,id',
+            'jam_ke' => 'required|array',
+            'jam_ke.*' => 'integer|min:1',
+            'thn_ajaran' => 'required|string',
+        ]);
 
-    
+        // Menyimpan data 'jam_ke' sebagai string (misalnya "1,2,3")
+        $validatedData['jam_ke'] = implode(',', $validatedData['jam_ke']);
+
+        // Simpan jadwal pelajaran ke database
+        JadwalPelajaran::create($validatedData);
+
+        // Kembali ke halaman index dengan pesan sukses
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
+    }
+
+
 
     public function edit($id)
     {
