@@ -32,37 +32,66 @@
         <span>Jadwal Pelajaran</span>
       </a>
       <hr class="my-4 border-t-1 border-gray-300">
-      <div class="relative">
-        <button onclick="toggleDropdown()" class="flex items-center w-full text-left px-4 py-2 rounded-md text-sm {{ Request::is('agenda') || Request::is('agenda/kelas/*') || Request::is('absen_guru') || Request::is('absen_guru/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') || Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'hover:bg-green-500 text-gray-300' }}">
-            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <!-- Font Awesome icon for the dropdown -->
-                <path fill="#ffffff" d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z"/>
-            </svg>
-            <span>Log Aktivitas</span>
-            <svg id="dropdownIcon" class="ml-auto w-5 h-5 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>          
+      <div x-data="{ open: false }" class="relative">
+        <button 
+          @click="open = !open" 
+          class="flex items-center w-full text-left px-4 py-2 rounded-md text-sm  outline-none
+          {{ Request::is('agenda') || Request::is('agenda/kelas/*') || Request::is('absen_guru') || Request::is('absen_guru/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') || Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'hover:bg-green-500 text-gray-300' }}">
+          <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="#ffffff" d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z"/>
+          </svg>
+          <span>Log Aktivitas</span>
+          <svg :class="{ 'rotate-180': open }" class="ml-auto w-5 h-5 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
         </button>
-        <!-- Dropdown Content -->
-        <div id="dropdownContent" class="hidden absolute left-0 mt-1 w-full bg-white shadow-md rounded-md z-10">
-            <a href="{{ url('agenda') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('agenda') || Request::is('agenda/kelas/*') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
-                <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-pen-line"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-.5"/><path d="M16 4h2a2 2 0 0 1 1.73 1"/><path d="M8 18h1"/><path d="M21.378 12.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>
-                <span>Agenda</span>
-            </a>
-            <a href="{{ url('absen_guru') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_guru') || Request::is('absen_guru/kelas/*') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
-                <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-PersonCross"><circle cx="12" cy="7" r="5"/><path d="M17 22H5.266a2 2 0 0 1-1.985-2.248l.39-3.124A3 3 0 0 1 6.649 14H7"/><path d="M21 18l-3-3m3 0l-3 3"/></svg>
-                <span>Absensi Guru</span>
-            </a>
-            <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
-                <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21"/></svg>
-                <span>Absensi Siswa (Sekretaris)</span>
-            </a>
-            <a href="{{ url('absensiswa_guru') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
-              <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21"/></svg>
-              <span>Absensi Siswa (Guru)</span>
-            </a>
+      
+        <div 
+          x-show="open" 
+          @click.outside="open = false" @keyup.esc.window="open = false" x.transition.origin.top
+          x-transition:enter="transition ease-out duration-100"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-75"
+          x-transition:leave-start="opacity-100 scale-100"
+          x-transition:leave-end="opacity-0 scale-95"
+          class="absolute left-0 mt-1 w-full bg-white shadow-md rounded-md z-10">
+      
+          <a href="{{ url('agenda') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('agenda') || Request::is('agenda/kelas/*') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="8" height="4" x="8" y="2" rx="1" />
+              <path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-.5" />
+              <path d="M16 4h2a2 2 0 0 1 1.73 1" />
+              <path d="M8 18h1" />
+              <path d="M21.378 12.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+            </svg>
+            <span>Agenda</span>
+          </a>
+      
+          <a href="{{ url('absen_guru') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_guru') || Request::is('absen_guru/kelas/*') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="7" r="5" />
+              <path d="M17 22H5.266a2 2 0 0 1-1.985-2.248l.39-3.124A3 3 0 0 1 6.649 14H7" />
+              <path d="M21 18l-3-3m3 0l-3 3" />
+            </svg>
+            <span>Absensi Guru</span>
+          </a>
+      
+          <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21" />
+            </svg>
+            <span>Absensi Siswa (Sekretaris)</span>
+          </a>
+      
+          <a href="{{ url('absensiswa_guru') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21" />
+            </svg>
+            <span>Absensi Siswa (Guru)</span>
+          </a>
         </div>
-      </div>
+      </div>      
     @elseif (Auth::user()->role == 'Guru')
       <a href="{{ url('guru') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('guru') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -106,21 +135,3 @@
       </a>
     @endif
 </nav>
-<script>
-  // Tampilkan/ Sembunyikan Dropdown
-  document.getElementById('dropdownMenuButton').addEventListener('click', function() {
-      document.getElementById('dropdownMenuContent').classList.toggle('hidden');
-  });
-  
-  function toggleDropdown() {
-        const dropdownContent = document.getElementById('dropdownContent');
-        const dropdownIcon = document.getElementById('dropdownIcon');
-        
-        // Toggle the visibility of the dropdown
-        dropdownContent.classList.toggle('hidden');
-        
-        // Toggle the direction of the dropdown icon (rotate it)
-        dropdownIcon.classList.toggle('rotate-180');
-    }
-
-</script>

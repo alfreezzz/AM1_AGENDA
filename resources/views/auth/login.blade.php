@@ -67,21 +67,21 @@
                 </div>              
 
                 <!-- Submit Button -->
-                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition">Login</button>
+                <button type="submit" class="w-full border bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition">Login</button>
             </form>
         </div>
     </div>
 
   <!-- Footer always at the bottom -->
 <footer class="relative z-10 footer-gradient flex justify-center space-x-4 py-6 text-white w-full">
-    <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="h-10 glow">
-    <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-10 glow">
-    <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="h-10 glow">
-    <img src="{{ asset('assets/images/LOGO-AKL-01-500x500.png') }}" alt="AKL" class="h-10 glow">
-    <img src="{{ asset('assets/images/BR-500x500.png') }}" alt="BR" class="h-10 glow">
-    <img src="{{ asset('assets/images/Logo-TB-OK-01-500x500.png') }}" alt="DPB" class="h-10 glow">
-    <img src="{{ asset('assets/images/LOGO-LPS-01-500x500.png') }}" alt="LPS" class="h-10 glow">
-    <img src="{{ asset('assets/images/MP-Baru-500x500.png') }}" alt="MP" class="h-10 glow">
+    <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="h-8 glow">
+    <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-6 glow">
+    <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="h-8 glow">
+    <img src="{{ asset('assets/images/LOGO-AKL-01-500x500.png') }}" alt="AKL" class="h-8 glow">
+    <img src="{{ asset('assets/images/BR-500x500.png') }}" alt="BR" class="h-8 glow">
+    <img src="{{ asset('assets/images/Logo-TB-OK-01-500x500.png') }}" alt="DPB" class="h-8 glow">
+    <img src="{{ asset('assets/images/LOGO-LPS-01-500x500.png') }}" alt="LPS" class="h-8 glow">
+    <img src="{{ asset('assets/images/MP-Baru-500x500.png') }}" alt="MP" class="h-8 glow">
 </footer>
 
 <style>

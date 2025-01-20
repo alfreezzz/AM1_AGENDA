@@ -47,7 +47,7 @@
       <!-- Header -->
       <header class="flex items-center justify-between h-16 bg-gray-800 text-white px-4 max-md:fixed top-0 w-full z-40" x-data="{ isNotificationOpen: false }">
         <!-- Burger Icon and Title -->
-        <button @click="sidebarOpen = !sidebarOpen" class="text-white focus:outline-none z-50 md:hidden">
+        <button @click="sidebarOpen = !sidebarOpen" @keyup.esc.window="sidebarOpen = !sidebarOpen" x-transition.origin.top.duration.300ms class="text-white focus:outline-none z-50 md:hidden">
           <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>
         </button>
         <div class="flex flex-grow justify-center text-center text-lg font-semibold  md:block">AM Agenda</div>
@@ -66,7 +66,7 @@
                 </button>
         
                 <!-- Dropdown Notification Panel -->
-                <div x-show="isNotificationOpen" @click.outside="isNotificationOpen = false" class="absolute right-0 mt-2 w-72 bg-white rounded shadow-lg p-4 z-50 transition ease-out duration-150" x-cloak x-show.transition.opacity>
+                <div x-show="isNotificationOpen" @click.outside="isNotificationOpen = false" @keyup.esc.window="isNotificationOpen = false" x-transition.origin.top.duration.300ms class="absolute right-0 mt-2 w-72 bg-white rounded shadow-lg p-4 z-50 transition ease-out duration-150" x-cloak x-show.transition.opacity>
                     <h3 class="text-gray-800 font-semibold text-sm mb-2">Notifikasi</h3>
                     <hr class="mb-2">
                     @forelse (Auth::user()->unreadNotifications as $notification)
