@@ -30,24 +30,29 @@ class Absensiswa_GuruController extends Controller
         }
 
         $currentAcademicYear = "$startYear/$endYear";
+        $hariIni = now()->locale('id')->dayName; // Nama hari dalam Bahasa Indonesia
 
         // Cek apakah admin ingin melihat semua data atau hanya tahun ajaran sekarang
         $showAll = $request->query('show_all', false);
 
         if (auth()->user()->role === 'Guru') {
-            // Guru hanya melihat kelas yang diajarkan
-            $kelas = auth()->user()->dataKelas()
+            $user = auth()->user(); // Ambil data user
+            $kelasIds = DB::table('jadwal_pelajarans')
+                ->where('guru_id', $user->id)
+                ->where('hari', $hariIni)
                 ->where('thn_ajaran', $currentAcademicYear)
-                ->with('jurusan')
+                ->pluck('kelas_id'); // Ambil hanya ID kelas dari jadwal pelajaran
+
+            // Ambil data kelas yang sesuai jadwal
+            $kelas = Kelas::with('jurusan')
+                ->whereIn('id', $kelasIds)
                 ->get();
         } elseif (auth()->user()->role === 'Admin' && $showAll) {
-            // Admin dapat melihat semua kelas
-            $kelas = Kelas::with('jurusan')->get();
+            $kelas = Kelas::with('jurusan')->get(); // Admin dapat melihat semua kelas
         } else {
-            // Default untuk admin tanpa `show_all`
             $kelas = Kelas::with('jurusan')
                 ->where('thn_ajaran', $currentAcademicYear)
-                ->get();
+                ->get(); // Default untuk admin tanpa `show_all`
         }
 
         return view('guru.absensiswa_guru.index', compact('kelas'), [
@@ -94,9 +99,35 @@ class Absensiswa_GuruController extends Controller
     public function create($kelas_id)
     {
         $user = auth()->user(); // Ambil user yang sedang login
-        $mapel = $user->mapels; // Ambil mapel melalui relasi mapels
+
+        $hariIni = now()->locale('id')->dayName; // Dapatkan nama hari saat ini dalam Bahasa Indonesia
+
+        // Tentukan tahun ajaran saat ini
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+        if ($currentMonth >= 7) { // Juli hingga Desember
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else { // Januari hingga Juni
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        $currentAcademicYear = "$startYear/$endYear";
 
         $kelas = Kelas::findOrFail($kelas_id);
+
+        $jadwal = DB::table('jadwal_pelajarans')
+            ->where('guru_id', $user->id)
+            ->where('hari', $hariIni)
+            ->where('kelas_id', $kelas_id)
+            ->where('thn_ajaran', $currentAcademicYear)
+            ->get();
+
+        // Ambil ID mapel dari jadwal yang relevan
+        $mapelIds = $jadwal->pluck('mapel_id')->toArray();
+
+        // Ambil hanya mapel yang sesuai dengan jadwal
+        $mapel = Mapel::whereIn('id', $mapelIds)->get();
 
         // Ambil data siswa berdasarkan kelas yang dipilih
         $data_siswa = Data_siswa::where('kelas_id', $kelas_id)->get();
@@ -171,9 +202,33 @@ class Absensiswa_GuruController extends Controller
     {
         $absensi = Absensiswa_Guru::findOrFail($id);
         $user = auth()->user(); // Ambil user yang sedang login
-        $mapel = $user->mapels; // Ambil mapel melalui relasi mapels
+        $hariIni = now()->locale('id')->dayName; // Dapatkan nama hari saat ini dalam Bahasa Indonesia
+
+        // Tentukan tahun ajaran saat ini
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+        if ($currentMonth >= 7) { // Juli hingga Desember
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else { // Januari hingga Juni
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        $currentAcademicYear = "$startYear/$endYear";
         $kelas = Kelas::findOrFail($absensi->kelas_id);
         $kelas_id = $kelas->id;
+        $jadwal = DB::table('jadwal_pelajarans')
+            ->where('guru_id', $user->id)
+            ->where('hari', $hariIni)
+            ->where('kelas_id', $kelas_id)
+            ->where('thn_ajaran', $currentAcademicYear)
+            ->get();
+
+        // Ambil ID mapel dari jadwal yang relevan
+        $mapelIds = $jadwal->pluck('mapel_id')->toArray();
+
+        // Ambil hanya mapel yang sesuai dengan jadwal
+        $mapel = Mapel::whereIn('id', $mapelIds)->get();
 
         return view('guru.absensiswa_guru.absensiswa_guru_kelas.edit', compact('absensi', 'kelas_id', 'mapel'), [
             'title' => 'Edit Absensi Siswa Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
