@@ -62,11 +62,11 @@ Route::middleware(['auth', 'role:Guru,Admin'])->group(function () {
     Route::get('agenda/kelas/{slug}', [AgendaController::class, 'agendaByClass']);
     Route::resource('absen_guru', Absen_guruController::class);
     Route::resource('absensiswa_guru', Absensiswa_GuruController::class);
-    Route::get('absensiswa_guru/kelas/{id}', [Absensiswa_GuruController::class, 'absensiswa_guruByClass']);
+    Route::get('absensiswa_guru/kelas/{slug}', [Absensiswa_GuruController::class, 'absensiswa_guruByClass']);
 });
 
 Route::middleware(['auth', 'role:Guru,Admin,Sekretaris'])->group(function () {
-    Route::get('absen_guru/kelas/{id}', [Absen_guruController::class, 'absen_guruByClass']);
+    Route::get('absen_guru/kelas/{slug}', [Absen_guruController::class, 'absen_guruByClass']);
     Route::resource('absen_siswa', Absen_siswaController::class);
     Route::resource('jadwal_pelajaran', JadwalPelajaranController::class);
 });

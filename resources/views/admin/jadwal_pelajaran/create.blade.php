@@ -5,6 +5,7 @@
 
         <!-- Bagian Kiri: Form -->
         <div class="w-full md:w-1/2 mb-4 md:mb-0">
+            @if (Auth::user()->role == 'Admin')
             <form action="{{ url('jadwal_pelajaran') }}" method="post" enctype="multipart/form-data" class="space-y-4">
                 @csrf
 
@@ -97,6 +98,9 @@
                     <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Simpan</button>
                 </div>
             </form>
+            @elseif (Auth::user()->role == 'Sekretaris' || Auth::user()->role == 'Guru')
+                <p class="text-center mt-4">Anda tidak memiliki hak untuk mengakses halaman ini.</p>
+            @endif
         </div>
 
         <!-- Bagian Kanan: Gambar -->

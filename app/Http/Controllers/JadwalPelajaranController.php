@@ -23,9 +23,23 @@ class JadwalPelajaranController extends Controller
 
     public function create()
     {
-        $kelas = Kelas::all();
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
+        if ($currentMonth >= 7) {
+            $currentAcademicYear = $currentYear . '/' . ($currentYear + 1);
+        } else {
+            $currentAcademicYear = ($currentYear - 1) . '/' . $currentYear;
+        }
+
+        // Ambil data kelas untuk tahun ajaran sekarang
+        $kelas = Kelas::where('thn_ajaran', $currentAcademicYear)
+            ->orderByRaw("FIELD(kelas, 'X', 'XI', 'XII')")
+            ->orderBy('kelas_id', 'asc')
+            ->get();
+
         $mapel = Mapel::all();
-        $user = User::all();
+        $user = User::where('role', 'Guru')->get();
         return view('admin/jadwal_pelajaran/create', compact('kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
     }
 
@@ -50,9 +64,22 @@ class JadwalPelajaranController extends Controller
     public function edit($id)
     {
         $jadwal = JadwalPelajaran::findOrFail($id);
-        $kelas = Kelas::all();
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
+        if ($currentMonth >= 7) {
+            $currentAcademicYear = $currentYear . '/' . ($currentYear + 1);
+        } else {
+            $currentAcademicYear = ($currentYear - 1) . '/' . $currentYear;
+        }
+
+        // Ambil data kelas untuk tahun ajaran sekarang
+        $kelas = Kelas::where('thn_ajaran', $currentAcademicYear)
+            ->orderByRaw("FIELD(kelas, 'X', 'XI', 'XII')")
+            ->orderBy('kelas_id', 'asc')
+            ->get();
         $mapel = Mapel::all();
-        $user = User::all();
+        $user = User::where('role', 'Guru')->get();
 
         $jadwal->jam_ke = json_decode($jadwal->jam_ke, true);
 

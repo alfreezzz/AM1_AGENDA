@@ -41,4 +41,9 @@ class Kelas extends Model
             $model->slug = Str::slug("{$model->kelas}-{$jurusanName}-{$model->kelas_id}-{$model->thn_ajaran}");
         });
     }
+
+    public function jadwal()
+    {
+        return $this->hasMany(JadwalPelajaran::class, 'kelas_id');
+    }
 }
