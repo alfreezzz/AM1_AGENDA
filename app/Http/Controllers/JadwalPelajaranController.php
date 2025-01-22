@@ -13,12 +13,32 @@ class JadwalPelajaranController extends Controller
 {
     public function index()
     {
-        $jadwal = JadwalPelajaran::with(['kelas', 'mapel', 'user'])->get();
-        $kelas = Kelas::all();
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
+        if ($currentMonth >= 7) {
+            $currentAcademicYear = $currentYear . '/' . ($currentYear + 1);
+        } else {
+            $currentAcademicYear = ($currentYear - 1) . '/' . $currentYear;
+        }
+
+        // Ambil data kelas untuk tahun ajaran sekarang
+        $kelas = Kelas::where('thn_ajaran', $currentAcademicYear)
+            ->orderByRaw("FIELD(kelas, 'X', 'XI', 'XII')")
+            ->orderBy('kelas_id', 'asc')
+            ->get();
+
+        // Ambil data jadwal untuk tahun ajaran sekarang
+        $jadwal = JadwalPelajaran::with(['kelas', 'mapel', 'user'])
+            ->whereHas('kelas', function ($query) use ($currentAcademicYear) {
+                $query->where('thn_ajaran', $currentAcademicYear);
+            })
+            ->get();
+
         $mapel = Mapel::all();
         $user = User::all();
 
-        return view('admin.jadwal_pelajaran.index', compact('jadwal'), ['title' => 'Jadwal Pelajaran']);
+        return view('admin.jadwal_pelajaran.index', compact('jadwal', 'kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
     }
 
     public function create()

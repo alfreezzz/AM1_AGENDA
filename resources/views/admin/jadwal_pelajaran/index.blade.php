@@ -2,10 +2,10 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <div class="container mx-auto p-6">
 
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Jadwal Pelajaran</h2>
-
         <!-- Tombol Tambah Jadwal -->
-        <a href="{{ url('jadwal_pelajaran/create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200 mb-4 inline-block">Tambah Jadwal</a>
+        @if(Auth::user()->role == 'Admin')
+        <a href="{{ url('jadwal_pelajaran/create') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200 mb-4 inline-block">Tambah Jadwal</a>
+        @endif
 
         <div class="mt-6">
             @php
@@ -80,7 +80,9 @@
                                                     <th class="px-4 py-2 border border-gray-300">Mapel</th>
                                                     <th class="px-4 py-2 border border-gray-300">Jam Ke</th>
                                                     <th class="px-4 py-2 border border-gray-300">Tahun Ajaran</th>
+                                                    @if(Auth::user()->role == 'Admin')
                                                     <th class="px-4 py-2 border border-gray-300 text-center">Aksi</th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -102,6 +104,7 @@
                                                     <td class="px-4 py-2 border border-gray-300 text-center">
                                                         {{ $item->thn_ajaran }}
                                                     </td>
+                                                    @if(Auth::user()->role == 'Admin')
                                                     <td class="px-4 py-2 border border-gray-300 text-center">
                                                         <!-- Tombol Edit -->
                                                         <a href="{{ url('jadwal_pelajaran/' . $item->id . '/edit') }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 transition duration-200">Edit</a>
@@ -112,6 +115,7 @@
                                                             <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200">Delete</button>
                                                         </form>
                                                     </td>
+                                                    @endif
                                                 </tr>
                                                 @endforeach
                                             </tbody>
