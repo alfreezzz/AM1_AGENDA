@@ -86,6 +86,32 @@ class JadwalPelajaranController extends Controller
 
         return redirect('jadwal_pelajaran')->with('success', 'Jadwal berhasil ditambahkan');
     }
+    public function getGuruByKelas($kelas_id)
+    {
+        $guru = DB::table('guru_kelas')
+            ->join('users', 'guru_kelas.user_id', '=', 'users.id')
+            ->where('guru_kelas.kelas_id', $kelas_id)
+            ->select('users.id', 'users.name')
+            ->distinct()
+            ->get();
+
+        return response()->json($guru);
+    }
+
+
+    public function getMapelByGuru($guru_id)
+    {
+        $mapel = DB::table('guru_mapel')
+            ->join('mapels', 'guru_mapel.mapel_id', '=', 'mapels.id')
+            ->where('guru_mapel.user_id', $guru_id)
+            ->select('mapels.id', 'mapels.nama_mapel')
+            ->distinct()
+            ->get();
+
+        return response()->json($mapel);
+    }
+
+
 
     public function edit($id)
     {

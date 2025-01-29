@@ -26,21 +26,21 @@
                 </div>
 
                 <!-- Pilihan Jam Ke -->
-<div>
-    <label class="block text-sm font-medium text-gray-700">Jam Ke</label>
-    <div class="flex flex-wrap gap-4">
-        @for ($i = 1; $i <= 10; $i++)
-            <div class="flex items-center">
-                <input type="checkbox" id="jam_ke_{{ $i }}" name="jam_ke[]" value="{{ $i }}" class="h-4 w-4 text-green-500 focus:ring-green-500">
-                <label for="jam_ke_{{ $i }}" class="ml-2 text-sm text-gray-700">Jam {{ $i }}</label>
-            </div>
-        @endfor
-    </div>
-    <small class="block mt-1 text-sm text-gray-500">Pilih jam pelajaran yang sesuai.</small>
-    @error('jam_ke')
-        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Jam Ke</label>
+                    <div class="flex flex-wrap gap-4">
+                        @for ($i = 1; $i <= 10; $i++)
+                            <div class="flex items-center">
+                                <input type="checkbox" id="jam_ke_{{ $i }}" name="jam_ke[]" value="{{ $i }}" class="h-4 w-4 text-green-500 focus:ring-green-500">
+                                <label for="jam_ke_{{ $i }}" class="ml-2 text-sm text-gray-700">Jam {{ $i }}</label>
+                            </div>
+                        @endfor
+                    </div>
+                    <small class="block mt-1 text-sm text-gray-500">Pilih jam pelajaran yang sesuai.</small>
+                    @error('jam_ke')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 <!-- Pilihan Kelas -->
                 <div>
@@ -56,20 +56,6 @@
                     @enderror
                 </div>
 
-                <!-- Pilihan Mata Pelajaran -->
-                <div>
-                    <label for="mapel_id" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
-                    <select class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('mapel_id') border-red-500 @enderror" name="mapel_id" id="mapel_id" style="padding-left: 10px;">
-                        <option value="">--Pilih Mata Pelajaran--</option>
-                        @foreach($mapel as $item)
-                            <option value="{{ $item->id }}">{{ $item->nama_mapel }}</option>
-                        @endforeach
-                    </select>
-                    @error('mapel_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <!-- Pilihan Guru -->
                 <div>
                     <label for="guru_id" class="block text-sm font-medium text-gray-700">Guru</label>
@@ -80,6 +66,20 @@
                         @endforeach
                     </select>
                     @error('guru_id')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Pilihan Mata Pelajaran -->
+                <div>
+                    <label for="mapel_id" class="block text-sm font-medium text-gray-700">Mata Pelajaran</span></label>
+                    <select class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('mapel_id') border-red-500 @enderror" name="mapel_id" id="mapel_id" style="padding-left: 10px;">
+                        <option value="">--Pilih Mata Pelajaran--</option>
+                        @foreach($mapel as $item)
+                            <option value="{{ $item->id }}">{{ $item->nama_mapel }}</option>
+                        @endforeach
+                    </select>
+                    @error('mapel_id')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
@@ -109,4 +109,66 @@
         </div>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let kelasSelect = document.getElementById("kelas_id");
+            let guruSelect = document.getElementById("guru_id");
+            let mapelSelect = document.getElementById("mapel_id");
+    
+            // Nonaktifkan guru dan mapel pada awalnya
+            guruSelect.disabled = true;
+            mapelSelect.disabled = true;
+    
+            kelasSelect.addEventListener("change", function () {
+                let kelas_id = this.value;
+    
+                // Reset dropdown guru dan mapel
+                guruSelect.innerHTML = '<option value="">--Pilih Guru--</option>';
+                mapelSelect.innerHTML = '<option value="">--Pilih Mata Pelajaran--</option>';
+                guruSelect.disabled = true;
+                mapelSelect.disabled = true;
+    
+                if (kelas_id) {
+                    fetch(`/get-guru/${kelas_id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                guruSelect.disabled = false; // Aktifkan guru
+                                data.forEach(guru => {
+                                    let option = document.createElement("option");
+                                    option.value = guru.id;
+                                    option.textContent = guru.name;
+                                    guruSelect.appendChild(option);
+                                });
+                            }
+                        });
+                }
+            });
+    
+            guruSelect.addEventListener("change", function () {
+                let guru_id = this.value;
+    
+                // Reset dropdown mapel
+                mapelSelect.innerHTML = '<option value="">--Pilih Mata Pelajaran--</option>';
+                mapelSelect.disabled = true;
+    
+                if (guru_id) {
+                    fetch(`/get-mapel/${guru_id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                mapelSelect.disabled = false; // Aktifkan mapel
+                                data.forEach(mapel => {
+                                    let option = document.createElement("option");
+                                    option.value = mapel.id;
+                                    option.textContent = mapel.nama_mapel;
+                                    mapelSelect.appendChild(option);
+                                });
+                            }
+                        });
+                }
+            });
+        });
+    </script>
+    
 </x-layout>
