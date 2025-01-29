@@ -2,10 +2,20 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <div class="container mx-auto p-6">
 
-        <!-- Tombol Tambah Jadwal -->
+    
+    <div class="flex flex-col md:flex-row md:justify-between items-center mb-6 p-4 rounded-lg">
+        <!-- Form Pencarian Mapel -->
+        <form action="{{ url('jadwal_pelajaran') }}" method="GET" class="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto mb-4 md:mb-0">
+            <input type="search" name="search" value="{{ request('search') }}" placeholder="Cari guru..." class="py-2 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mt-2 md:mt-0 transition duration-200">Cari</button>
+        </form>
+
         @if(Auth::user()->role == 'Admin')
-        <a href="{{ url('jadwal_pelajaran/create') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200 mb-4 inline-block">Tambah Jadwal</a>
+        <a href="{{ url('Jadwal_pelajaran/create') }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Tambah Data</a>
         @endif
+    </div>
+        
+        
 
         <div class="mt-6">
             @php
@@ -16,6 +26,7 @@
             @endphp
 
             @foreach ($daysOfWeek as $hari)
+            
                 @if ($groupedByDay->has($hari)) <!-- Pastikan ada jadwal untuk hari tersebut -->
                 <!-- Accordion Hari -->
                 <div class="mb-8 border rounded-lg" x-data="{ open: false }">
@@ -34,8 +45,10 @@
                             // Kelompokkan jadwal berdasarkan kelas (X, XI, XII)
                             $jadwalHari = $groupedByDay->get($hari);
                             $groupedByGrade = $jadwalHari->groupBy(function ($item) {
-                                return substr($item->kelas->kelas, 0, 2); // Ambil X, XI, atau XII
-                            });
+                        return $item->kelas->kelas; // Pastikan kelas diambil secara penuh
+                        });
+
+
                         @endphp
 
                         @foreach ($groupedByGrade as $grade => $jadwalGrade)

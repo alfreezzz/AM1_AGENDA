@@ -11,33 +11,39 @@ use Illuminate\Support\Facades\DB;
 
 class JadwalPelajaranController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $currentMonth = date('m');
         $currentYear = date('Y');
-
+    
         if ($currentMonth >= 7) {
             $currentAcademicYear = $currentYear . '/' . ($currentYear + 1);
         } else {
             $currentAcademicYear = ($currentYear - 1) . '/' . $currentYear;
         }
-
+    
         // Ambil data kelas untuk tahun ajaran sekarang
         $kelas = Kelas::where('thn_ajaran', $currentAcademicYear)
             ->orderByRaw("FIELD(kelas, 'X', 'XI', 'XII')")
             ->orderBy('kelas_id', 'asc')
             ->get();
-
-        // Ambil data jadwal untuk tahun ajaran sekarang
+    
+        $mapel = Mapel::all();
+        $user = User::all();
+    
+        // Pencarian berdasarkan username guru
+        $search = $request->input('search');
         $jadwal = JadwalPelajaran::with(['kelas', 'mapel', 'user'])
             ->whereHas('kelas', function ($query) use ($currentAcademicYear) {
                 $query->where('thn_ajaran', $currentAcademicYear);
             })
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%');
+                });
+            })
             ->get();
-
-        $mapel = Mapel::all();
-        $user = User::all();
-
+    
         return view('admin.jadwal_pelajaran.index', compact('jadwal', 'kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
     }
 
@@ -62,7 +68,7 @@ class JadwalPelajaranController extends Controller
         $user = User::where('role', 'Guru')->get();
         return view('admin/jadwal_pelajaran/create', compact('kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
     }
-
+    
     public function store(Request $request)
     {
         $validatedData = $request->validate([
