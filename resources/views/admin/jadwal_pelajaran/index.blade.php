@@ -11,7 +11,7 @@
         </form>
 
         @if(Auth::user()->role == 'Admin')
-        <a href="{{ url('Jadwal_pelajaran/create') }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Tambah Data</a>
+        <a href="{{ url('jadwal_pelajaran/create') }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Tambah Data</a>
         @endif
     </div>
         
