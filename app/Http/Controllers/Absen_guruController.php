@@ -160,6 +160,7 @@ class Absen_guruController extends Controller
             ],
             'keterangan' => 'required',
             'tugas.*' => 'nullable|mimes:pdf|max:15360',
+            'keterangantugas' => 'required',
         ]);
 
         $absen_guru = new Absen_guru;
@@ -167,6 +168,7 @@ class Absen_guruController extends Controller
         $absen_guru->tgl = $request->tgl;
         $absen_guru->kelas_id = $request->kelas_id;
         $absen_guru->keterangan = $request->keterangan;
+        $absen_guru->keterangantugas = $request->keterangantugas;
 
         // Simpan semua file tugas jika ada
         $tugasFiles = [];
@@ -265,6 +267,7 @@ class Absen_guruController extends Controller
             'mapel_id' => 'required',
             'keterangan' => 'required',
             'tugas.*' => 'nullable|mimes:pdf|max:15360', // Validasi untuk multiple files
+            'keterangantugas' => 'required',
         ]);
 
         $absen_guru = Absen_guru::findOrFail($id);
@@ -273,6 +276,7 @@ class Absen_guruController extends Controller
         // $absen_guru->tgl = $request->tgl;
         $absen_guru->kelas_id = $request->kelas_id;
         $absen_guru->keterangan = $request->keterangan;
+        $absen_guru->keterangantugas = $request->keterangantugas;
 
         // Ambil tugas yang ada jika ada, decode menjadi array
         $existingTugas = $absen_guru->tugas ? json_decode($absen_guru->tugas, true) : [];
