@@ -92,7 +92,6 @@
                                                     <th class="px-4 py-2 border border-gray-300">Guru</th>
                                                     <th class="px-4 py-2 border border-gray-300">Mapel</th>
                                                     <th class="px-4 py-2 border border-gray-300">Jam Ke</th>
-                                                    <th class="px-4 py-2 border border-gray-300">Tahun Ajaran</th>
                                                     @if(Auth::user()->role == 'Admin')
                                                     <th class="px-4 py-2 border border-gray-300 text-center">Aksi</th>
                                                     @endif
@@ -113,9 +112,6 @@
                                                             $jamKeArray = json_decode($item->jam_ke);
                                                             echo implode(', ', $jamKeArray);
                                                         @endphp
-                                                    </td>
-                                                    <td class="px-4 py-2 border border-gray-300 text-center">
-                                                        {{ $item->thn_ajaran }}
                                                     </td>
                                                     @if(Auth::user()->role == 'Admin')
                                                     <td class="px-4 py-2 border border-gray-300 text-center">
