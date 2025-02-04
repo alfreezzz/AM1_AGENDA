@@ -40,6 +40,7 @@
                             <th class="px-4 py-2">Mapel</th>
                             <th class="px-4 py-2">Keterangan</th>
                             <th class="px-4 py-2">Indikator Kompetensi</th>
+                            <th class="px-4 py-2">Keterangan Tugas</th>
                             @if(Auth::user()->role == 'Admin')
                             <th class="px-4 py-2">Waktu Ditambahkan</th>
                             @endif
@@ -76,7 +77,8 @@
                                     @else
                                         <span class="block text-gray-500">-</span>
                                     @endif
-                                </td>                                              
+                                </td>    
+                                <td class="px-4 py-2">{{ $item->keterangantugas }}</td>
                                 @if(Auth::user()->role == 'Admin')
                                 <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}</td>
                                 @endif
