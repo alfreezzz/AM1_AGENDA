@@ -73,7 +73,7 @@
     </div>
 
   <!-- Footer always at the bottom -->
-<footer class="relative z-10 footer-gradient flex justify-center space-x-4 py-6 text-white w-full">
+<footer class="relative z-10 footer-gradient flex justify-center items-center space-x-4 py-6 text-white w-full">
     <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="h-8 glow">
     <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-6 glow">
     <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="h-8 glow">

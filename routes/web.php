@@ -70,6 +70,7 @@ Route::middleware(['auth', 'role:Guru,Admin'])->group(function () {
 Route::middleware(['auth', 'role:Guru,Admin,Sekretaris'])->group(function () {
     Route::get('absen_guru/kelas/{slug}', [Absen_guruController::class, 'absen_guruByClass']);
     Route::resource('absen_siswa', Absen_siswaController::class);
+    Route::get('absen_siswa/kelas/{slug}', [Absen_siswaController::class, 'absen_siswaByClass']);
     Route::resource('jadwal_pelajaran', JadwalPelajaranController::class);
 });
 

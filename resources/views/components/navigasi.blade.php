@@ -37,7 +37,7 @@
         <button 
           @click="open = !open" 
           class="flex items-center w-full text-left px-4 py-2 rounded-md text-sm  outline-none
-          {{ Request::is('agenda') || Request::is('agenda/kelas/*') || Request::is('absen_guru') || Request::is('absen_guru/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') || Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'hover:bg-green-500 text-gray-300' }}">
+          {{ Request::is('agenda') || Request::is('agenda/kelas/*') || Request::is('absen_guru') || Request::is('absen_guru/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') || Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'hover:bg-green-500 text-gray-300' }}">
           <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path fill="#ffffff" d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z"/>
           </svg>
@@ -78,7 +78,7 @@
             <span>Absensi Guru</span>
           </a>
       
-          <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
+          <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
             <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21" />
             </svg>
@@ -114,7 +114,7 @@
         <span>Absensi Siswa (Guru)</span>
       </a>
       <hr class="my-4 border-t-1 border-gray-300">
-      <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
+      <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21"/></svg>
         <span>Absensi Siswa (Sekretaris)</span>
       </a>
@@ -130,11 +130,11 @@
         </svg>
         <span>Beranda</span>
       </a>
-      <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
+      <a href="{{ $kelasSlug ? url('absen_siswa/kelas/' . $kelasSlug) : '#' }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_siswa/kelas/' . $kelasSlug) || Request::is('absen_siswa/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21"/></svg>
         <span>Absensi</span>
       </a>
-      <a href="{{ $kelasSlug ? url('absen_guru/kelas/' . $kelasSlug) : '#' }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_guru/kelas/' . $kelasSlug) ? 'bg-green-500' : 'hover:bg-green-500' }}">
+      <a href="{{ $kelasSlug ? url('absen_guru/kelas/' . $kelasSlug) : '#' }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('absen_guru/kelas/' . $kelasSlug) || Request::is('absen_guru/kelas/*') ? 'bg-green-500' : 'hover:bg-green-500' }}">
         <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="m438-240 226-226-58-58-169 169-84-84-57 57 142 142ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
         <span>Tugas</span>
     </a>

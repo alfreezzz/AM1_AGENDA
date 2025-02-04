@@ -8,74 +8,78 @@ use App\Models\Absen_siswa;
 use App\Models\Kelas;
 use App\Models\Data_siswa;
 use Illuminate\Support\Facades\Auth; // Tambahkan ini
+use DB;
 
 class Absen_siswaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
     public function index(Request $request)
     {
-        $user = Auth::user();
-        $search = $request->get('search');
-        $filterDate = $request->get('date') ?? Carbon::today()->format('Y-m-d');
-        $searchMessage = null;
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
 
-        // Sekretaris: hanya cari siswa di kelas mereka
-        if ($user->role == 'Sekretaris') {
-            $kelasId = $user->kelas_id;
-            $kelas = Kelas::findOrFail($kelasId);
-            $title = 'Absensi Siswa Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id;
-
-            $data_siswa = Data_siswa::where('kelas_id', $kelasId)
-                ->when($search, function ($query) use ($search) {
-                    $query->where('nama_siswa', 'LIKE', "%{$search}%")
-                        ->orWhere('kelas_id', 'LIKE', "%{$search}%");
-                })
-                ->pluck('id');
-
-            if ($data_siswa->isEmpty() && $search) {
-                $searchMessage = 'Siswa tidak ditemukan.';
-            }
-
-            $absen_siswa = Absen_siswa::with('data_siswa')
-                ->whereIn('nis_id', $data_siswa)
-                ->whereDate('tgl', $filterDate)
-                ->orderBy('tgl', 'desc')
-                ->get()
-                ->groupBy('tgl');
-
-            return view('siswa.absen_siswa.index', compact('absen_siswa', 'title', 'searchMessage', 'filterDate', 'search'));
+        // Tentukan awal dan akhir tahun ajaran
+        if ($currentMonth >= 7) { // Juli hingga Desember
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else { // Januari hingga Juni
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
         }
 
-        // Admin atau Guru: pencarian kelas gabungan
-        $absen_siswa = Absen_siswa::with(['data_siswa', 'kelas.jurusan'])
-            ->when($search, function ($query) use ($search) {
-                // Pecah input pencarian ke dalam beberapa kata
-                $keywords = explode(' ', $search);
+        $currentAcademicYear = "$startYear/$endYear";
+        $hariIni = now()->locale('id')->dayName; // Nama hari dalam Bahasa Indonesia
 
-                $query->whereHas('data_siswa', function ($query) use ($search) {
-                    $query->where('nama_siswa', 'LIKE', "%{$search}%");
-                })
-                    ->orWhereHas('kelas', function ($query) use ($keywords) {
-                        $query->where(function ($query) use ($keywords) {
-                            foreach ($keywords as $keyword) {
-                                $query->orWhere('kelas', '=', strtoupper($keyword)) // Pencocokan eksak untuk kelas (X, XI, XII)
-                                    ->orWhere('kelas_id', 'LIKE', "%{$keyword}%") // Tetap menggunakan LIKE untuk kelas_id
-                                    ->orWhereHas('jurusan', fn($query) => $query->where('jurusan_id', 'LIKE', "%{$keyword}%")); // LIKE untuk jurusan
-                            }
-                        });
-                    });
-            })
-            ->whereDate('tgl', $filterDate)
+        // Cek apakah admin ingin melihat semua data atau hanya tahun ajaran sekarang
+        $showAll = $request->query('show_all', false);
+
+        if (auth()->user()->role === 'Guru') {
+            $user = auth()->user(); // Ambil data user
+            $kelasIds = DB::table('jadwal_pelajarans')
+                ->where('guru_id', $user->id)
+                ->where('hari', $hariIni)
+                ->where('thn_ajaran', $currentAcademicYear)
+                ->pluck('kelas_id'); // Ambil hanya ID kelas dari jadwal pelajaran
+
+            // Ambil data kelas yang sesuai jadwal
+            $kelas = Kelas::with('jurusan')
+                ->whereIn('id', $kelasIds)
+                ->get();
+        } elseif (auth()->user()->role === 'Admin' && $showAll) {
+            $kelas = Kelas::with('jurusan')->get(); // Admin dapat melihat semua kelas
+        } else {
+            $kelas = Kelas::with('jurusan')
+                ->where('thn_ajaran', $currentAcademicYear)
+                ->get(); // Default untuk admin tanpa `show_all`
+        }
+
+        return view('siswa.absen_siswa.index', compact('kelas'), [
+            'title' => 'Daftar Kelas',
+            'currentAcademicYear' => $currentAcademicYear,
+        ]);
+    }
+
+    public function absen_siswaByClass($kelas_slug)
+    {
+        // Cari kelas berdasarkan slug
+        $kelas = Kelas::where('slug', $kelas_slug)->with('jurusan')->firstOrFail();
+
+        // Ambil tanggal dari request atau tanggal hari ini jika tidak ada
+        $filterDate = request('date', Carbon::today()->toDateString());
+
+        // Ambil data absensi berdasarkan tanggal yang difilter
+        $absen_siswa = Absen_siswa::where('kelas_id', $kelas->id)
+            ->whereDate('tgl', $filterDate) // Filter berdasarkan tanggal
+            ->with(['data_siswa', 'kelas.jurusan'])
             ->orderBy('tgl', 'desc')
             ->get()
-            ->groupBy('tgl');
+            ->groupBy('tgl'); // Kelompokkan berdasarkan tanggal
 
-        $title = 'Absensi Siswa';
-
-        return view('siswa.absen_siswa.index', compact('absen_siswa', 'title', 'searchMessage', 'filterDate', 'search'));
+        return view('siswa.absen_siswa.absen_siswa_kelas.index', compact('absen_siswa', 'kelas', 'filterDate'), [
+            'title' => 'Absensi Siswa ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
+        ]);
     }
 
     public function create()
@@ -92,7 +96,7 @@ class Absen_siswaController extends Controller
 
         $title = $kelas ? 'Tambah Absensi Siswa ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id : 'Tambah Absensi Siswa';
 
-        return view('siswa.absen_siswa.create', compact('data_siswa', 'kelas'), ['title' => $title]);
+        return view('siswa.absen_siswa.absen_siswa_kelas.create', compact('data_siswa', 'kelas'), ['title' => $title]);
     }
 
     /**
@@ -154,7 +158,6 @@ class Absen_siswaController extends Controller
             ]);
         }
 
-        // Redirect kembali dengan pesan sukses
         return redirect('absen_siswa')->with('status', 'Data berhasil ditambah');
     }
 
@@ -181,7 +184,7 @@ class Absen_siswaController extends Controller
         $title = 'Edit Absensi Siswa ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id;
 
         // Mengirim data absensi dan kelas ke view
-        return view('siswa.absen_siswa.edit', compact('absen_siswa', 'kelas'), ['title' => $title]);
+        return view('siswa.absen_siswa.absen_siswa_kelas.edit', compact('absen_siswa', 'kelas'), ['title' => $title]);
     }
 
     /**
@@ -202,8 +205,8 @@ class Absen_siswaController extends Controller
         $absen_siswa->keterangan = $request->keterangan; // Allow nullable keterangan
         $absen_siswa->save(); // Save the changes
 
-        // Redirect with a success message
-        return redirect()->route('absen_siswa.index')->with('status', 'Data berhasil diupdate');
+        $kelas = $absen_siswa->kelas;
+        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Data berhasil diedit');
     }
 
     /**
@@ -214,6 +217,7 @@ class Absen_siswaController extends Controller
         $absen_siswa = Absen_siswa::findOrFail($id);
         $absen_siswa->delete();
 
-        return redirect('absen_siswa')->with('status', 'Data berhasil dihapus');
+        $kelas = $absen_siswa->kelas;
+        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
     }
 }

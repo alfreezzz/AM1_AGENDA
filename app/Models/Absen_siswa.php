@@ -21,6 +21,6 @@ class Absen_siswa extends Model
 
     public function data_siswa()
     {
-        return $this->belongsTo(Data_siswa::class, 'nis_id');
+        return $this->belongsTo(Data_siswa::class, 'nis_id', 'id');
     }
 }
