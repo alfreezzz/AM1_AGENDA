@@ -67,7 +67,7 @@ class JadwalPelajaranController extends Controller
         $mapel = Mapel::all();
         $user = User::where('role', 'Guru')->get();
         return view('admin/jadwal_pelajaran/create', compact('kelas', 'mapel', 'user'), ['title' => 'Jadwal Pelajaran']);
-    }n
+    }
 
     public function store(Request $request)
     {

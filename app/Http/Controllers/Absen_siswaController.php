@@ -36,16 +36,10 @@ class Absen_siswaController extends Controller
         $showAll = $request->query('show_all', false);
 
         if (auth()->user()->role === 'Guru') {
-            $user = auth()->user(); // Ambil data user
-            $kelasIds = DB::table('jadwal_pelajarans')
-                ->where('guru_id', $user->id)
-                ->where('hari', $hariIni)
+            // Guru hanya melihat kelas yang diajarkan
+            $kelas = auth()->user()->dataKelas()
                 ->where('thn_ajaran', $currentAcademicYear)
-                ->pluck('kelas_id'); // Ambil hanya ID kelas dari jadwal pelajaran
-
-            // Ambil data kelas yang sesuai jadwal
-            $kelas = Kelas::with('jurusan')
-                ->whereIn('id', $kelasIds)
+                ->with('jurusan')
                 ->get();
         } elseif (auth()->user()->role === 'Admin' && $showAll) {
             $kelas = Kelas::with('jurusan')->get(); // Admin dapat melihat semua kelas

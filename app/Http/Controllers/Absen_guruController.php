@@ -38,16 +38,10 @@ class Absen_guruController extends Controller
         $showAll = $request->query('show_all', false);
 
         if (auth()->user()->role === 'Guru') {
-            $user = auth()->user(); // Ambil data user
-            $kelasIds = DB::table('jadwal_pelajarans')
-                ->where('guru_id', $user->id)
-                ->where('hari', $hariIni)
+            // Guru hanya melihat kelas yang diajarkan
+            $kelas = auth()->user()->dataKelas()
                 ->where('thn_ajaran', $currentAcademicYear)
-                ->pluck('kelas_id'); // Ambil hanya ID kelas dari jadwal pelajaran
-
-            // Ambil data kelas yang sesuai jadwal
-            $kelas = Kelas::with('jurusan')
-                ->whereIn('id', $kelasIds)
+                ->with('jurusan')
                 ->get();
         } elseif (auth()->user()->role === 'Admin' && $showAll) {
             $kelas = Kelas::with('jurusan')->get(); // Admin dapat melihat semua kelas
@@ -63,55 +57,55 @@ class Absen_guruController extends Controller
         ]);
     }
 
-   public function absen_guruByClass(Request $request, $slug)
-{
-    $kelas = Kelas::where('slug', $slug)->firstOrFail();
-    $userRole = auth()->user()->role;
-    $title = ($userRole === 'Guru' || $userRole === 'Admin') ? 'Absensi' : 'Tugas';
+    public function absen_guruByClass(Request $request, $slug)
+    {
+        $kelas = Kelas::where('slug', $slug)->firstOrFail();
+        $userRole = auth()->user()->role;
+        $title = ($userRole === 'Guru' || $userRole === 'Admin') ? 'Absensi' : 'Tugas';
 
-    $absenGuruQuery = Absen_guru::where('kelas_id', $kelas->id)
-        ->with(['user', 'mapel'])
-        ->orderBy('tgl', 'desc');
+        $absenGuruQuery = Absen_guru::where('kelas_id', $kelas->id)
+            ->with(['user', 'mapel'])
+            ->orderBy('tgl', 'desc');
 
-    // Filter Berdasarkan Rentang Tanggal
-    if ($request->has('filter')) {
-        $filter = $request->filter;
+        // Filter Berdasarkan Rentang Tanggal
+        if ($request->has('filter')) {
+            $filter = $request->filter;
 
-        switch ($filter) {
-            case 'today':
-                $absenGuruQuery->whereDate('tgl', Carbon::today());
-                break;
-            case 'last_week':
-                $absenGuruQuery->whereBetween('tgl', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]);
-                break;
-            case 'last_month':
-                $absenGuruQuery->whereBetween('tgl', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
-                break;
-            case 'custom':
-                if ($request->filled('start_date') && $request->filled('end_date')) {
-                    $absenGuruQuery->whereBetween('tgl', [$request->start_date, $request->end_date]);
-                }
-                break;
+            switch ($filter) {
+                case 'today':
+                    $absenGuruQuery->whereDate('tgl', Carbon::today());
+                    break;
+                case 'last_week':
+                    $absenGuruQuery->whereBetween('tgl', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]);
+                    break;
+                case 'last_month':
+                    $absenGuruQuery->whereBetween('tgl', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
+                    break;
+                case 'custom':
+                    if ($request->filled('start_date') && $request->filled('end_date')) {
+                        $absenGuruQuery->whereBetween('tgl', [$request->start_date, $request->end_date]);
+                    }
+                    break;
+            }
         }
+
+        if (auth()->user()->role === 'Guru') {
+            $assignedMapels = DB::table('guru_mapel')
+                ->where('user_id', auth()->user()->id)
+                ->pluck('mapel_id');
+
+            $absenGuruQuery->whereIn('mapel_id', $assignedMapels);
+        }
+
+        $absen_guru = $absenGuruQuery->get();
+
+        return view('guru.absen_guru.absen_guru_kelas.index', compact('absen_guru', 'kelas'), [
+            'title' => $title . ' di Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
+            'selectedFilter' => $request->filter,
+            'startDate' => $request->start_date,
+            'endDate' => $request->end_date,
+        ]);
     }
-
-    if (auth()->user()->role === 'Guru') {
-        $assignedMapels = DB::table('guru_mapel')
-            ->where('user_id', auth()->user()->id)
-            ->pluck('mapel_id');
-
-        $absenGuruQuery->whereIn('mapel_id', $assignedMapels);
-    }
-
-    $absen_guru = $absenGuruQuery->get();
-
-    return view('guru.absen_guru.absen_guru_kelas.index', compact('absen_guru', 'kelas'), [
-        'title' => $title . ' di Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
-        'selectedFilter' => $request->filter,
-        'startDate' => $request->start_date,
-        'endDate' => $request->end_date,
-    ]);
-}
 
 
     /**
