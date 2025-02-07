@@ -3,14 +3,18 @@
     
     <!-- Search, Date Filter, and Add Button aligned -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4 space-y-4 md:space-y-0 md:space-x-4">
-        <form method="GET" action="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
-            <input type="date" id="date" name="date" value="{{ $filterDate ?? '' }}" class="py-2 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
-            <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">
-                Filter
-            </button>
-            <a href="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200">
-                Reset
-            </a>
+        <form id="filter-form" method="GET" action="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
+            <select name="filter" id="filter" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                <option value="">Semua Tanggal</option>
+                <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
+                <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
+                <option value="range" {{ request('filter') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
+            </select>
+        
+            <div id="date-range" class="hidden flex space-x-2">
+                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+            </div>
         </form>
         @if (Auth::user()->role == 'Sekretaris')
             <a href="{{ route('absen_siswa.create') }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 w-full md:w-auto text-center">Tambah Absensi</a>
@@ -65,4 +69,39 @@
             </div>
         @endforeach
     @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let filter = document.getElementById('filter');
+            let startDate = document.getElementById('start_date');
+            let endDate = document.getElementById('end_date');
+            let dateRange = document.getElementById('date-range');
+            let form = document.getElementById('filter-form');
+    
+            // Tampilkan input rentang tanggal jika sudah dipilih sebelumnya
+            if (filter.value === 'range') {
+                dateRange.classList.remove('hidden');
+            }
+    
+            // Fungsi untuk submit otomatis
+            function autoSubmit() {
+                form.submit();
+            }
+    
+            // Submit otomatis saat filter berubah
+            filter.addEventListener('change', function () {
+                if (this.value === 'range') {
+                    dateRange.classList.remove('hidden');
+                } else {
+                    dateRange.classList.add('hidden');
+                    startDate.value = "";
+                    endDate.value = "";
+                    autoSubmit();
+                }
+            });
+    
+            // Submit otomatis saat tanggal rentang dipilih
+            startDate.addEventListener('change', autoSubmit);
+            endDate.addEventListener('change', autoSubmit);
+        });
+    </script>
 </x-layout>

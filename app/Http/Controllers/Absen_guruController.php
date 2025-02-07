@@ -63,7 +63,6 @@ class Absen_guruController extends Controller
         ]);
     }
 
-
     public function absen_guruByClass(Request $request, $slug)
     {
         $kelas = Kelas::where('slug', $slug)->firstOrFail();

@@ -18,7 +18,7 @@
   <div x-data="{ sidebarOpen: false }" class="back flex h-full">
     
     <!-- Sidebar -->
-    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col z-30">
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 w-64 bg-gray-800 text-white transform transition-transform duration-200 ease-in-out lg:translate-x-0 flex flex-col z-30 overflow-y-auto">
       <div class="flex items-center justify-center mt-3 mb-5 mx-3">
         <div class="flex items-center space-x-2">
           <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" class="w-10 h-10">
@@ -50,7 +50,7 @@
         <button @click="sidebarOpen = !sidebarOpen" @keyup.esc.window="sidebarOpen = !sidebarOpen" x-transition.origin.top.duration.300ms class="text-white focus:outline-none z-50 lg:hidden">
           <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>
         </button>
-        <div class="flex flex-grow justify-center text-center text-lg font-semibold  lg:block">AM Agenda</div>
+        <div class="flex flex-grow justify-center text-center lg:text-lg font-semibold lg:block">AM Agenda Pembelajaran Harian</div>
     
         <!-- Notifications -->
         @if (Auth::user()->role == 'Sekretaris')

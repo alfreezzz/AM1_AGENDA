@@ -63,21 +63,25 @@ class Absen_siswaController extends Controller
 
     public function absen_siswaByClass($kelas_slug)
     {
-        // Cari kelas berdasarkan slug
         $kelas = Kelas::where('slug', $kelas_slug)->with('jurusan')->firstOrFail();
+        $query = Absen_siswa::where('kelas_id', $kelas->id)->with(['data_siswa', 'kelas.jurusan']);
 
-        // Ambil tanggal dari request atau tanggal hari ini jika tidak ada
-        $filterDate = request('date', Carbon::today()->toDateString());
+        // Ambil filter dari request
+        $filter = request('filter');
+        $startDate = request('start_date');
+        $endDate = request('end_date');
 
-        // Ambil data absensi berdasarkan tanggal yang difilter
-        $absen_siswa = Absen_siswa::where('kelas_id', $kelas->id)
-            ->whereDate('tgl', $filterDate) // Filter berdasarkan tanggal
-            ->with(['data_siswa', 'kelas.jurusan'])
-            ->orderBy('tgl', 'desc')
-            ->get()
-            ->groupBy('tgl'); // Kelompokkan berdasarkan tanggal
+        if ($filter == 'last_week') {
+            $query->whereBetween('tgl', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()]);
+        } elseif ($filter == 'last_month') {
+            $query->whereBetween('tgl', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
+        } elseif ($filter == 'range' && $startDate && $endDate) {
+            $query->whereBetween('tgl', [$startDate, $endDate]);
+        }
 
-        return view('siswa.absen_siswa.absen_siswa_kelas.index', compact('absen_siswa', 'kelas', 'filterDate'), [
+        $absen_siswa = $query->orderBy('tgl', 'desc')->get()->groupBy('tgl');
+
+        return view('siswa.absen_siswa.absen_siswa_kelas.index', compact('absen_siswa', 'kelas'), [
             'title' => 'Absensi Siswa ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
         ]);
     }
@@ -158,7 +162,8 @@ class Absen_siswaController extends Controller
             ]);
         }
 
-        return redirect('absen_siswa')->with('status', 'Data berhasil ditambah');
+        $kelas = Kelas::findOrFail($siswa->kelas_id);
+        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
     }
 
     /**

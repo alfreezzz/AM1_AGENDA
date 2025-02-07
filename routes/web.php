@@ -22,6 +22,7 @@ use App\Http\Controllers\Absensiswa_GuruController;
 // Halaman Siswa
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\Absen_siswaController;
+use App\Http\Controllers\RekapanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -72,6 +73,8 @@ Route::middleware(['auth', 'role:Guru,Admin,Sekretaris'])->group(function () {
     Route::resource('absen_siswa', Absen_siswaController::class);
     Route::get('absen_siswa/kelas/{slug}', [Absen_siswaController::class, 'absen_siswaByClass']);
     Route::resource('jadwal_pelajaran', JadwalPelajaranController::class);
+    Route::get('rekapan', [RekapanController::class, 'index']);
+    Route::get('absen_siswa/kelas/{slug}/rekapan', [RekapanController::class, 'rekapanByClass']);
 });
 
 // Login
