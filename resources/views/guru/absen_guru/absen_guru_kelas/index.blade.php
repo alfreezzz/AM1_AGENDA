@@ -1,21 +1,29 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <form method="GET" action="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
-    <select name="filter" id="filter" class="py-2 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
-        <option value="" selected disabled>Pilih Filter</option>
-        <option value="today" {{ request('filter') == 'today' ? 'selected' : '' }}>Hari Ini</option>
-        <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
-        <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
-        <option value="custom" {{ request('filter') == 'custom' ? 'selected' : '' }}>Rentang Tanggal</option>
-    </select>
-
-    <input type="date" name="start_date" value="{{ request('start_date') }}" class="py-2 px-4 border border-gray-300 rounded">
-    <input type="date" name="end_date" value="{{ request('end_date') }}" class="py-2 px-4 border border-gray-300 rounded">
+        <!-- Action Buttons Section -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4">
+            @if(Auth::user()->role == 'Guru')
+                <a href="{{ url('absen_guru/create/' . $kelas->id) }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 mb-2 md:mb-0">
+                    Tambah Absensi
+                </a>
+            @endif
     
-    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Filter</button>
-    <a href="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200">Reset</a>
-</form>
+            <!-- Date Filter Form -->
+            <form method="GET" action="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
+                <input type="date" id="date" name="date" value="{{ $filterDate ?? '' }}" class="py-2 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Filter
+                </button>
+                <a href="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition duration-200">Reset</a>
+            </form>
+        </div>
+    
+        @if($absen_guru->isEmpty())
+            <p class="text-center mt-4">Tidak ada absensi untuk kelas ini.</p>
+        @else
+            @php
+                $groupedAbsensi = $absen_guru->groupBy('tgl');
+            @endphp
 
         <!-- Displaying Attendance Records Grouped by Date -->
         @foreach ($groupedAbsensi as $date => $absensiItems)
