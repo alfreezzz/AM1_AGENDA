@@ -5,7 +5,7 @@
         <p class="text-center mt-4">Tidak ada data absensi yang ditemukan</p>
     @else
         <div class="mt-4">
-            <div class="overflow-y-auto max-h-80 mt-2">
+            <div class="mt-2 overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300 rounded-lg table-auto">
                     <thead class="bg-green-500 text-white">
                         <tr class="text-center">

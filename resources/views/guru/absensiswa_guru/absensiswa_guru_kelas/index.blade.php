@@ -47,7 +47,7 @@
             @foreach ($mapelGrouped as $mapel => $mapelGroup)
                 <h4 class="text-md font-medium mb-2 mt-2 text-gray-700">Mata Pelajaran: {{ $mapel }}</h4>
 
-                <div class="overflow-y-auto max-h-80">
+                <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-300 rounded-lg table-auto">
                         <thead class="sticky top-0 bg-green-500 text-white">
                             <tr class="text-center">

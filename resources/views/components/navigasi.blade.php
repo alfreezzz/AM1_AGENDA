@@ -33,15 +33,11 @@
         <span>Jadwal Pelajaran</span>
       </a>
       <hr class="my-4 border-t-1 border-gray-300">
-      <a href="{{ url('rekapan') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('rekapan') || Request::is('absen_siswa/kelas/*/rekapan') ? 'bg-green-500' : 'hover:bg-green-500' }}">
-        <svg class="w-5 h-5 mr-2"  mlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff"   d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/></svg>
-        <span>Rekapan Absensi Siswa</span>
-      </a>
       <div x-data="{ open: false }" class="relative">
         <button 
           @click="open = !open" 
           class="flex items-center w-full text-left px-4 py-2 rounded-md text-sm  outline-none
-          {{ Request::is('agenda') || Request::is('agenda/kelas/*') || Request::is('absen_guru') || Request::is('absen_guru/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') && !Request::is('absen_siswa/kelas/*/rekapan') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') || Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'hover:bg-green-500 text-gray-300' }}">
+          {{ Request::is('agenda') || Request::is('agenda/kelas/*') || Request::is('absen_guru') || Request::is('absen_guru/kelas/*') || Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') || Request::is('absensiswa_guru') || Request::is('absensiswa_guru/kelas/*') ? 'bg-green-500 text-white' : 'hover:bg-green-500 text-gray-300' }}">
           <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path fill="#ffffff" d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z"/>
           </svg>
@@ -82,7 +78,7 @@
             <span>Absensi Guru</span>
           </a>
       
-          <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') && !Request::is('absen_siswa/kelas/*/rekapan') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
+          <a href="{{ url('absen_siswa') }}" class="flex items-center px-4 py-2 text-sm {{ Request::is('absen_siswa') || Request::is('absen_siswa/kelas/*') || Request::is('absen_siswa/create') || Request::is('absen_siswa/*/edit') ? 'bg-green-500 text-white' : 'text-gray-700 hover:bg-green-100' }}">
             <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M16 7S9 1 2 6v22c7-5 14 0 14 0s7-5 14 0V6c-7-5-14 1-14 1m0 0v21" />
             </svg>

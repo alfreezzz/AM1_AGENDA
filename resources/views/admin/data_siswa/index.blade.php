@@ -16,7 +16,7 @@
 
     <!-- Tabel data siswa dengan scroll hanya untuk desktop -->
     <div class="overflow-x-auto mt-4">
-        <div class="max-h-96 md:overflow-y-auto">
+        <div class="">
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
                 <thead class="sticky top-0 bg-green-500 text-white">
                     <tr class="text-center">

@@ -29,7 +29,7 @@
             @enderror
         </div>   
     
-        <div class="overflow-y-auto max-h-80">
+        <div class="overflow-x-auto">
             <table class="min-w-full bg-white border-collapse border border-gray-300 rounded-lg table-auto">
                 <thead class="sticky top-0 bg-green-500 text-white">
                     <tr>

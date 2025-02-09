@@ -35,6 +35,11 @@ class Absensiswa_Guru extends Model
 
     public function data_siswa()
     {
-        return $this->belongsTo(Data_siswa::class, 'nis_id');
+        return $this->belongsTo(Data_siswa::class, 'nis_id', 'id');
+    }
+
+    public function guru()
+    {
+        return $this->belongsTo(User::class, 'added_by', 'kode_guru');
     }
 }

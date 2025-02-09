@@ -32,7 +32,7 @@
         @foreach ($groupedAgendas as $date => $agendas)
             <h2 class="text-xl font-semibold mb-2 mt-4 text-green-600">{{ \Carbon\Carbon::parse($date)->format('d M Y') }}</h2>
 
-            <div class="overflow-y-auto max-h-80">
+            <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-300 rounded-lg table-auto">
                     <thead class="sticky top-0 bg-green-500 text-white">
                         <tr class="text-center">

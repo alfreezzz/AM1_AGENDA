@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:Guru,Admin'])->group(function () {
     Route::get('absensiswa_guru/kelas/{slug}', [Absensiswa_GuruController::class, 'absensiswa_guruByClass']);
     Route::get('/get-guru/{kelas_id}', [JadwalPelajaranController::class, 'getGuruByKelas']);
     Route::get('/get-mapel/{guru_id}', [JadwalPelajaranController::class, 'getMapelByGuru']);
+    Route::get('absensiswa_guru/kelas/{slug}/rekapan', [RekapanController::class, 'rekapanGuru']);
 });
 
 Route::middleware(['auth', 'role:Guru,Admin,Sekretaris'])->group(function () {
@@ -73,8 +74,7 @@ Route::middleware(['auth', 'role:Guru,Admin,Sekretaris'])->group(function () {
     Route::resource('absen_siswa', Absen_siswaController::class);
     Route::get('absen_siswa/kelas/{slug}', [Absen_siswaController::class, 'absen_siswaByClass']);
     Route::resource('jadwal_pelajaran', JadwalPelajaranController::class);
-    Route::get('rekapan', [RekapanController::class, 'index']);
-    Route::get('absen_siswa/kelas/{slug}/rekapan', [RekapanController::class, 'rekapanByClass']);
+    Route::get('absen_siswa/kelas/{slug}/rekapan', [RekapanController::class, 'rekapanSekretaris']);
 });
 
 // Login

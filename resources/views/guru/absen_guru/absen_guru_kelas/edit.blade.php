@@ -10,18 +10,13 @@
 
                 <input type="hidden" name="kelas_id" value="{{ $kelas_id }}">
 
-                <!-- Mapel -->
+                <!-- Mapel (Tidak Bisa Diedit) -->
                 <div class="form-group">
-                    <label for="mapel_id" class="block text-sm font-medium text-gray-700">Mapel</label>
-                    <select class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('mapel_id') border-red-500 @enderror" name="mapel_id" id="mapel_id" style="padding-left: 10px">
-                        @foreach ($mapel as $item)
-                            <option value="{{ $item->id }}" {{ $absen_guru->mapel_id == $item->id ? 'selected' : '' }}>{{ $item->nama_mapel }}</option>
-                        @endforeach
-                    </select>
-                    @error('mapel_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>     
+                    <label for="mapel_nama" class="block text-sm font-medium text-gray-700">Mapel</label>
+                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm sm:text-sm" 
+                        id="mapel_nama" value="{{ $absen_guru->mapel->nama_mapel }}" disabled style="padding-left: 10px;">
+                    <input type="hidden" name="mapel_id" value="{{ $absen_guru->mapel_id }}">
+                </div>
 
                 <!-- Tanggal -->
                 <div class="form-group">
