@@ -66,14 +66,20 @@ class Absen_guruController extends Controller
         // Set the title based on the user's role
         $title = ($userRole === 'Guru' || $userRole === 'Admin') ? 'Absensi' : 'Tugas';
 
-        $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
+        $filter = $request->query('filter');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
 
         $absenGuruQuery = Absen_guru::where('kelas_id', $kelas->id)
             ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
             ->orderBy('tgl', 'desc');
 
-        if ($filterDate) {
-            $absenGuruQuery->whereDate('tgl', $filterDate);
+        if ($filter === 'last_week') {
+            $absenGuruQuery->whereBetween('tgl', [Carbon::now()->subWeek(), Carbon::now()]);
+        } elseif ($filter === 'last_month') {
+            $absenGuruQuery->whereBetween('tgl', [Carbon::now()->subMonth(), Carbon::now()]);
+        } elseif ($filter === 'range' && $startDate && $endDate) {
+            $absenGuruQuery->whereBetween('tgl', [$startDate, $endDate]);
         }
 
         if (auth()->user()->role === 'Guru') {
@@ -88,7 +94,7 @@ class Absen_guruController extends Controller
 
         $absen_guru = $absenGuruQuery->get();
 
-        return view('guru.absen_guru.absen_guru_kelas.index', compact('absen_guru', 'kelas', 'filterDate'), ['title' => $title . ' di Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id]);
+        return view('guru.absen_guru.absen_guru_kelas.index', compact('absen_guru', 'kelas', 'filter', 'startDate', 'endDate'), ['title' => $title . ' di Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id]);
     }
 
     /**
