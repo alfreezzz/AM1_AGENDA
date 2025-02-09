@@ -58,15 +58,20 @@ class Absensiswa_GuruController extends Controller
     public function absensiswa_guruByClass(Request $request, $slug)
     {
         $kelas = Kelas::where('slug', $slug)->firstOrFail();
-        $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
+        $filter = $request->query('filter');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
 
         $absensiQuery = Absensiswa_Guru::where('kelas_id', $kelas->id)
             ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
             ->orderBy('tgl', 'desc');
 
-        // Filter berdasarkan tanggal jika diperlukan
-        if ($filterDate) {
-            $absensiQuery->whereDate('tgl', $filterDate);
+        if ($filter === 'last_week') {
+            $absensiQuery->whereBetween('tgl', [Carbon::now()->subWeek(), Carbon::now()]);
+        } elseif ($filter === 'last_month') {
+            $absensiQuery->whereBetween('tgl', [Carbon::now()->subMonth(), Carbon::now()]);
+        } elseif ($filter === 'range' && $startDate && $endDate) {
+            $absensiQuery->whereBetween('tgl', [$startDate, $endDate]);
         }
 
         // Jika user adalah Guru, terapkan filter berdasarkan `mapel_id` dari `guru_mapel`
@@ -82,7 +87,7 @@ class Absensiswa_GuruController extends Controller
 
         $absensi = $absensiQuery->get();
 
-        return view('guru.absensiswa_guru.absensiswa_guru_kelas.index', compact('absensi', 'kelas', 'filterDate'), [
+        return view('guru.absensiswa_guru.absensiswa_guru_kelas.index', compact('absensi', 'kelas', 'filter', 'startDate', 'endDate'), [
             'title' => 'Absensi Siswa Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
         ]);
     }

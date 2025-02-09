@@ -56,40 +56,41 @@ class AgendaController extends Controller
 
     public function agendaByClass(Request $request, $slug)
     {
-        // Cari kelas berdasarkan slug
         $kelas = Kelas::where('slug', $slug)->firstOrFail();
 
-        // Ambil tanggal filter dari query string atau gunakan tanggal hari ini
-        $filterDate = $request->query('date') ?? Carbon::today()->toDateString();
+        $filter = $request->query('filter');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
 
-        // Buat query agenda menggunakan kelas_id
-        $agendaQuery = Agenda::where('kelas_id', $kelas->id) // Gunakan $kelas->id, bukan $slug
-            ->with(['user', 'mapel']) // Tambahkan 'user' untuk memuat data nama pengguna
+        $agendaQuery = Agenda::where('kelas_id', $kelas->id)
+            ->with(['user', 'mapel'])
             ->orderBy('tgl', 'desc');
 
-        // Filter berdasarkan tanggal jika diperlukan
-        if ($filterDate) {
-            $agendaQuery->whereDate('tgl', $filterDate);
+        if ($filter === 'last_week') {
+            $agendaQuery->whereBetween('tgl', [Carbon::now()->subWeek(), Carbon::now()]);
+        } elseif ($filter === 'last_month') {
+            $agendaQuery->whereBetween('tgl', [Carbon::now()->subMonth(), Carbon::now()]);
+        } elseif ($filter === 'range' && $startDate && $endDate) {
+            $agendaQuery->whereBetween('tgl', [$startDate, $endDate]);
         }
 
-        // Jika user adalah Guru, terapkan filter berdasarkan mapel yang diajarkan
         if (auth()->user()->role === 'Guru') {
-            $user = auth()->user(); // Ambil data user yang login
             $assignedMapels = DB::table('guru_mapel')
-                ->where('user_id', $user->id)
+                ->where('user_id', auth()->id())
                 ->pluck('mapel_id');
 
-            // Filter agenda berdasarkan mapel yang diajarkan
             $agendaQuery->whereIn('mapel_id', $assignedMapels);
         }
 
-        // Eksekusi query dan ambil data
         $agenda = $agendaQuery->get();
 
-        // Return ke view dengan data
-        return view('guru.agenda.agenda_kelas.index', compact('agenda', 'kelas', 'filterDate'), [
-            'title' => 'Agenda Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
-        ]);
+        return view(
+            'guru.agenda.agenda_kelas.index',
+            compact('agenda', 'kelas', 'filter', 'startDate', 'endDate'),
+            [
+                'title' => 'Agenda Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
+            ]
+        );
     }
 
     /**
