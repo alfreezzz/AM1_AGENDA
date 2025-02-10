@@ -9,6 +9,8 @@ use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Data_siswa;
 use DB;
+use App\Exports\AbsensiExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Absensiswa_GuruController extends Controller
 {
@@ -96,6 +98,16 @@ class Absensiswa_GuruController extends Controller
         return view('guru.absensiswa_guru.absensiswa_guru_kelas.index', compact('absensi', 'kelas', 'filter', 'startDate', 'endDate'), [
             'title' => 'Absensi Siswa Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
         ]);
+    }
+
+    public function exportExcel(Request $request, $kelas_slug)
+    {
+        $kelas = Kelas::where('slug', $kelas_slug)->firstOrFail();
+        $filter = $request->query('filter', '');
+        $start_date = $request->query('start_date', '');
+        $end_date = $request->query('end_date', '');
+        
+        return Excel::download(new AbsensiExport($kelas->id, $filter, $start_date, $end_date), 'Absensi_Siswa_' . $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id . '.xlsx');
     }
 
     /**
