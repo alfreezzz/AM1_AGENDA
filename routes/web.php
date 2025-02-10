@@ -74,6 +74,7 @@ Route::middleware(['auth', 'role:Guru,Admin,Sekretaris'])->group(function () {
     Route::resource('absen_siswa', Absen_siswaController::class);
     Route::get('absen_siswa/kelas/{slug}', [Absen_siswaController::class, 'absen_siswaByClass']);
     Route::resource('jadwal_pelajaran', JadwalPelajaranController::class);
+    Route::get('absen_siswa/export/{kelas_slug}', [Absen_siswaController::class, 'export'])->name('absen_siswa.export');
     Route::get('absen_siswa/kelas/{slug}/rekapan', [RekapanController::class, 'rekapanSekretaris']);
 });
 

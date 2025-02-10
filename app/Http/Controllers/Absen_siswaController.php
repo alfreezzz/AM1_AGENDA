@@ -9,6 +9,8 @@ use App\Models\Kelas;
 use App\Models\Data_siswa;
 use Illuminate\Support\Facades\Auth; // Tambahkan ini
 use DB;
+use App\Exports\AbsenSiswaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Absen_siswaController extends Controller
 {
@@ -78,6 +80,16 @@ class Absen_siswaController extends Controller
         return view('siswa.absen_siswa.absen_siswa_kelas.index', compact('absen_siswa', 'kelas'), [
             'title' => 'Absensi Siswa ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
         ]);
+    }
+
+    public function export(Request $request, $kelas_slug)
+    {
+        $kelas = Kelas::where('slug', $kelas_slug)->firstOrFail();
+        $filter = $request->query('filter', '');
+        $start_date = $request->query('start_date', '');
+        $end_date = $request->query('end_date', '');
+
+        return Excel::download(new AbsenSiswaExport($kelas->id, $filter, $start_date, $end_date), 'absensi_siswa_' . $kelas->kelas . '.xlsx');
     }
 
     public function create()
