@@ -20,6 +20,10 @@
             <a href="{{ route('absen_siswa.create') }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 w-full md:w-auto text-center">Tambah Absensi</a>
         @endif
     </div>
+    <a href="{{ route('absen_siswa.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
+        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-auto text-center">
+        Ekspor ke Excel
+    </a>
 
     @if($absen_siswa->isEmpty())
         @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Guru')

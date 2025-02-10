@@ -23,6 +23,10 @@
             </div>
         </form>
     </div>
+    <a href="{{ route('absensiswa_guru.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
+    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+        Export Excel
+    </a>
 
     @if($absensi->isEmpty())
         <p class="text-center mt-4">Tidak ada absen siswa untuk kelas ini.</p>
