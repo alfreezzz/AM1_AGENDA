@@ -34,9 +34,21 @@
                         <td class="py-3 px-6">{{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }}</td>
                         <td class="py-3 px-6">{{ $item->thn_ajaran }}</td>
                         <td class="py-3 px-6">
-                            @foreach ($item->dataGuruKelas as $guru)
-                                {{ $guru->name }}{{ !$loop->last ? ',' : '' }}<br>
-                            @endforeach
+                            <div x-data="{ open: false }">
+                                <button @click="open = !open" class="bg-green-100 text-green-700 py-1 px-2 rounded text-sm flex items-center">
+                                    Lihat Guru
+                                    <svg :class="{ 'rotate-180': open }" class="ml-auto w-5 h-5 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <div x-show="open" class="mt-2 bg-gray-100 p-2 rounded-lg shadow">
+                                    @forelse ($item->dataGuruKelas as $guru)
+                                        <span class="block text-gray-700 py-1">{{ $guru->name }},</span>
+                                    @empty
+                                        <span class="text-gray-500">Tidak ada guru</span>
+                                    @endforelse
+                                </div>
+                            </div>
                         </td>
                         <td class="px-4 py-2 text-center">
                             <div class="flex justify-center items-center space-x-2">

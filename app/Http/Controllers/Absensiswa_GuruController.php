@@ -67,9 +67,15 @@ class Absensiswa_GuruController extends Controller
             ->orderBy('tgl', 'desc');
 
         if ($filter === 'last_week') {
-            $absensiQuery->whereBetween('tgl', [Carbon::now()->subWeek(), Carbon::now()]);
+            $absensiQuery->whereBetween('tgl', [
+                Carbon::now()->subWeek()->startOfWeek(),
+                Carbon::now()->subWeek()->endOfWeek()
+            ]);
         } elseif ($filter === 'last_month') {
-            $absensiQuery->whereBetween('tgl', [Carbon::now()->subMonth(), Carbon::now()]);
+            $absensiQuery->whereBetween('tgl', [
+                Carbon::now()->subMonth()->startOfMonth(),
+                Carbon::now()->subMonth()->endOfMonth()
+            ]);
         } elseif ($filter === 'range' && $startDate && $endDate) {
             $absensiQuery->whereBetween('tgl', [$startDate, $endDate]);
         }

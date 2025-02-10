@@ -67,9 +67,15 @@ class AgendaController extends Controller
             ->orderBy('tgl', 'desc');
 
         if ($filter === 'last_week') {
-            $agendaQuery->whereBetween('tgl', [Carbon::now()->subWeek(), Carbon::now()]);
+            $agendaQuery->whereBetween('tgl', [
+                Carbon::now()->subWeek()->startOfWeek(),
+                Carbon::now()->subWeek()->endOfWeek()
+            ]);
         } elseif ($filter === 'last_month') {
-            $agendaQuery->whereBetween('tgl', [Carbon::now()->subMonth(), Carbon::now()]);
+            $agendaQuery->whereBetween('tgl', [
+                Carbon::now()->subMonth()->startOfMonth(),
+                Carbon::now()->subMonth()->endOfMonth()
+            ]);
         } elseif ($filter === 'range' && $startDate && $endDate) {
             $agendaQuery->whereBetween('tgl', [$startDate, $endDate]);
         }
