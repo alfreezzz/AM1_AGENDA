@@ -2,31 +2,44 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Action Buttons Section -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
         @if(Auth::user()->role == 'Guru')
-            <a href="{{ url('absensiswa_guru/create/' . $kelas->id) }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 mb-2 md:mb-0">
+            <a href="{{ url('absensiswa_guru/create/' . $kelas->id) }}" 
+               class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">
                 Tambah Absensi Siswa
             </a>
         @endif
-
-        <form id="filter-form" method="GET" action="{{ url('absensiswa_guru/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
-            <select name="filter" id="filter" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+    
+        <form id="filter-form" method="GET" action="{{ url('absensiswa_guru/kelas/' . $kelas->slug) }}" 
+              class="flex flex-wrap items-center space-x-2">
+            <select name="filter" id="filter" 
+                    class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
                 <option value="">Semua Tanggal</option>
                 <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
                 <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
                 <option value="range" {{ request('filter') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
             </select>
-        
+    
             <div id="date-range" class="hidden flex space-x-2">
-                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" 
+                       class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" 
+                       class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
             </div>
         </form>
     </div>
-    <a href="{{ route('absensiswa_guru.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
-    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
-        Export Excel
-    </a>
+    
+    <div class="flex flex-col md:flex-row items-center md:justify-between space-y-2 md:space-y-0">
+        <a href="{{ route('absensiswa_guru.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
+           class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200">
+            Export Excel
+        </a>
+    
+        <a href="{{ url('absensiswa_guru/kelas/' . $kelas->slug . '/rekapan') }}" 
+           class="block text-center py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300">
+            Lihat Rekapan
+        </a>
+    </div>    
 
     @if($absensi->isEmpty())
         <p class="text-center mt-4">Tidak ada absen siswa untuk kelas ini.</p>

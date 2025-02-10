@@ -2,28 +2,44 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     
     <!-- Search, Date Filter, and Add Button aligned -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4 space-y-4 md:space-y-0 md:space-x-4">
-        <form id="filter-form" method="GET" action="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
-            <select name="filter" id="filter" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+        <form id="filter-form" method="GET" action="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" 
+              class="flex flex-wrap items-center space-x-2">
+            <select name="filter" id="filter" 
+                    class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
                 <option value="">Semua Tanggal</option>
                 <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
                 <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
                 <option value="range" {{ request('filter') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
             </select>
-        
+    
             <div id="date-range" class="hidden flex space-x-2">
-                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" 
+                       class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
+                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" 
+                       class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
             </div>
         </form>
+    
         @if (Auth::user()->role == 'Sekretaris')
-            <a href="{{ route('absen_siswa.create') }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 w-full md:w-auto text-center">Tambah Absensi</a>
+            <a href="{{ route('absen_siswa.create') }}" 
+               class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 w-full md:w-auto text-center">
+                Tambah Absensi
+            </a>
         @endif
     </div>
-    <a href="{{ route('absen_siswa.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
-        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-auto text-center">
-        Ekspor ke Excel
-    </a>
+    
+    <div class="flex flex-col md:flex-row items-center md:justify-between space-y-2 md:space-y-0 md:space-x-4">
+        <a href="{{ route('absen_siswa.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
+           class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-auto text-center">
+            Ekspor ke Excel
+        </a>
+    
+        <a href="{{ url('absen_siswa/kelas/' . $kelas->slug . '/rekapan') }}" 
+           class="block text-center py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300 w-full md:w-auto">
+            Lihat Rekapan
+        </a>
+    </div>    
 
     @if($absen_siswa->isEmpty())
         @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Guru')

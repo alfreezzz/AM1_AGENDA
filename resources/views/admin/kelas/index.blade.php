@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="flex flex-col md:flex-row md:justify-between items-center mb-6 p-4 rounded-lg">
+    <div class="flex flex-col md:flex-row md:justify-between items-center mb-6 rounded-lg">
         <!-- Form Search -->
         <form action="{{ url('jurusan/' . $jurusan->id . '/kelas') }}" method="GET" class="mt-4">
             <input type="search" name="search" value="{{ $search }}" placeholder="Cari Tahun Ajaran"

@@ -2,7 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
         <!-- Action Buttons Section -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6 p-4">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
             @if(Auth::user()->role == 'Guru')
                 <a href="{{ url('absen_guru/create/' . $kelas->id) }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 mb-2 md:mb-0">
                     Tambah Absensi

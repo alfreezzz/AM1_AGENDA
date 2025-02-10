@@ -64,7 +64,7 @@ Route::middleware(['auth', 'role:Guru,Admin'])->group(function () {
     Route::resource('absen_guru', Absen_guruController::class);
     Route::resource('absensiswa_guru', Absensiswa_GuruController::class);
     Route::get('absensiswa_guru/kelas/{slug}', [Absensiswa_GuruController::class, 'absensiswa_guruByClass']);
-    Route::get('absensiswa_guru/export/{kelas_slug}', [Absensiswa_GuruController::class, 'exportExcel'])->name('absensiswa.export');
+    Route::get('absensiswa_guru/export/{kelas_slug}', [Absensiswa_GuruController::class, 'exportExcel'])->name('absensiswa_guru.export');
     Route::get('/get-guru/{kelas_id}', [JadwalPelajaranController::class, 'getGuruByKelas']);
     Route::get('/get-mapel/{guru_id}', [JadwalPelajaranController::class, 'getMapelByGuru']);
     Route::get('absensiswa_guru/kelas/{slug}/rekapan', [RekapanController::class, 'rekapanGuru']);

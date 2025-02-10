@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="flex flex-col md:flex-row md:justify-between items-center mb-6 p-4 rounded-lg bg-gray-100 shadow">
+    <div class="flex flex-col md:flex-row md:justify-between items-center mb-6 rounded-lg bg-gray-100 shadow">
         <!-- Form Pencarian Mapel -->
         <form action="{{ url('mapel') }}" method="GET" class="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto mb-4 md:mb-0">
             <input type="search" name="search" value="{{ request('search') }}" placeholder="Cari mapel atau guru..." class="py-2 px-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200">

@@ -12,7 +12,7 @@
 
                 @foreach ($groupedData as $guru_nama => $mapelData)
                     @if(Auth::user()->role == 'Admin')
-                        <h2 class="text-lg font-bold mt-4">Guru: {{ $guru_nama ?? 'Tidak Diketahui' }}</h2>
+                        <h3 class="text-lg font-medium mb-2 mt-2 text-blue-600">Guru: {{ $guru_nama ?? 'Tidak Diketahui' }}</h2>
                     @endif
 
                     @php
@@ -20,7 +20,7 @@
                     @endphp
 
                     @foreach ($mapelGrouped as $mapel_nama => $absensi)
-                        <h3 class="text-md font-semibold mt-2">Mata Pelajaran: {{ $mapel_nama ?? 'Tidak Diketahui' }}</h3>
+                        <h4 class="text-md font-medium mb-2 mt-2 text-gray-700">Mata Pelajaran: {{ $mapel_nama ?? 'Tidak Diketahui' }}</h3>
 
                         <table class="overflow-x-auto min-w-full bg-white border border-gray-300 rounded-lg table-auto mt-2">
                             <thead class="bg-green-500 text-white">
