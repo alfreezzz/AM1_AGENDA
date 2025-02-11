@@ -106,8 +106,10 @@ class Absensiswa_GuruController extends Controller
         $filter = $request->query('filter', '');
         $start_date = $request->query('start_date', '');
         $end_date = $request->query('end_date', '');
-        
-        return Excel::download(new AbsensiExport($kelas->id, $filter, $start_date, $end_date), 'Absensi_Siswa_' . $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id . '.xlsx');
+
+        $filename = 'absensi_siswa_' . str_replace(['/', '\\'], '', $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id . '(guru)_TA_' . $kelas->thn_ajaran) . '.xlsx';
+
+        return Excel::download(new AbsensiExport($kelas->id, $filter, $start_date, $end_date), $filename);
     }
 
     /**

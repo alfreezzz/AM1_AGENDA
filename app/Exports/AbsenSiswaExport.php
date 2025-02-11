@@ -6,8 +6,13 @@ use App\Models\Absen_siswa;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Illuminate\Support\Collection;
 
-class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping
+class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
 {
     protected $kelas_id;
     protected $filter;
@@ -34,13 +39,40 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping
             $query->whereBetween('tgl', [$this->start_date, $this->end_date]);
         }
 
-        return $query->orderBy('tgl', 'desc')->get();
+        $data = $query->orderBy('tgl', 'desc')->get();
+
+        return $this->groupData($data);
+    }
+
+    private function groupData($data)
+    {
+        $grouped = collect();
+        $counter = 1;
+        $lastDate = null;
+
+        foreach ($data as $absen) {
+            if ($lastDate !== $absen->tgl) {
+                $grouped->push((object) ['header' => (string) $absen->tgl]); // Simpan header sebagai object
+                $counter = 1;
+            }
+
+            $grouped->push((object) [
+                'no' => $counter++,
+                'nama_siswa' => $absen->data_siswa->nama_siswa,
+                'keterangan' => $absen->keterangan,
+                'created_at' => $absen->created_at->format('d M Y H:i:s'),
+            ]);
+
+            $lastDate = $absen->tgl;
+        }
+
+        return $grouped;
     }
 
     public function headings(): array
     {
         return [
-            'Tanggal',
+            'No',
             'Nama Siswa',
             'Keterangan',
             'Waktu Ditambahkan',
@@ -49,11 +81,32 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($absen): array
     {
+        // Jika ini adalah header tanggal
+        if (isset($absen->header)) {
+            return [$absen->header, '', '', ''];
+        }
+
         return [
-            $absen->tgl,
-            $absen->data_siswa->nama_siswa,
-            $absen->keterangan,
-            $absen->created_at->format('d M Y H:i:s'),
+            $absen->no ?? '',
+            $absen->nama_siswa ?? '',
+            $absen->keterangan ?? '',
+            $absen->created_at ?? '',
         ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        // Styling header
+        $sheet->getStyle('A1:D1')->applyFromArray([
+            'font' => ['bold' => true],
+            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '90EE90']],
+        ]);
+
+        // Set kolom "Keterangan" (C) dan "Waktu Ditambahkan" (D) agar center
+        $sheet->getStyle('C:C')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('D:D')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        return [];
     }
 }
