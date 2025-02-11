@@ -307,8 +307,8 @@ final class AttributeType
         '1.3.6.1.1.1.1.10' => ['shadowExpire'],
         '1.3.6.1.1.1.1.11' => ['shadowFlag'],
         '1.3.6.1.1.1.1.12' => ['memberUid'],
-        '1.3.6.1.1.1.1.13' => ['memberNISetgroup'],
-        '1.3.6.1.1.1.1.14' => ['NISetgroupTriple'],
+        '1.3.6.1.1.1.1.13' => ['memberNisNetgroup'],
+        '1.3.6.1.1.1.1.14' => ['nisNetgroupTriple'],
         '1.3.6.1.1.1.1.15' => ['ipServicePort'],
         '1.3.6.1.1.1.1.16' => ['ipServiceProtocol'],
         '1.3.6.1.1.1.1.17' => ['ipProtocolNumber'],
@@ -413,7 +413,8 @@ final class AttributeType
      */
     private function __construct(
         protected string $_oid
-    ) {}
+    ) {
+    }
 
     public static function create(string $oid): self
     {

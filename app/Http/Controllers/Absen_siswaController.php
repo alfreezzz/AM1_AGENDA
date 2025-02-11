@@ -89,7 +89,7 @@ class Absen_siswaController extends Controller
         $start_date = $request->query('start_date', '');
         $end_date = $request->query('end_date', '');
 
-        return Excel::download(new AbsenSiswaExport($kelas->id, $filter, $start_date, $end_date), 'absensi_siswa_' . $kelas->kelas . '.xlsx');
+        return Excel::download(new AbsenSiswaExport($kelas->id, $filter, $start_date, $end_date), 'absensi_siswa_' . $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id . '.xlsx');
     }
 
     public function create()
