@@ -23,7 +23,7 @@ class MapelController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where('nama_mapel', 'like', '%' . $search . '%')
                     ->orWhereHas('dataGurus', function ($query) use ($search) {
-                        $query->where('nama_guru', 'like', '%' . $search . '%');
+                        $query->where('users.name', 'like', '%' . $search . '%');
                     });
             })
             ->get();

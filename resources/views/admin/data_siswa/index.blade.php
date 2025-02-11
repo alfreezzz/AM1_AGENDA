@@ -3,7 +3,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
         <!-- Header Section -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm mb-8">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 <!-- Search Form -->
                 <form action="{{ url('data_siswa') }}" method="GET" id="searchForm" class="flex-1 flex flex-col sm:flex-row gap-3">
@@ -49,13 +49,13 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                <th scope="col" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
-                                <th scope="col" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">NIS</th>
-                                <th scope="col" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
-                                <th scope="col" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
-                                <th scope="col" class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            <tr class="text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-4 py-2">No</th>
+                                <th scope="col" class="px-4 py-2">Nama Siswa</th>
+                                <th scope="col" class="px-4 py-2">NIS</th>
+                                <th scope="col" class="px-4 py-2">Gender</th>
+                                <th scope="col" class="px-4 py-2">Kelas</th>
+                                <th scope="col" class="px-4 py-2">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -66,14 +66,14 @@
                                     <div class="text-sm font-medium text-gray-900">{{ $item->nama_siswa }}</div>
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{{ $item->nis_id }}</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm">
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-center">
                                     @if ($item->gender == 'Pria')
                                         <span class="text-blue-600 text-2xl">&#9794;</span>
                                     @else
                                         <span class="text-pink-600 text-2xl">&#9792;</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-2 whitespace-nowrap">
+                                <td class="px-4 py-2 whitespace-nowrap text-center">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                         {{ $item->kelas->kelas }} {{ $item->kelas->jurusan->jurusan_id }} {{ $item->kelas->kelas_id }}
                                     </span>

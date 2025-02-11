@@ -1,62 +1,149 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="container mx-auto p-6 flex flex-col md:flex-row">
+    <div class="">
+        <div class="container mx-auto">
+            <div class="overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <!-- Form Section -->
+                    <div class="w-full md:w-1/2 px-8" x-data="{ 
+                        formData: {
+                            kelas: '',
+                            kelas_id: '',
+                            thn_ajaran: ''
+                        },
+                        isSubmitting: false,
+                        formatTahunAjaran() {
+                            let value = this.formData.thn_ajaran.replace(/\D/g, '');
+                            if (value.length >= 4) {
+                                const tahun1 = value.substr(0, 4);
+                                const tahun2 = String(Number(tahun1) + 1);
+                                this.formData.thn_ajaran = `${tahun1}/${tahun2}`;
+                            }
+                        }
+                    }">
+                        <div class="max-w-md mx-auto">
+                            <form action="{{ url('kelas') }}" 
+                                  method="post" 
+                                  enctype="multipart/form-data"
+                                  @submit.prevent="isSubmitting = true; $el.submit()"
+                                  class="space-y-6">
+                                @csrf
 
-        <!-- Bagian Kiri: Form -->
-        <div class="w-full md:w-1/2 mb-4 md:mb-0">
-            <form action="{{ url('kelas') }}" method="post" enctype="multipart/form-data" class="space-y-4">
-                @csrf
+                                <!-- Kelas Selection -->
+                                <div class="space-y-3">
+                                    <label class="text-sm font-medium text-gray-700 block">Tingkat Kelas</label>
+                                    <div class="flex flex-wrap gap-4">
+                                        @foreach(['X', 'XI', 'XII'] as $tingkat)
+                                            <label class="relative flex cursor-pointer items-center rounded-full p-3 ring-2 ring-transparent transition-all hover:ring-green-500"
+                                                   :class="{ 'bg-green-50 ring-green-500': formData.kelas === '{{ $tingkat }}' }">
+                                                <input type="radio"
+                                                       name="kelas"
+                                                       value="{{ $tingkat }}"
+                                                       x-model="formData.kelas"
+                                                       class="sr-only"
+                                                       {{ old('kelas') == $tingkat ? 'checked' : '' }}>
+                                                <span class="flex items-center justify-center text-sm font-medium"
+                                                      :class="{ 'text-green-700': formData.kelas === '{{ $tingkat }}', 'text-gray-900': formData.kelas !== '{{ $tingkat }}' }">
+                                                    {{ $tingkat }}
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('kelas')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Kelas</label>
-                    <div class="flex space-x-4 mt-2">
-                        <div class="flex items-center">
-                            <input class="form-radio h-4 w-4 text-green-500 @error('kelas') border-red-500 @enderror" type="radio" name="kelas" id="kelasX" value="X" {{ old('kelas') == 'X' ? 'checked' : '' }}>
-                            <label for="kelasX" class="ml-2 text-gray-700">X</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input class="form-radio h-4 w-4 text-green-500 @error('kelas') border-red-500 @enderror" type="radio" name="kelas" id="kelasXI" value="XI" {{ old('kelas') == 'XI' ? 'checked' : '' }}>
-                            <label for="kelasXI" class="ml-2 text-gray-700">XI</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input class="form-radio h-4 w-4 text-green-500 @error('kelas') border-red-500 @enderror" type="radio" name="kelas" id="kelasXII" value="XII" {{ old('kelas') == 'XII' ? 'checked' : '' }}>
-                            <label for="kelasXII" class="ml-2 text-gray-700">XII</label>
+                                <input type="hidden" name="jurusan" value="{{ $jurusan->id }}">
+
+                                <!-- Nomor Kelas Input -->
+                                <div class="space-y-2">
+                                    <label for="kelas_id" class="block text-sm font-medium text-gray-700">
+                                        Nomor Kelas
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" 
+                                               x-model="formData.kelas_id"
+                                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('kelas_id') border-red-500 @enderror"
+                                               id="kelas_id" 
+                                               name="kelas_id"
+                                               min="1"
+                                               placeholder="Contoh: 1, 2, 3"
+                                               value="{{ old('kelas_id') }}">
+                                    </div>
+                                    @error('kelas_id')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Tahun Ajaran Input -->
+                                <div class="space-y-2">
+                                    <label for="thn_ajaran" class="block text-sm font-medium text-gray-700">
+                                        Tahun Ajaran <span class="text-gray-500 italic">Format: 2024/2025</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" 
+                                               x-model="formData.thn_ajaran"
+                                               @input="formatTahunAjaran"
+                                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('thn_ajaran') border-red-500 @enderror"
+                                               id="thn_ajaran" 
+                                               name="thn_ajaran"
+                                               placeholder="YYYY/YYYY"
+                                               maxlength="9"
+                                               value="{{ old('thn_ajaran') }}">
+                                    </div>
+                                    @error('thn_ajaran')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="pt-4">
+                                    <button type="submit" 
+                                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+                                            :disabled="isSubmitting"
+                                            :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                                        <span x-show="!isSubmitting">Simpan Kelas</span>
+                                        <span x-show="isSubmitting" class="flex items-center">
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Menyimpan...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    @error('kelas')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                <input type="hidden" name="jurusan" value="{{ $jurusan->id }}">
-
-                <div>
-                    <label for="kelas_id" class="block text-sm font-medium text-gray-700">No Kelas</label>
-                    <input type="number" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('kelas_id') border-red-500 @enderror" id="kelas_id" name="kelas_id" value="{{ old('kelas_id') }}" style="padding-left: 10px;">
-                    @error('kelas_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <!-- Image Section -->
+                    <div class="w-full md:w-1/2 px-8 flex items-center justify-center">
+                        <div class="relative">
+                            <div class="absolute inset-0"></div>
+                            <img src="{{ asset('assets/images/hero.png') }}" 
+                                 alt="Hero Image" 
+                                 class="relative z-10 w-96 h-auto">
+                        </div>
+                    </div>
                 </div>
-
-                <div>
-                    <label for="thn_ajaran" class="block text-sm font-medium text-gray-700">Tahun Ajaran <i>*2024/2025</i></label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('thn_ajaran') border-red-500 @enderror" id="thn_ajaran" name="thn_ajaran" value="{{ old('thn_ajaran') }}" style="padding-left: 10px;">
-                    @error('thn_ajaran')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Simpan</button>
-                </div>
-            </form>
+            </div>
         </div>
-
-        <!-- Bagian Kanan: Gambar -->
-        <div class="w-full md:w-1/2 flex justify-center items-center">
-            <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" class="w-72 h-auto rounded-lg">
-        </div>
-
     </div>
 </x-layout>

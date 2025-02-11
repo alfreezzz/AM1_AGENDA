@@ -35,14 +35,14 @@
                 }">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
-                            <tr class="bg-gray-50">
-                                <th class="px-4 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider w-20">
+                            <tr class="bg-gray-50 text-center text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-4 py-2">
                                     No
                                 </th>
-                                <th class="px-4 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-4 py-2">
                                     Nama Jurusan
                                 </th>
-                                <th class="px-4 py-2 text-center text-sm font-medium text-gray-500 uppercase tracking-wider w-72">
+                                <th class="px-4 py-2">
                                     Aksi
                                 </th>
                             </tr>

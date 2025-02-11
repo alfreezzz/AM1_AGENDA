@@ -5,7 +5,7 @@
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
             <!-- Search Form -->
-            <form action="{{ url('jurusan/' . $jurusan->id . '/kelas') }}" method="GET" 
+            <form action="{{ url('jurusan/' . $jurusan->slug . '/kelas') }}" method="GET" 
                   class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
                 <div class="relative flex-grow">
                     <input type="search" name="search" value="{{ $search }}" 
@@ -40,12 +40,12 @@
             <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tahun Ajaran</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Guru Pengajar</th>
-                            <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <tr class="text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-4 py-2">No</th>
+                            <th class="px-4 py-2">Kelas</th>
+                            <th class="px-4 py-2">Tahun Ajaran</th>
+                            <th class="px-4 py-2">Guru Pengajar</th>
+                            <th class="px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

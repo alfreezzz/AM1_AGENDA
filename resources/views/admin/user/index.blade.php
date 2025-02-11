@@ -3,7 +3,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
         <!-- Header Section -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div class="mb-12">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <!-- Search and Filter Form -->
                 <form action="{{ url('user') }}" method="GET" id="filterForm" class="flex-1 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -63,13 +63,13 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">No</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-left">Username</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Role</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-left">Mapel & Kelas Mengajar</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Kelas</th>
-                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Aksi</th>
+                            <tr class="font-medium text-gray-500 uppercase tracking-wider text-center">
+                                <th class="px-4 py-2 text-xs">No</th>
+                                <th class="px-4 py-2 text-xs">Username</th>
+                                <th class="px-4 py-2 text-xs">Role</th>
+                                <th class="px-4 py-2 text-xs">Mapel & Kelas Mengajar</th>
+                                <th class="px-4 py-2 text-xs">Kelas</th>
+                                <th class="px-4 py-2 text-xs">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">

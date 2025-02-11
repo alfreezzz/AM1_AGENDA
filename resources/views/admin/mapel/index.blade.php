@@ -4,7 +4,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
 
         <!-- Search and Add Section -->
-        <div class="flex flex-col md:flex-row md:justify-between items-center mb-6 p-6 rounded-xl bg-white shadow-lg border border-gray-100">
+        <div class="flex flex-col md:flex-row md:justify-between items-center mb-12">
             <!-- Form Pencarian Mapel with improved styling -->
             <form action="{{ url('mapel') }}" method="GET" class="flex flex-col md:flex-row md:space-x-4 w-full md:w-auto mb-4 md:mb-0">
                 <div class="relative flex-grow md:max-w-md">
@@ -48,10 +48,10 @@
             <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
-                        <tr class="text-center">
-                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Mapel</th>
-                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Guru</th>
-                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        <tr class="text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-4 py-2">Nama Mapel</th>
+                            <th class="px-4 py-2">Nama Guru</th>
+                            <th class="px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

@@ -1,73 +1,152 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="container mx-auto p-6 flex flex-col md:flex-row">
+    <div class="min-h-screen">
+        <div class="container mx-auto">
+            <!-- Card Container -->
+            <div class="overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <!-- Form Section -->
+                    <div class="w-full md:w-1/2 px-8" x-data="{ 
+                        formData: {
+                            kelas_id: '',
+                            nama_siswa: '',
+                            nis_id: '',
+                            gender: ''
+                        },
+                        isSubmitting: false
+                    }">
+                        <div class="max-w-md mx-auto">                
+                            <form action="{{ url('data_siswa') }}" method="post" enctype="multipart/form-data" 
+                                  @submit="isSubmitting = true" 
+                                  class="space-y-6">
+                                @csrf
 
-        <!-- Bagian Kiri: Form -->
-        <div class="w-full md:w-1/2 mb-4 md:mb-0">
-            <form action="{{ url('data_siswa') }}" method="post" enctype="multipart/form-data" class="space-y-4">
-                @csrf
+                                <!-- Kelas Selection -->
+                                <div class="space-y-2">
+                                    <label for="kelas_id" class="text-sm font-medium text-gray-700 block">
+                                        Kelas
+                                    </label>
+                                    <div class="relative">
+                                        <select x-model="formData.kelas_id"
+                                                class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('kelas_id') border-red-500 @enderror"
+                                                name="kelas_id" 
+                                                id="kelas_id">
+                                            <option value="">--Pilih Kelas--</option>
+                                            @foreach ($kelas as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    @error('kelas_id')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                <div>
-                    <label for="kelas_id" class="block text-sm font-medium text-gray-700">Kelas</label>
-                    <select class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('kelas_id') border-red-500 @enderror" name="kelas_id" id="kelas_id" style="padding-left: 10px;">
-                        <option value="">--Pilih--</option>
-                        @foreach ($kelas as $item)
-                            <option value="{{ $item->id }}">{{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})</option>
-                        @endforeach
-                    </select>
-                    @error('kelas_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                                <!-- Nama Siswa Input -->
+                                <div class="space-y-2">
+                                    <label for="nama_siswa" class="text-sm font-medium text-gray-700 block">
+                                        Nama Siswa
+                                    </label>
+                                    <input type="text" 
+                                           x-model="formData.nama_siswa"
+                                           class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('nama_siswa') border-red-500 @enderror"
+                                           id="nama_siswa" 
+                                           name="nama_siswa" 
+                                           value="{{ old('nama_siswa') }}"
+                                           placeholder="Masukkan nama lengkap">
+                                    @error('nama_siswa')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                <div>
-                    <label for="nama_siswa" class="block text-sm font-medium text-gray-700">Nama Siswa</label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('nama_siswa') border-red-500 @enderror" id="nama_siswa" name="nama_siswa" value="{{ old('nama_siswa') }}" style="padding-left: 10px;">
-                    @error('nama_siswa')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                                <!-- NIS Input -->
+                                <div class="space-y-2">
+                                    <label for="nis_id" class="text-sm font-medium text-gray-700 block">
+                                        NIS
+                                    </label>
+                                    <input type="number" 
+                                           x-model="formData.nis_id"
+                                           class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('nis_id') border-red-500 @enderror"
+                                           id="nis_id" 
+                                           name="nis_id" 
+                                           value="{{ old('nis_id') }}"
+                                           placeholder="Masukkan NIS">
+                                    @error('nis_id')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                <div>
-                    <label for="nis_id" class="block text-sm font-medium text-gray-700">NIS</label>
-                    <input type="number" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('nis_id') border-red-500 @enderror" id="nis_id" name="nis_id" value="{{ old('nis_id') }}" style="padding-left: 10px;">
-                    @error('nis_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                                <!-- Gender Selection -->
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-gray-700 block">Gender</label>
+                                    <div class="flex space-x-6">
+                                        <div class="flex items-center">
+                                            <input type="radio" 
+                                                   x-model="formData.gender"
+                                                   id="gender_pria" 
+                                                   name="gender" 
+                                                   value="Pria"
+                                                   class="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300">
+                                            <label for="gender_pria" class="ml-3 text-sm text-gray-700 flex items-center">
+                                                <span class="text-blue-500 text-lg mr-1">♂</span> Laki-laki
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="radio" 
+                                                   x-model="formData.gender"
+                                                   id="gender_wanita" 
+                                                   name="gender" 
+                                                   value="Wanita"
+                                                   class="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300">
+                                            <label for="gender_wanita" class="ml-3 text-sm text-gray-700 flex items-center">
+                                                <span class="text-pink-500 text-lg mr-1">♀</span> Perempuan
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @error('gender')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
 
-                <div>
-                    <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
-                    <div class="mt-2 flex items-center space-x-4">
-                        <div>
-                            <input type="radio" id="gender_pria" name="gender" value="Pria" {{ old('gender') == 'Pria' ? 'checked' : '' }} class="text-green-500 focus:ring-green-500">
-                            <label for="gender_pria" class="ml-2 text-sm text-gray-700">
-                                <span class="text-blue-500">&#9794;</span> Laki-laki
-                            </label>
-                        </div>
-                        <div>
-                            <input type="radio" id="gender_wanita" name="gender" value="Wanita" {{ old('gender') == 'Wanita' ? 'checked' : '' }} class="text-green-500 focus:ring-green-500">
-                            <label for="gender_wanita" class="ml-2 text-sm text-gray-700">
-                                <span class="text-pink-500">&#9792;</span> Perempuan
-                            </label>
+                                <!-- Submit Button -->
+                                <div class="pt-4">
+                                    <button type="submit" 
+                                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+                                            :disabled="isSubmitting"
+                                            :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                                        <span x-show="!isSubmitting">Simpan Data</span>
+                                        <span x-show="isSubmitting" class="flex items-center">
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Menyimpan...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    @error('gender')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+
+                    <!-- Image Section -->
+                    <div class="w-full md:w-1/2 px-8 flex items-center justify-center">
+                        <div class="relative">
+                            <div class="absolute inset-0"></div>
+                            <img src="{{ asset('assets/images/hero.png') }}" 
+                                 alt="Hero Image" 
+                                 class="relative z-10 w-96 h-auto">
+                        </div>
+                    </div>
                 </div>
-
-                <div>
-                    <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Simpan</button>
-                </div>
-            </form>
+            </div>
         </div>
-
-        <!-- Bagian Kanan: Gambar -->
-        <div class="w-full md:w-1/2 flex justify-center items-center">
-            <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" class="w-72 h-auto rounded-lg">
-        </div>
-
     </div>
 </x-layout>
