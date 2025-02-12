@@ -2,7 +2,7 @@
     // Ambil slug dari kelas terkait pengguna, jika tersedia
     $kelasSlug = Auth::user()->kelas ? Auth::user()->kelas->slug : null;
 @endphp
-<nav class="flex flex-col space-y-2 px-4 flex-grow overflow-y-auto scrollbar-hide">
+<nav class="flex flex-col space-y-2 px-4 flex-grow overflow-y-auto py-2 my-2 mb-4 scrollbar-hide max-lg:pt-20">
     <!-- Conditional Navigation Links based on User Role -->
     @if (Auth::user()->role == 'Admin')
       <a href="{{ url('admin') }}" class="flex items-center px-4 py-2 rounded-md text-sm {{ Request::is('admin') ? 'bg-green-500' : 'hover:bg-green-500' }}">
