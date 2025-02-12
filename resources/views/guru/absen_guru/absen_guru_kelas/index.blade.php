@@ -1,146 +1,195 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-        <!-- Action Buttons Section -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-            @if(Auth::user()->role == 'Guru')
-                <a href="{{ url('absen_guru/create/' . $kelas->id) }}" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 mb-2 md:mb-0">
-                    Tambah Absensi
-                </a>
-            @endif
-    
-            <!-- Date Filter Form -->
-            <form id="filter-form" method="GET" action="{{ url('absen_guru/kelas/' . $kelas->slug) }}" class="flex items-center space-x-2">
-                <select name="filter" id="filter" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                    <option value="">Semua Tanggal</option>
-                    <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
-                    <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
-                    <option value="range" {{ request('filter') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
-                </select>
-            
-                <div id="date-range" class="hidden flex space-x-2">
-                    <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                    <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                </div>
-            </form>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ 
+        showDateRange: {{ request('filter') === 'range' ? 'true' : 'false' }},
+        currentFilter: '{{ request('filter') }}',
+        startDate: '{{ request('start_date') }}',
+        endDate: '{{ request('end_date') }}'
+    }">
+        <!-- Header Section with improved spacing and shadow -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                <!-- Action Button -->
+                @if(Auth::user()->role == 'Guru')
+                    <a href="{{ url('absen_guru/create/' . $kelas->id) }}" 
+                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Tambah Absensi
+                    </a>
+                @endif
+
+                <!-- Enhanced Filter Form -->
+                <form id="filter-form" method="GET" action="{{ url('absen_guru/kelas/' . $kelas->slug) }}" 
+                      class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <div class="relative">
+                        <select name="filter" x-model="currentFilter"
+                                class="appearance-none bg-white border border-gray-300 rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700 text-sm">
+                            <option value="">Semua Tanggal</option>
+                            <option value="last_week">Minggu Lalu</option>
+                            <option value="last_month">Bulan Lalu</option>
+                            <option value="range">Rentang Tanggal</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Date Range Inputs with smooth transition -->
+                    <div x-show="currentFilter === 'range'"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform scale-95"
+                         x-transition:enter-end="opacity-100 transform scale-100"
+                         class="flex space-x-4">
+                        <input type="date" name="start_date" x-model="startDate"
+                               class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm">
+                        <input type="date" name="end_date" x-model="endDate"
+                               class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm">
+                    </div>
+                </form>
+            </div>
         </div>
-    
+
+        <!-- No Data Message -->
         @if($absen_guru->isEmpty())
-            <p class="text-center mt-4">Tidak ada absensi untuk kelas ini.</p>
+            <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                <p class="mt-4 text-gray-600">Tidak ada absensi untuk kelas ini.</p>
+            </div>
         @else
             @php
                 $groupedAbsensi = $absen_guru->groupBy('tgl');
             @endphp
 
-        <!-- Displaying Attendance Records Grouped by Date -->
-        @foreach ($groupedAbsensi as $date => $absensiItems)
-            <h2 class="text-xl font-semibold mb-2 mt-4 text-green-600">{{ \Carbon\Carbon::parse($date)->format('d M Y') }}</h2>
+            <!-- Attendance Records Section -->
+            @foreach ($groupedAbsensi as $date => $absensiItems)
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                    <div class="bg-green-600 px-6 py-4">
+                        <h2 class="text-xl font-semibold text-white">
+                            {{ \Carbon\Carbon::parse($date)->format('d M Y') }}
+                        </h2>
+                    </div>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 rounded-lg table-auto">
-                    <thead class="sticky top-0 bg-green-500 text-white">
-                        <tr class="text-center">
-                            <th class="px-4 py-2">No</th>
-                            @if(Auth::user()->role == 'Admin')
-                            <th class="py-3 px-6">Nama Guru</th>
-                            @endif
-                            <th class="px-4 py-2">Mapel</th>
-                            <th class="px-4 py-2">Keterangan</th>
-                            <th class="px-4 py-2">Indikator Kompetensi</th>
-                            <th class="px-4 py-2">Keterangan Tugas</th>
-                            @if(Auth::user()->role == 'Admin')
-                            <th class="px-4 py-2">Waktu Ditambahkan</th>
-                            @endif
-                            @if(Auth::user()->role == 'Guru')
-                            <th class="px-4 py-2">Aksi</th>
-                            @endif
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($absensiItems as $item)
-                            <tr class="text-center border-t border-gray-200 hover:bg-gray-100">
-                                <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                                @if(Auth::user()->role == 'Admin')
-                                <td class="px-4 py-2">{{ $item->user->name }}</td>
-                                @endif
-                                <td class="px-4 py-2">{{ $item->mapel->nama_mapel }}</td>
-                                <td class="px-4 py-2">{{ $item->keterangan }}</td>
-                                <td class="px-4 py-2">
-                                    @php
-                                        $tugasList = json_decode($item->tugas);
-                                    @endphp
-                                
-                                    @if(!empty($tugasList) && is_array($tugasList))
-                                        <div class="flex flex-col space-y-1">
-                                            @foreach ($tugasList as $file)
-                                                <a href="{{ asset('storage/' . $file) }}" download class="text-blue-500 hover:underline flex items-center">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4zm4 8h8m-8 4h8M4 4h16v16H4V4z" />
-                                                    </svg>
-                                                    {{ \Illuminate\Support\Str::limit(basename($file), 20) }}
-                                                </a>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <span class="block text-gray-500">-</span>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    @if(Auth::user()->role == 'Admin')
+                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Guru</th>
                                     @endif
-                                </td>    
-                                <td class="px-4 py-2">{{ $item->keterangantugas }}</td>
-                                @if(Auth::user()->role == 'Admin')
-                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}</td>
-                                @endif
-                                @if(Auth::user()->role == 'Guru')
-                                <td class="px-4 py-2 text-center">
-                                    <div class="flex justify-center items-center space-x-2">
-                                        <a href="{{ url('absen_guru/' . $item->id . '/edit') }}" class="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 transition duration-200">Edit</a>
-                                        <form action="{{ url('absen_guru/' . $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-200">Delete</button>
-                                        </form>
-                                    </div>
-                                </td>                                
-                                @endif
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endforeach
-    @endif
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mapel</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Indikator Kompetensi</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan Tugas</th>
+                                    @if(Auth::user()->role == 'Admin')
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Ditambahkan</th>
+                                    @endif
+                                    @if(Auth::user()->role == 'Guru')
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    @endif
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach ($absensiItems as $item)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $loop->iteration }}</td>
+                                        @if(Auth::user()->role == 'Admin')
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->user->name }}</td>
+                                        @endif
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->mapel->nama_mapel }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->keterangan }}</td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            @php
+                                                $tugasList = json_decode($item->tugas);
+                                            @endphp
+                                            
+                                            @if(!empty($tugasList) && is_array($tugasList))
+                                                <div class="space-y-2">
+                                                    @foreach ($tugasList as $file)
+                                                        <a href="{{ asset('storage/' . $file) }}" 
+                                                           class="flex items-center text-green-600 hover:text-green-700 group">
+                                                            <svg class="w-4 h-4 mr-2 group-hover:text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                                            </svg>
+                                                            <span class="text-sm">{{ \Illuminate\Support\Str::limit(basename($file), 20) }}</span>
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <span class="text-gray-500">-</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">{{ $item->keterangantugas }}</td>
+                                        @if(Auth::user()->role == 'Admin')
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
+                                            </td>
+                                        @endif
+                                        @if(Auth::user()->role == 'Guru')
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <div class="flex space-x-2">
+                                                    <a href="{{ url('absen_guru/' . $item->id . '/edit') }}" 
+                                                       class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-md transition-colors duration-150">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                        </svg>
+                                                        Edit
+                                                    </a>
+                                                    <form action="{{ url('absen_guru/' . $item->id) }}" method="POST" 
+                                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" 
+                                                                class="inline-flex items-center px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-md transition-colors duration-150">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                            </svg>
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let filter = document.getElementById('filter');
-            let startDate = document.getElementById('start_date');
-            let endDate = document.getElementById('end_date');
-            let dateRange = document.getElementById('date-range');
-            let form = document.getElementById('filter-form');
-    
-            // Tampilkan input rentang tanggal jika sudah dipilih sebelumnya
-            if (filter.value === 'range') {
-                dateRange.classList.remove('hidden');
-            }
-    
-            // Fungsi untuk submit otomatis
-            function autoSubmit() {
-                form.submit();
-            }
-    
-            // Submit otomatis saat filter berubah
-            filter.addEventListener('change', function () {
-                if (this.value === 'range') {
-                    dateRange.classList.remove('hidden');
-                } else {
-                    dateRange.classList.add('hidden');
-                    startDate.value = "";
-                    endDate.value = "";
-                    autoSubmit();
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('filterData', () => ({
+                init() {
+                    this.$watch('currentFilter', value => {
+                        if (value !== 'range') {
+                            this.$refs.filterForm.submit();
+                        }
+                    });
+
+                    this.$watch('startDate', value => {
+                        if (this.currentFilter === 'range' && this.endDate) {
+                            this.$refs.filterForm.submit();
+                        }
+                    });
+
+                    this.$watch('endDate', value => {
+                        if (this.currentFilter === 'range' && this.startDate) {
+                            this.$refs.filterForm.submit();
+                        }
+                    });
                 }
-            });
-    
-            // Submit otomatis saat tanggal rentang dipilih
-            startDate.addEventListener('change', autoSubmit);
-            endDate.addEventListener('change', autoSubmit);
+            }));
         });
     </script>
 </x-layout>
