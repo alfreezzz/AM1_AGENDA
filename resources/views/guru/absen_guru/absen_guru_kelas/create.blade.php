@@ -1,112 +1,141 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="container mx-auto p-6 flex flex-col md:flex-row">
-        <!-- Bagian Kiri: Form -->
-        <div class="w-full md:w-1/2 mb-4 md:mb-0">
-            <form action="{{ url('absen_guru') }}" method="post" enctype="multipart/form-data" class="space-y-4">
-                @csrf
+    <div class="min-h-screen bg-gray-50 py-12" x-data="{ 
+        files: [],
+        message: '',
+        updateMessage(type) {
+            this.message = type === 'Sakit' ? 'Semoga lekas sembuh' : 'Semoga urusanmu lancar';
+        }
+    }">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <!-- Form Section -->
+                    <div class="w-full md:w-1/2 p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Form Absensi</h2>
+                        
+                        <form action="{{ url('absen_guru') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+                            @csrf
+                            <input type="hidden" name="kelas_id" value="{{ $kelas_id }}">
 
-                <input type="hidden" name="kelas_id" value="{{ $kelas_id }}">
+                            <!-- Mapel Selection -->
+                            <div class="space-y-2">
+                                <label for="mapel_id" class="text-sm font-medium text-gray-700 block">Mata Pelajaran</label>
+                                <select id="mapel_id" name="mapel_id" 
+                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors duration-200">
+                                    <option value="">--Pilih Mata Pelajaran--</option>
+                                    @foreach($mapel as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nama_mapel }}</option>
+                                    @endforeach
+                                </select>
+                                @error('mapel_id')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                <!-- Mapel -->
-                <div class="form-group">
-                    <label for="mapel_id" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
-                    <select id="mapel_id" name="mapel_id" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm">
-                        <option value="">--Pilih--</option>
-                        @foreach($mapel as $item)
-                            <option value="{{ $item->id }}">{{ $item->nama_mapel }}</option>
-                        @endforeach
-                    </select>
-                    @error('mapel_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>     
+                            <!-- Date Input -->
+                            <div class="space-y-2">
+                                <label for="tgl" class="text-sm font-medium text-gray-700 block">Tanggal</label>
+                                <input type="date" id="tgl" name="tgl" 
+                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors duration-200"
+                                    value="{{ old('tgl', date('Y-m-d')) }}" 
+                                    min="{{ date('Y-m-d') }}" 
+                                    max="{{ date('Y-m-d') }}">
+                                @error('tgl')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                <!-- Tanggal -->
-                <div class="form-group">
-                    <label for="tgl" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                    <input type="date" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('tgl') border-red-500 @enderror" 
-                                id="tgl" name="tgl" value="{{ old('tgl', date('Y-m-d')) }}" 
-                                min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d') }}" style="padding-left: 10px;">
-                    @error('tgl')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                            <!-- Radio Buttons -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700 block">Keterangan</label>
+                                <div class="flex space-x-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="keterangan" value="Sakit" 
+                                            class="form-radio text-green-500 focus:ring-green-500"
+                                            x-on:change="updateMessage('Sakit')">
+                                        <span class="ml-2">Sakit</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="keterangan" value="Izin" 
+                                            class="form-radio text-green-500 focus:ring-green-500"
+                                            x-on:change="updateMessage('Izin')">
+                                        <span class="ml-2">Izin</span>
+                                    </label>
+                                </div>
+                                @error('keterangan')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                <!-- Keterangan dengan Flexbox -->
-                <div class="form-group">
-                    <label class="block text-sm font-medium text-gray-700">Keterangan</label>
-                    <div class="flex space-x-4"> <!-- Menggunakan Flex untuk menyusun radio button -->
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input @error('keterangan') is-invalid @enderror" id="keterangan_sakit" name="keterangan" value="Sakit" {{ old('keterangan') == 'Sakit' ? 'checked' : '' }} onchange="updateMessage()">
-                            <label class="form-check-label" for="keterangan_sakit">Sakit</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input @error('keterangan') is-invalid @enderror" id="keterangan_izin" name="keterangan" value="Izin" {{ old('keterangan') == 'Izin' ? 'checked' : '' }} onchange="updateMessage()">
-                            <label class="form-check-label" for="keterangan_izin">Izin</label>
+                            <!-- File Upload -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700 block">Upload Tugas</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-green-500 transition-colors duration-200"
+                                    x-on:drop="files = $event.dataTransfer.files"
+                                    x-on:dragover.prevent="$el.classList.add('border-green-500')"
+                                    x-on:dragleave.prevent="$el.classList.remove('border-green-500')">
+                                    <div class="space-y-1 text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <div class="flex text-sm text-gray-600">
+                                            <label class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                                <span>Upload file</span>
+                                                <input type="file" name="tugas[]" multiple class="sr-only" accept=".pdf" x-on:change="files = $event.target.files">
+
+                                            </label>
+                                            <p class="pl-1">atau drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">pdf up to 10MB</p>
+                                    </div>
+                                </div>
+                                <div x-show="files.length > 0" class="mt-2">
+                                    <template x-for="file in files" :key="file.name">
+                                        <div class="text-sm text-gray-600" x-text="file.name"></div>
+                                    </template>
+                                </div>
+                                @error('tugas')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Task Description -->
+                            <div class="space-y-2">
+                                <label for="keterangantugas" class="text-sm font-medium text-gray-700 block">Keterangan Tugas</label>
+                                <input type="text" id="keterangantugas" name="keterangantugas" 
+                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors duration-200"
+                                    value="{{ old('keterangantugas') }}">
+                                @error('keterangantugas')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="pt-4">
+                                <button type="submit" 
+                                    class="w-full bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200">
+                                    Simpan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Image & Message Section -->
+                    <div class="w-full md:w-1/2 bg-green-50 p-8 flex flex-col justify-center items-center">
+                        <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" 
+                            class="w-full max-w-md h-auto mb-8 transform transition-transform duration-500 hover:scale-105">
+                        <div x-show="message" 
+                            x-text="message"
+                            class="text-xl font-bold text-green-600 text-center animate-fade-in"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform -translate-y-4"
+                            x-transition:enter-end="opacity-100 transform translate-y-0">
                         </div>
                     </div>
-                    @error('keterangan')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Tombol Upload Tugas Berupa Gambar -->
-                <div class="form-group">
-                    <label for="tugas" class="block text-sm font-medium text-gray-700">Tugas</label>
-                    <label class="flex w-full cursor-pointer" style="margin: 10px; margin-left: 0;">
-                        <span class="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center hover:bg-green-600 transition-all duration-200">
-                            <img src="{{ asset('assets/images/upload-regular-24.png') }}" alt="Upload Icon" class="w-6 h-6 mr-2">
-                            <span>Upload Tugas</span>
-                        </span>
-                        <input type="file" class="hidden" id="tugas" name="tugas[]" multiple>
-                    </label>
-                    @error('tugas')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="keterangantugas" class="block text-sm font-medium text-gray-700">Keterangan Tugas</label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('keterangantugas') border-red-500 @enderror" id="keterangantugas" name="keterangantugas" value="{{ old('keterangantugas') }}" style="padding-left: 10px;">
-                    @error('keterangantugas')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Simpan</button>
-            </form>
-        </div>
-
-        <!-- Bagian Kanan: Gambar dan Pesan -->
-        <div class="w-full md:w-1/2 flex justify-center items-center">
-            <div class="text-center">
-                <!-- Gambar Responsif dan Mengecil di Desktop -->
-                <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" class="w-full max-w-xs md:max-w-sm lg:max-w-xs xl:max-w-xs h-auto mb-4"> <!-- Gambar lebih kecil di Desktop -->
-                <div id="message" class="text-lg font-bold text-green-600">
-                    <!-- Default message or dynamic message will appear here -->
                 </div>
             </div>
         </div>
-           
     </div>
-
-    <!-- JavaScript untuk Mengubah Pesan -->
-    <script>
-        function updateMessage() {
-            const sakit = document.getElementById('keterangan_sakit').checked;
-            const izin = document.getElementById('keterangan_izin').checked;
-            const messageDiv = document.getElementById('message');
-
-            if (sakit) {
-                messageDiv.textContent = 'Semoga lekas sembuh';
-            } else if (izin) {
-                messageDiv.textContent = 'Semoga urusanmu lancar';
-            } else {
-                messageDiv.textContent = '';
-            }
-        }
-    </script>
 </x-layout>

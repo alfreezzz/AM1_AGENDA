@@ -1,36 +1,60 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    @if($absen_siswa->isEmpty())
-        <p class="text-center mt-4">Tidak ada data absensi yang ditemukan</p>
-    @else
-        <div class="mt-4">
-            <div class="mt-2 overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300 rounded-lg table-auto">
-                    <thead class="bg-green-500 text-white">
-                        <tr class="text-center">
-                            <th class="px-4 py-2">No</th>
-                            <th class="px-4 py-2">Nama Siswa</th>
-                            <th class="px-4 py-2">Hadir</th>
-                            <th class="px-4 py-2">Sakit</th>
-                            <th class="px-4 py-2">Izin</th>
-                            <th class="px-4 py-2">Alpha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($absen_siswa as $index => $item)
-                            <tr class="text-center border-t border-gray-200 hover:bg-gray-100">
-                                <td class="px-4 py-2">{{ $index + 1 }}</td>
-                                <td class="px-4 py-2 text-left">{{ $item->data_siswa->nama_siswa }}</td>
-                                <td class="px-4 py-2">{{ $item->total_hadir }}</td>
-                                <td class="px-4 py-2">{{ $item->total_sakit }}</td>
-                                <td class="px-4 py-2">{{ $item->total_izin }}</td>
-                                <td class="px-4 py-2">{{ $item->total_alpha }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <div class="container mx-auto px-4 py-8">
+
+        @if($absen_siswa->isEmpty())
+            <div class="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <p class="text-gray-600 text-lg">Tidak ada data absensi yang ditemukan</p>
             </div>
-        </div>
-    @endif
+        @else
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gradient-to-r from-green-500 to-green-600">
+                            <tr>
+                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">No</th>
+                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider text-left">Nama Siswa</th>
+                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Hadir</th>
+                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Sakit</th>
+                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Izin</th>
+                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Alpha</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            @foreach ($absen_siswa as $index => $item)
+                                <tr class="hover:bg-gray-50 transition duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-600">{{ $index + 1 }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ $item->data_siswa->nama_siswa }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            {{ $item->total_hadir }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            {{ $item->total_sakit }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            {{ $item->total_izin }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            {{ $item->total_alpha }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+    </div>
 </x-layout>
