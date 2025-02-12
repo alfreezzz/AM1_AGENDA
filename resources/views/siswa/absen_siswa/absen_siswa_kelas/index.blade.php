@@ -1,127 +1,143 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
     
-    <!-- Search, Date Filter, and Add Button aligned -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
-        <form id="filter-form" method="GET" action="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" 
-              class="flex flex-wrap items-center space-x-2">
-            <select name="filter" id="filter" 
-                    class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                <option value="">Semua Tanggal</option>
-                <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
-                <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
-                <option value="range" {{ request('filter') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
-            </select>
-    
-            <div id="date-range" class="hidden flex space-x-2">
-                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" 
-                       class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" 
-                       class="py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-green-500">
-            </div>
-        </form>
-    
-        @if (Auth::user()->role == 'Sekretaris')
-            <a href="{{ route('absen_siswa.create') }}" 
-               class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 w-full md:w-auto text-center">
-                Tambah Absensi
-            </a>
-        @endif
-    </div>
-    
-    <div class="flex flex-col md:flex-row items-center md:justify-between space-y-2 md:space-y-0 md:space-x-4">
-        <a href="{{ route('absen_siswa.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
-           class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 w-full md:w-auto text-center">
-            Ekspor ke Excel
-        </a>
-    
-        <a href="{{ url('absen_siswa/kelas/' . $kelas->slug . '/rekapan') }}" 
-           class="block text-center py-2 px-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300 w-full md:w-auto">
-            Lihat Rekapan
-        </a>
-    </div>    
+    <div class="container mx-auto px-4 max-w-7xl" x-data="{ 
+        showDateRange: {{ request('filter') === 'range' ? 'true' : 'false' }},
+        startDate: '{{ request('start_date') }}',
+        endDate: '{{ request('end_date') }}'
+    }">
+        <!-- Header Section -->
+        <div class="mb-12">
+            <div class="flex flex-col lg:flex-row justify-between items-stretch space-y-4 lg:space-y-0 lg:space-x-4">
+                <!-- Filter Form -->
+                <form id="filter-form" method="GET" action="{{ url('absen_siswa/kelas/' . $kelas->slug) }}" 
+                      class="flex-1 flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                    <select name="filter" id="filter" 
+                            x-on:change="showDateRange = $event.target.value === 'range'; if($event.target.value !== 'range') $el.form.submit()"
+                            class="w-full sm:w-auto px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                        <option value="">Semua Tanggal</option>
+                        <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
+                        <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
+                        <option value="range" {{ request('filter') == 'range' ? 'selected' : '' }}>Rentang Tanggal</option>
+                    </select>
+                    
+                    <div x-show="showDateRange" 
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 transform scale-95"
+                         x-transition:enter-end="opacity-100 transform scale-100"
+                         class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
+                        <input type="date" name="start_date" x-model="startDate"
+                               x-on:change="$el.form.submit()"
+                               class="w-full sm:w-auto px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <input type="date" name="end_date" x-model="endDate"
+                               x-on:change="$el.form.submit()"
+                               class="w-full sm:w-auto px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    </div>
+                </form>
 
-    @if($absen_siswa->isEmpty())
-        @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Guru')
-            <p class="text-center mt-4">Tidak ada data absensi yang ditemukan</p>
-        @endif
-        @if (Auth::user()->role == 'Sekretaris')
-            <p class="text-center mt-4">Tidak ada absensi untuk kelas ini.</p>
-        @endif
-    @else
-        <!-- Loop through each date group -->
-        @foreach ($absen_siswa as $date => $records)
-            <div class="mt-4">
-                <h3 class="font-bold text-lg text-green-600">{{ \Carbon\Carbon::parse($date)->format('d M Y') }}</h3>
-                
-                <div class="overflow-y-auto max-h-80 mt-2">
-                    <table class="min-w-full bg-white border border-gray-300 rounded-lg table-auto">
-                        <thead class="bg-green-500 text-white">
-                            <tr class="text-center">
-                                <th class="px-4 py-2">No</th>
-                                <th class="px-4 py-2">Nama Siswa</th>
-                                <th class="px-4 py-2">Keterangan</th>
-                                @if(Auth::user()->role == 'Admin')
-                                    <th class="py-3 px-6">Waktu Ditambahkan</th>
-                                    <th class="px-4 py-2">Aksi</th>
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($records as $item)
-                                <tr class="text-center border-t border-gray-200 hover:bg-gray-100">
-                                    <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                                    <td class="px-4 py-2 text-left">{{ $item->data_siswa->nama_siswa }}</td>
-                                    <td class="px-4 py-2">{{ $item->keterangan }}</td>
+                @if (Auth::user()->role == 'Sekretaris')
+                    <a href="{{ route('absen_siswa.create') }}" 
+                       class="inline-flex items-center justify-center px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        Tambah Absensi
+                    </a>
+                @endif
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
+            <a href="{{ route('absen_siswa.export', ['kelas_slug' => $kelas->slug, 'filter' => request('filter'), 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
+               class="inline-flex items-center justify-center px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Ekspor ke Excel
+            </a>
+
+            <a href="{{ url('absen_siswa/kelas/' . $kelas->slug . '/rekapan') }}"
+               class="inline-flex items-center justify-center px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Lihat Rekapan
+            </a>
+        </div>
+
+        <!-- Empty State -->
+        @if($absen_siswa->isEmpty())
+            <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+                <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                <p class="mt-4 text-lg text-gray-600">
+                    @if (Auth::user()->role == 'Sekretaris')
+                        Tidak ada absensi untuk kelas ini.
+                    @else
+                        Tidak ada data absensi yang ditemukan
+                    @endif
+                </p>
+            </div>
+        @else
+            <!-- Attendance Records -->
+            @foreach ($absen_siswa as $date => $records)
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+                    <div class="px-4 py-4 bg-green-500 border-b border-green-100">
+                        <h3 class="text-lg font-semibold text-white">
+                            {{ \Carbon\Carbon::parse($date)->format('d M Y') }}
+                        </h3>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr class="text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th class="px-4 py-2">No</th>
+                                    <th class="px-4 py-2">Nama Siswa</th>
+                                    <th class="px-4 py-2">Keterangan</th>
                                     @if(Auth::user()->role == 'Admin')
-                                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}</td>
-                                    <td class="px-4 py-2 text-center">
-                                        <div class="flex justify-center items-center space-x-2">
-                                            <a href="{{ route('absen_siswa.edit', $item->id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition duration-200">Edit</a>
-                                        </div>
-                                    </td>
+                                        <th class="px-4 py-2">Waktu Ditambahkan</th>
+                                        <th class="px-4 py-2">Aksi</th>
                                     @endif
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach ($records as $item)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-center text-gray-500">{{ $loop->iteration }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->data_siswa->nama_siswa }}</td>
+                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-center">
+                                            <span class="px-3 py-1 rounded-full text-sm font-medium
+                                                {{ $item->keterangan === 'Hadir' ? 'bg-green-100 text-green-800' : '' }}
+                                                {{ $item->keterangan === 'Izin' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                {{ $item->keterangan === 'Sakit' ? 'bg-blue-100 text-blue-800' : '' }}
+                                                {{ $item->keterangan === 'Alpha' ? 'bg-red-100 text-red-800' : '' }}">
+                                                {{ $item->keterangan }}
+                                            </span>
+                                        </td>
+                                        @if(Auth::user()->role == 'Admin')
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
+                                            </td>
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <a href="{{ route('absen_siswa.edit', $item->id) }}" 
+                                                   class="inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition-colors duration-200">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                    </svg>
+                                                    Edit
+                                                </a>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        @endforeach
-    @endif
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let filter = document.getElementById('filter');
-            let startDate = document.getElementById('start_date');
-            let endDate = document.getElementById('end_date');
-            let dateRange = document.getElementById('date-range');
-            let form = document.getElementById('filter-form');
-    
-            // Tampilkan input rentang tanggal jika sudah dipilih sebelumnya
-            if (filter.value === 'range') {
-                dateRange.classList.remove('hidden');
-            }
-    
-            // Fungsi untuk submit otomatis
-            function autoSubmit() {
-                form.submit();
-            }
-    
-            // Submit otomatis saat filter berubah
-            filter.addEventListener('change', function () {
-                if (this.value === 'range') {
-                    dateRange.classList.remove('hidden');
-                } else {
-                    dateRange.classList.add('hidden');
-                    startDate.value = "";
-                    endDate.value = "";
-                    autoSubmit();
-                }
-            });
-    
-            // Submit otomatis saat tanggal rentang dipilih
-            startDate.addEventListener('change', autoSubmit);
-            endDate.addEventListener('change', autoSubmit);
-        });
-    </script>
+            @endforeach
+        @endif
+    </div>
 </x-layout>
