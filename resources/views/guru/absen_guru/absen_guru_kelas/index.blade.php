@@ -8,7 +8,7 @@
         endDate: '{{ request('end_date') }}'
     }">
         <!-- Header Section with improved spacing and shadow -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="mb-12">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                 <!-- Action Button -->
                 @if(Auth::user()->role == 'Guru')

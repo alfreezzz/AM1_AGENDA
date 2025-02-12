@@ -118,10 +118,10 @@
                                             </span>
                                         </td>
                                         @if(Auth::user()->role == 'Admin')
-                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                                 {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
                                             </td>
-                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                                 <a href="{{ route('absen_siswa.edit', $item->id) }}" 
                                                    class="inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition-colors duration-200">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

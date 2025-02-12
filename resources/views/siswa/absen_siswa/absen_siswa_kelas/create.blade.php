@@ -2,40 +2,36 @@
     <x-slot:title>{{$title}}</x-slot:title>
 
     @if (Auth::user()->role == 'Sekretaris')
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" x-data="{ 
-        currentDate: '{{ date('Y-m-d') }}',
-        toast: false,
-        showToast() {
-            this.toast = true;
-            setTimeout(() => this.toast = false, 3000);
+    <div class="max-w-6xl mx-auto px-4" x-data="{ 
+        currentDate: new Date().toISOString().split('T')[0],
+        toggleAttendance(studentId) {
+            return {
+                selected: null,
+                select(value) {
+                    if (this.selected === value) {
+                        this.selected = null;
+                    } else {
+                        this.selected = value;
+                    }
+                }
+            }
         }
     }">
-        <!-- Toast Notification -->
-        <div x-show="toast" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform translate-y-2"
-             x-transition:enter-end="opacity-100 transform translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 transform translate-y-0"
-             x-transition:leave-end="opacity-0 transform translate-y-2"
-             class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
-            Data absensi berhasil disimpan
-        </div>
-
-        <form action="{{ route('absen_siswa.store') }}" method="post" enctype="multipart/form-data" 
-              @submit="showToast()" class="space-y-8">
+        <form action="{{ route('absen_siswa.store') }}" method="post" enctype="multipart/form-data" class="space-y-8">
             @csrf
             
             <!-- Date Input Section -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="">
                 <label for="tgl" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Absensi</label>
-                <input type="date" 
-                       class="w-full md:w-64 h-10 px-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 transition-colors duration-200" 
-                       id="tgl" 
-                       name="tgl" 
-                       x-model="currentDate"
-                       :min="currentDate" 
-                       :max="currentDate">
+                <input 
+                    type="date" 
+                    id="tgl" 
+                    name="tgl" 
+                    x-model="currentDate"
+                    :min="currentDate"
+                    :max="currentDate"
+                    class="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition duration-200 bg-gray-50"
+                >
                 @error('tgl')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -46,41 +42,50 @@
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="bg-green-500 text-white">
+                            <tr class="bg-emerald-600 text-white">
                                 <th class="px-6 py-4 text-center w-16">No</th>
                                 <th class="px-6 py-4 text-center">Nama Siswa</th>
-                                <th class="px-6 py-4">Status Kehadiran</th>
+                                <th class="px-6 py-4 text-center">
+                                    <span class="flex items-center justify-center gap-2">
+                                        Keterangan
+                                        <span class="text-emerald-200 text-sm italic">(Kosongkan Jika Hadir)</span>
+                                    </span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($data_siswa as $item)
-                            <tr class="hover:bg-gray-50 transition-colors duration-200"
-                                x-data="{ 
-                                    status: 'Hadir',
-                                    getStatusColor() {
-                                        return {
-                                            'Hadir': 'bg-green-100 text-green-800',
-                                            'Sakit': 'bg-yellow-100 text-yellow-800',
-                                            'Izin': 'bg-blue-100 text-blue-800',
-                                            'Alpha': 'bg-red-100 text-red-800'
-                                        }[this.status]
-                                    }
-                                }">
-                                <td class="px-6 py-4 text-center text-gray-900">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-4  text-gray-900">{{ $item->nama_siswa }}</td>
-                                <td class="px-6 py-4">
-                                    <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" x-model="status">
-                                    <div class="flex justify-center space-x-3">
-                                        <template x-for="option in ['Hadir', 'Sakit', 'Izin', 'Alpha']">
-                                            <button type="button"
-                                                    @click="status = status === option ? 'Hadir' : option"
-                                                    :class="[
-                                                        'px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
-                                                        status === option ? getStatusColor() : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                    ]"
-                                                    x-text="option">
-                                            </button>
-                                        </template>
+                            <tr class="hover:bg-gray-50 transition duration-150">
+                                <td class="px-6 py-4 text-gray-500 text-center">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 font-medium">{{ $item->nama_siswa }}</td>
+                                <td class="px-6 py-4" x-data="toggleAttendance({{ $item->id }})">
+                                    <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" :value="selected || 'Hadir'">
+                                    
+                                    <div class="flex justify-center gap-6">
+                                        <button 
+                                            type="button"
+                                            @click="select('Sakit')"
+                                            :class="{'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500': selected === 'Sakit'}"
+                                            class="px-4 py-2 rounded-full text-sm font-medium hover:bg-emerald-50 transition duration-150"
+                                        >
+                                            Sakit
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            @click="select('Izin')"
+                                            :class="{'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500': selected === 'Izin'}"
+                                            class="px-4 py-2 rounded-full text-sm font-medium hover:bg-emerald-50 transition duration-150"
+                                        >
+                                            Izin
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            @click="select('Alpha')"
+                                            :class="{'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500': selected === 'Alpha'}"
+                                            class="px-4 py-2 rounded-full text-sm font-medium hover:bg-emerald-50 transition duration-150"
+                                        >
+                                            Alpha
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -92,23 +97,26 @@
 
             <!-- Submit Button -->
             <div class="flex justify-end">
-                <button type="submit" 
-                        class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                <button 
+                    type="submit" 
+                    class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-200 transition duration-150 flex items-center gap-2"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
-                    <span>Simpan Absensi</span>
+                    Simpan Absensi
                 </button>
             </div>
         </form>
     </div>
     @elseif (Auth::user()->role == 'Admin' || Auth::user()->role == 'Guru')
-        <div class="min-h-screen flex items-center justify-center">
-            <div class="bg-white p-8 rounded-lg shadow-lg text-center">
-                <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        <div class="min-h-[400px] flex items-center justify-center">
+            <div class="text-center p-8 bg-red-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                <p class="text-lg text-gray-700">Anda tidak memiliki hak untuk mengakses halaman ini.</p>
+                <p class="text-lg font-medium text-gray-900">Akses Terbatas</p>
+                <p class="mt-2 text-gray-600">Anda tidak memiliki hak untuk mengakses halaman ini.</p>
             </div>
         </div>
     @endif

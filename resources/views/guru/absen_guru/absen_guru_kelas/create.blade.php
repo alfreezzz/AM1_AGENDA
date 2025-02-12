@@ -1,19 +1,18 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="min-h-screen bg-gray-50 py-12" x-data="{ 
+    <div class="" x-data="{ 
         files: [],
         message: '',
         updateMessage(type) {
             this.message = type === 'Sakit' ? 'Semoga lekas sembuh' : 'Semoga urusanmu lancar';
         }
     }">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="container mx-auto">
+            <div class="overflow-hidden">
                 <div class="flex flex-col md:flex-row">
                     <!-- Form Section -->
                     <div class="w-full md:w-1/2 p-8">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Form Absensi</h2>
                         
                         <form action="{{ url('absen_guru') }}" method="post" enctype="multipart/form-data" class="space-y-6">
                             @csrf
@@ -88,7 +87,7 @@
                                             </label>
                                             <p class="pl-1">atau drag and drop</p>
                                         </div>
-                                        <p class="text-xs text-gray-500">pdf up to 10MB</p>
+                                        <p class="text-xs text-gray-500">pdf up to 15MB</p>
                                     </div>
                                 </div>
                                 <div x-show="files.length > 0" class="mt-2">
@@ -123,7 +122,7 @@
                     </div>
 
                     <!-- Image & Message Section -->
-                    <div class="w-full md:w-1/2 bg-green-50 p-8 flex flex-col justify-center items-center">
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-center items-center">
                         <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" 
                             class="w-full max-w-md h-auto mb-8 transform transition-transform duration-500 hover:scale-105">
                         <div x-show="message" 

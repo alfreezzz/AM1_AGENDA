@@ -3,7 +3,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
         <!-- Header Section -->
-        <div class="bg-white rounded-lg shadow-sm mb-8">
+        <div class="mb-12">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 <!-- Search Form -->
                 <form action="{{ url('data_siswa') }}" method="GET" id="searchForm" class="flex-1 flex flex-col sm:flex-row gap-3">

@@ -1,8 +1,8 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="min-h-screen">
-        <div class="container mx-auto">
+    <div class="">
+        <div class="container mx-auto pb-8">
             <!-- Card Container -->
             <div class="overflow-hidden">
                 <div class="flex flex-col md:flex-row">
