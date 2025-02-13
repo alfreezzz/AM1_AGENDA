@@ -6,7 +6,7 @@
             <div class="overflow-hidden">
                 <div class="flex flex-col md:flex-row">
                     <!-- Form Section -->
-                    <div class="w-full md:w-1/2 px-8">
+                    <div class="w-full px-8">
                         @if (Auth::user()->role == 'Admin')
 
                             <form action="{{ url('jadwal_pelajaran/' . $jadwal->id) }}" method="post" enctype="multipart/form-data" class="space-y-6">
@@ -126,16 +126,6 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
-
-                    <!-- Image Section -->
-                    <div class="w-full md:w-1/2 px-8 flex items-center justify-center">
-                        <div class="relative">
-                            <div class="absolute -inset-4">
-                                <div class="w-full h-full mx-auto"></div>
-                            </div>
-                            <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" class="relative w-80 h-auto">
-                        </div>
                     </div>
                 </div>
             </div>

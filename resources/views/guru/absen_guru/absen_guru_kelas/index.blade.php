@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ 
+    <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8" x-data="{ 
         showDateRange: {{ request('filter') === 'range' ? 'true' : 'false' }},
         currentFilter: '{{ request('filter') }}',
         startDate: '{{ request('start_date') }}',
@@ -70,7 +70,7 @@
             <!-- Attendance Records Section -->
             @foreach ($groupedAbsensi as $date => $absensiItems)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-                    <div class="bg-green-600 px-6 py-4">
+                    <div class="bg-green-600 px-4 py-4">
                         <h2 class="text-xl font-semibold text-white">
                             {{ \Carbon\Carbon::parse($date)->format('d M Y') }}
                         </h2>
@@ -80,32 +80,32 @@
                         <table class="w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                     @if(Auth::user()->role == 'Admin')
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Guru</th>
+                                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Guru</th>
                                     @endif
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mapel</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Indikator Kompetensi</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan Tugas</th>
+                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mapel</th>
+                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
+                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Indikator Kompetensi</th>
+                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan Tugas</th>
                                     @if(Auth::user()->role == 'Admin')
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Ditambahkan</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Ditambahkan</th>
                                     @endif
                                     @if(Auth::user()->role == 'Guru')
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     @endif
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($absensiItems as $item)
                                     <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $loop->iteration }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $loop->iteration }}</td>
                                         @if(Auth::user()->role == 'Admin')
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->user->name }}</td>
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->user->name }}</td>
                                         @endif
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->mapel->nama_mapel }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->keterangan }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->mapel->nama_mapel }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->keterangan }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-900">
                                             @php
                                                 $tugasList = json_decode($item->tugas);
                                             @endphp
@@ -126,14 +126,14 @@
                                                 <span class="text-gray-500">-</span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-900">{{ $item->keterangantugas }}</td>
+                                        <td class="px-4 py-4 text-sm text-gray-900">{{ $item->keterangantugas }}</td>
                                         @if(Auth::user()->role == 'Admin')
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
                                             </td>
                                         @endif
                                         @if(Auth::user()->role == 'Guru')
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <div class="flex space-x-2">
                                                     <a href="{{ url('absen_guru/' . $item->id . '/edit') }}" 
                                                        class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-md transition-colors duration-150">

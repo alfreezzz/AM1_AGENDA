@@ -1,105 +1,153 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="container mx-auto p-6 flex flex-col md:flex-row">
-        <!-- Bagian Kiri: Form -->
-        <div class="w-full md:w-1/2 mb-4 md:mb-0">
-            <form action="{{ url('absen_guru/' . $absen_guru->id) }}" method="post" enctype="multipart/form-data" class="space-y-4">
-                @method('PUT')
-                @csrf
+    <div class="">
+        <div class="container mx-auto">
+            <div class="overflow-hidden">
+                <div class="flex flex-col lg:flex-row">
+                    <!-- Form Section -->
+                    <div class="w-full lg:w-1/2 p-6 sm:px-8">
+                        <form action="{{ url('absen_guru/' . $absen_guru->id) }}" method="post" enctype="multipart/form-data"
+                            x-data="{ 
+                                keterangan: '{{ old('keterangan', $absen_guru->keterangan) }}',
+                                files: [],
+                                message: ''
+                            }"
+                            x-init="$watch('keterangan', value => {
+                                message = value === 'Sakit' ? 'Semoga lekas sembuh' : 
+                                         value === 'Izin' ? 'Semoga urusanmu lancar' : '';
+                            })"
+                            class="space-y-6"
+                        >
+                            @method('PUT')
+                            @csrf
+                            <input type="hidden" name="kelas_id" value="{{ $kelas_id }}">
 
-                <input type="hidden" name="kelas_id" value="{{ $kelas_id }}">
+                            <!-- Mapel Field -->
+                            <div class="space-y-1">
+                                <label class="text-sm font-medium text-gray-700">Mata Pelajaran</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" 
+                                        value="{{ $absen_guru->mapel->nama_mapel }}" disabled>
+                                    <input type="hidden" name="mapel_id" value="{{ $absen_guru->mapel_id }}">
+                                </div>
+                            </div>
 
-                <!-- Mapel (Tidak Bisa Diedit) -->
-                <div class="form-group">
-                    <label for="mapel_nama" class="block text-sm font-medium text-gray-700">Mapel</label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm sm:text-sm" 
-                        id="mapel_nama" value="{{ $absen_guru->mapel->nama_mapel }}" disabled style="padding-left: 10px;">
-                    <input type="hidden" name="mapel_id" value="{{ $absen_guru->mapel_id }}">
-                </div>
+                            <!-- Tanggal Field -->
+                            <div class="space-y-1">
+                                <label class="text-sm font-medium text-gray-700">Tanggal</label>
+                                <input type="date" name="tgl" 
+                                    class="w-full px-4 py-3 rounded-lg bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 @error('tgl') border-red-500 @enderror"
+                                    value="{{ old('tgl', $absen_guru->tgl) }}" readonly>
+                                @error('tgl')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                <!-- Tanggal -->
-                <div class="form-group">
-                    <label for="tgl" class="block text-sm font-medium text-gray-700">Tanggal</label>
-                    <input type="date" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('tgl') border-red-500 @enderror" 
-                                id="tgl" name="tgl" value="{{ old('tgl', $absen_guru->tgl) }}" style="padding-left: 10px;" readonly>
-                    @error('tgl')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                            <!-- Keterangan Field -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700">Keterangan</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="keterangan" value="Sakit" 
+                                            x-model="keterangan"
+                                            class="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500">
+                                        <span class="text-gray-700">Sakit</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="keterangan" value="Izin" 
+                                            x-model="keterangan"
+                                            class="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500">
+                                        <span class="text-gray-700">Izin</span>
+                                    </label>
+                                </div>
+                                @error('keterangan')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-                <!-- Keterangan dengan Flexbox -->
-                <div class="form-group">
-                    <label class="block text-sm font-medium text-gray-700">Keterangan</label>
-                    <div class="flex space-x-4"> <!-- Menggunakan Flex untuk menyusun radio button -->
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input @error('keterangan') is-invalid @enderror" id="keterangan_sakit" name="keterangan" value="Sakit" {{ old('keterangan', $absen_guru->keterangan) == 'Sakit' ? 'checked' : '' }} onchange="updateMessage()">
-                            <label class="form-check-label" for="keterangan_sakit">Sakit</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input @error('keterangan') is-invalid @enderror" id="keterangan_izin" name="keterangan" value="Izin" {{ old('keterangan', $absen_guru->keterangan) == 'Izin' ? 'checked' : '' }} onchange="updateMessage()">
-                            <label class="form-check-label" for="keterangan_izin">Izin</label>
+                            <!-- File Upload -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-700">Upload Tugas</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-green-500 transition-colors duration-200"
+                                    x-on:dragover.prevent="$el.classList.add('border-green-500')"
+                                    x-on:dragleave.prevent="$el.classList.remove('border-green-500')"
+                                    x-on:drop.prevent="
+                                        $el.classList.remove('border-green-500');
+                                        files = [...files, ...$event.dataTransfer.files]
+                                    ">
+                                    <div class="space-y-1 text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <div class="flex text-sm text-gray-600">
+                                            <label class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                                <span>Upload files</span>
+                                                <input type="file" name="tugas[]" class="sr-only" multiple
+                                                    x-on:change="files = [...$event.target.files]">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">PDF up to 15MB</p>
+                                    </div>
+                                </div>
+                                <!-- File Preview -->
+                                <div class="mt-2 space-y-2" x-show="files.length > 0">
+                                    <template x-for="file in files" :key="file.name">
+                                        <div class="flex items-center space-x-2 p-2 bg-gray-50 rounded">
+                                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="text-sm text-gray-500" x-text="file.name"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Keterangan Tugas -->
+                            <div class="space-y-1">
+                                <label class="text-sm font-medium text-gray-700">Keterangan Tugas</label>
+                                <input type="text" name="keterangantugas" 
+                                    class="w-full px-4 py-3 rounded-lg bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 @error('keterangantugas') border-red-500 @enderror"
+                                    value="{{ old('keterangantugas', $absen_guru->keterangantugas) }}">
+                                @error('keterangantugas')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="pt-4">
+                                <button type="submit" 
+                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-200">
+                                    Update Absensi
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Image Section -->
+                    <div class="w-full lg:w-1/2 px-6 sm:px-8 flex flex-col justify-center items-center">
+                        <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" 
+                            class="w-full max-w-md h-auto mb-6">
+                        <div x-text="message" 
+                            class="text-xl font-medium text-green-600 text-center animate-fade-in"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform translate-y-4"
+                            x-transition:enter-end="opacity-100 transform translate-y-0">
                         </div>
                     </div>
-                    @error('keterangan')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Tombol Upload Tugas Berupa Gambar -->
-                <div class="form-group">
-                    <label for="tugas" class="block text-sm font-medium text-gray-700">Tugas</label>
-                    <label class="flex w-full cursor-pointer" style="margin: 10px; margin-left: 0;">
-                        <span class="bg-green-500 text-white py-2 px-4 rounded-lg flex items-center justify-center hover:bg-green-600 transition-all duration-200">
-                            <img src="{{ asset('assets/images/upload-regular-24.png') }}" alt="Upload Icon" class="w-6 h-6 mr-2">
-                            <span>Tambah Tugas</span>
-                        </span>
-                        <input type="file" class="hidden" id="tugas" name="tugas[]" multiple>
-                    </label>
-                    @error('tugas')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="keterangantugas" class="block text-sm font-medium text-gray-700">Keterangan Tugas</label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('keterangantugas') border-red-500 @enderror" id="keterangantugas" name="keterangantugas" value="{{ old('keterangantugas', $absen_guru->keterangantugas) }}" style="padding-left: 10px;">
-                    @error('keterangantugas')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Update</button>
-            </form>
-        </div>
-
-        <!-- Bagian Kanan: Gambar dan Pesan -->
-        <div class="w-full md:w-1/2 flex justify-center items-center">
-            <div class="text-center">
-                <!-- Gambar Responsif dan Mengecil di Desktop -->
-                <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" class="w-full max-w-xs md:max-w-sm lg:max-w-xs xl:max-w-xs h-auto mb-4"> <!-- Gambar lebih kecil di Desktop -->
-                <div id="message" class="text-lg font-bold text-green-600">
-                    <!-- Default message or dynamic message will appear here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript untuk Mengubah Pesan -->
-    <script>
-        function updateMessage() {
-            const sakit = document.getElementById('keterangan_sakit').checked;
-            const izin = document.getElementById('keterangan_izin').checked;
-            const messageDiv = document.getElementById('message');
-
-            if (sakit) {
-                messageDiv.textContent = 'Semoga lekas sembuh';
-            } else if (izin) {
-                messageDiv.textContent = 'Semoga urusanmu lancar';
-            } else {
-                messageDiv.textContent = '';
-            }
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-    </script>
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out;
+        }
+    </style>
 </x-layout>

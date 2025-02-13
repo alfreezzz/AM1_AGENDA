@@ -12,7 +12,7 @@
     <!-- Background with overlay -->
     <div class="absolute inset-0 w-full h-full">
         <img src="{{ asset('assets/images/am_bg.png') }}" class="absolute inset-0 w-full h-full object-cover" alt="Background">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 bg-black/60"></div>
     </div>
 
     <!-- Content Area -->

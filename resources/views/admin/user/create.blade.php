@@ -1,180 +1,181 @@
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
 
-    <div class="container mx-auto p-6 flex flex-col md:flex-row">
-        <div class="w-full md:w-1/2 mb-4 md:mb-0">
-            <form action="{{ url('user') }}" method="post" enctype="multipart/form-data" class="space-y-4">
-                @csrf
-
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-                    <div class="mt-2 flex items-center space-x-4 gap-2">
-                        <div>
-                            <!-- Admin Role with Icon -->
-                            <input type="radio" id="role_admin" name="role" value="Admin" {{ old('role') == 'Admin' ? 'checked' : '' }} class="text-green-500 focus:ring-green-500">
-                            <label for="role_admin" class="text-sm text-gray-700">
-                                <i class="fas fa-user-shield mr-2"></i> Admin
-                            </label>
-                        </div>
-                        <div>
-                            <!-- Guru Role with Icon -->
-                            <input type="radio" id="role_guru" name="role" value="Guru" {{ old('role') == 'Guru' ? 'checked' : '' }} class="text-green-500 focus:ring-green-500">
-                            <label for="role_guru" class="text-sm text-gray-700">
-                                <i class="fas fa-chalkboard-teacher mr-2"></i> Guru
-                            </label>
-                        </div>
-                        <div>
-                            <!-- Sekretaris Role with Icon -->
-                            <input type="radio" id="role_perwakilan_kelas" name="role" value="Sekretaris" {{ old('role') == 'Sekretaris' ? 'checked' : '' }} class="text-green-500 focus:ring-green-500">
-                            <label for="role_perwakilan_kelas" class="text-sm text-gray-700">
-                                <i class="fas fa-users mr-2"></i> Sekretaris
-                            </label>
-                        </div>
-                    </div>
-                    @error('role')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="kode-guru-section" style="display: none;">
-                    <label for="mata_pelajaran" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
-                    <div class="mt-2 space-y-2">
-                        @foreach($mapel as $item)
-                            <label class="flex items-center space-x-2">
-                                <input type="checkbox" name="mapel_ids[]" value="{{ $item->id }}" class="text-green-500 focus:ring-green-500">
-                                <span>{{ $item->nama_mapel }}</span>
-                            </label>
-                        @endforeach
-                    </div>
-                    @error('mapel_ids')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-
-                    <label for="kelas" class="block text-sm font-medium text-gray-700 mt-3">Kelas Mengajar</label>
-                    <div class="mt-2 space-y-2">
-                        @foreach($kelas as $item)
-                            <label class="flex items-center space-x-2">
-                                <input type="checkbox" name="kelas_ids[]" value="{{ $item->id }}" class="text-green-500 focus:ring-green-500">
-                                <span>{{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})</span>
-                            </label>
-                        @endforeach
-                    </div>
-                    @error('kelas_ids')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>                
-
-                <!-- Dropdown Kelas -->
-                <div id="kelas-section" style="display: none;">
-                    <label for="kelas_id" class="block text-sm font-medium text-gray-700">Kelas</label>
-                    <select class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('kelas_id') border-red-500 @enderror" name="kelas_id" id="kelas_id" style="padding-left: 10px;">
-                        <option value="">--Pilih--</option>
-                        @foreach ($kelas as $item)
-                            <option value="{{ $item->id }}">{{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})</option>
-                        @endforeach
-                    </select>
-                    @error('kelas_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                    <input type="text" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('name') border-red-500 @enderror" id="name" name="name" value="{{ old('name') }}" style="padding-left: 10px;">
-                    @error('name')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <div class="relative">
-                        <input type="password" class="mt-1 block w-full h-10 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 sm:text-sm @error('password') border-red-500 @enderror" id="password" name="password" value="{{ old('password') }}" style="padding-left: 10px;">
+    <div class="">
+        <div class="container mx-auto">
+            <div class="overflow-hidden">
+                <div class="flex flex-col md:flex-row py-8 items-center">
+                    <!-- Form Section -->
+                    <div class="w-full md:w-3/4 px-8">
                         
-                        <!-- Eye Icon -->
-                        <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('password', 'togglePasswordIcon')">
-                            <i id="togglePasswordIcon" class="fas fa-eye text-gray-600"></i>
-                        </span>
-                    </div>
-                    @error('password')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                        <form action="{{ url('user') }}" method="post" enctype="multipart/form-data" 
+                              x-data="{ 
+                                  role: '{{ old('role') }}',
+                                  showPassword: false 
+                              }" 
+                              class="space-y-6">
+                            @csrf
 
-                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">Simpan</button>
-            </form>
-        </div>
-        <!-- Bagian Kanan: Gambar -->
-        <div class="w-full md:w-1/2 flex justify-center items-center">
-            <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" class="w-72 h-auto rounded-lg">
+                            <!-- Role Selection -->
+                            <div class="space-y-4">
+                                <label class="text-sm font-semibold text-gray-700">Select Role</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <!-- Admin Role -->
+                                    <label class="relative flex items-center p-4 cursor-pointer bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <input type="radio" name="role" value="Admin" 
+                                               x-model="role"
+                                               class="peer sr-only">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600">
+                                                <i class="fas fa-user-shield"></i>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900">Admin</span>
+                                        </div>
+                                        <div class="absolute inset-0 rounded-lg ring-2 ring-transparent peer-checked:ring-green-500 transition-all"></div>
+                                    </label>
+
+                                    <!-- Guru Role -->
+                                    <label class="relative flex items-center p-4 cursor-pointer bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <input type="radio" name="role" value="Guru" 
+                                               x-model="role"
+                                               class="peer sr-only">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                                                <i class="fas fa-chalkboard-teacher"></i>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900">Guru</span>
+                                        </div>
+                                        <div class="absolute inset-0 rounded-lg ring-2 ring-transparent peer-checked:ring-green-500 transition-all"></div>
+                                    </label>
+
+                                    <!-- Sekretaris Role -->
+                                    <label class="relative flex items-center p-4 cursor-pointer bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                        <input type="radio" name="role" value="Sekretaris" 
+                                               x-model="role"
+                                               class="peer sr-only">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <span class="ml-3 font-medium text-gray-900">Sekretaris</span>
+                                        </div>
+                                        <div class="absolute inset-0 rounded-lg ring-2 ring-transparent peer-checked:ring-green-500 transition-all"></div>
+                                    </label>
+                                </div>
+                                @error('role')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Guru Specific Fields -->
+                            <div x-show="role === 'Guru'" 
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                                 class="space-y-4">
+                                <!-- Mata Pelajaran -->
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <label class="text-sm font-semibold text-gray-700 mb-3 block">Mata Pelajaran</label>
+                                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                                        @foreach($mapel as $item)
+                                            <label class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-md transition-colors">
+                                                <input type="checkbox" name="mapel_ids[]" value="{{ $item->id }}" 
+                                                       class="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
+                                                <span class="text-sm text-gray-700">{{ $item->nama_mapel }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <!-- Kelas Mengajar -->
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <label class="text-sm font-semibold text-gray-700 mb-3 block">Kelas Mengajar</label>
+                                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                                        @foreach($kelas as $item)
+                                            <label class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-md transition-colors">
+                                                <input type="checkbox" name="kelas_ids[]" value="{{ $item->id }}" 
+                                                       class="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
+                                                <span class="text-sm text-gray-700">
+                                                    {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} 
+                                                    <span class="text-gray-500">({{ $item->thn_ajaran }})</span>
+                                                </span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sekretaris Specific Fields -->
+                            <div x-show="role === 'Sekretaris'"
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform -translate-y-4"
+                                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                                 class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700">Kelas</label>
+                                    <select name="kelas_id" 
+                                            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        <option value="">--Pilih--</option>
+                                        @foreach ($kelas as $item)
+                                            <option value="{{ $item->id }}">
+                                                {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} 
+                                                ({{ $item->thn_ajaran }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('kelas_id')
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Name Field -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">Name</label>
+                                <input type="text" name="name" value="{{ old('name') }}"
+                                       class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                @error('name')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Password Field -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">Password</label>
+                                <div class="relative">
+                                    <input :type="showPassword ? 'text' : 'password'" 
+                                           name="password"
+                                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                    <button type="button" 
+                                            @click="showPassword = !showPassword"
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                        <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    </button>
+                                </div>
+                                @error('password')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" 
+                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                                Create Account
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="w-full md:w-1/2 px-8 lg:px-12 flex items-center justify-center">
+                        <div class="relative w-full max-w-md">
+                            <div class="absolute inset-0"></div>
+                            <img src="{{ asset('assets/images/hero.png') }}" 
+                                 alt="Hero Image" 
+                                 class="relative w-full h-auto">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Tambahkan script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const roleInputs = document.querySelectorAll('input[name="role"]');
-            const kelasSection = document.getElementById('kelas-section');
-
-            roleInputs.forEach(roleInput => {
-                roleInput.addEventListener('change', function() {
-                    if (this.value === 'Sekretaris') {
-                        kelasSection.style.display = 'block';
-                    } else {
-                        kelasSection.style.display = 'none';
-                    }
-                });
-            });
-
-            // Pastikan kelas select muncul jika role 'Sekretaris' sudah dipilih pada awal load
-            const checkedRole = document.querySelector('input[name="role"]:checked');
-            if (checkedRole && checkedRole.value === 'Sekretaris') {
-                kelasSection.style.display = 'block';
-            }
-        });
-
-        function togglePasswordVisibility(passwordFieldId, iconId) {
-            const passwordField = document.getElementById(passwordFieldId);
-            const toggleIcon = document.getElementById(iconId);
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            const roleInputs = document.querySelectorAll('input[name="role"]');
-            const kodeGuruSection = document.querySelector('.kode-guru-section');
-
-            roleInputs.forEach(roleInput => {
-                roleInput.addEventListener('change', function() {
-                    if (this.value === 'Guru') {
-                        kodeGuruSection.style.display = 'block';
-                    } else {
-                        kodeGuruSection.style.display = 'none';
-                    }
-                });
-            });
-
-            // Ensure 'Kode Guru' dropdown appears if 'Guru' role is selected on page load
-            const checkedRole = document.querySelector('input[name="role"]:checked');
-            if (checkedRole && checkedRole.value === 'Guru') {
-                kodeGuruSection.style.display = 'block';
-            }
-        });
-
-        function togglePasswordVisibility(passwordFieldId, iconId) {
-            const passwordField = document.getElementById(passwordFieldId);
-            const toggleIcon = document.getElementById(iconId);
-            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
-            toggleIcon.classList.toggle('fa-eye');
-            toggleIcon.classList.toggle('fa-eye-slash');
-        }
-    </script>
 </x-layout>
