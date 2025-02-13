@@ -3,7 +3,7 @@
 
     <div class="">
         <div class="container mx-auto">
-            <div class="overflow-hidden">
+            <div class="">
                 <div class="flex flex-col md:flex-row py-8 items-center">
                     <!-- Form Section -->
                     <div class="w-full md:w-3/4 px-8">

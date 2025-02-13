@@ -3,7 +3,7 @@
 
     <div class="">
         <div class="container mx-auto max-w-4xl">
-            <div class="overflow-hidden">
+            <div class="">
                 <div class="py-6">
 
                     <form action="{{ url('absensiswa_guru/'. $absensi->id) }}" method="post" enctype="multipart/form-data"

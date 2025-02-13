@@ -89,7 +89,7 @@
     <!-- Footer -->
     <footer class="relative z-10 bg-gradient-to-t from-black via-black/90 to-transparent py-8">
         <div class="container mx-auto px-4">
-            <div class="flex flex-wrap justify-center items-center gap-4">
+            <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4">
                 <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
                 <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
                 <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">

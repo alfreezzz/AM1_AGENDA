@@ -4,7 +4,7 @@
     <div class="">
         <div class="container mx-auto pb-8">
             <!-- Card Container -->
-            <div class=overflow-hidden">
+            <div class="">
                 <div class="flex flex-col md:flex-row">
                     <!-- Form Section -->
                     <div class="w-full md:w-1/2 px-8">

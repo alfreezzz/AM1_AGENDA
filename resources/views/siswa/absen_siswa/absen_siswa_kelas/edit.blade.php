@@ -4,7 +4,7 @@
     <div class="">
         <div class="container mx-auto max-w-4xl">
             @if (Auth::user()->role == 'Admin')
-                <div class="overflow-hidden">
+                <div class="">
                     <div class="py-8">
 
                         <form action="{{ route('absen_siswa.update', $absen_siswa->id) }}" method="post" 

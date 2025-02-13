@@ -9,7 +9,7 @@
         }
     }">
         <div class="container mx-auto">
-            <div class="overflow-hidden">
+            <div class="">
                 <div class="flex flex-col md:flex-row">
                     <!-- Form Section -->
                     <div class="w-full md:w-1/2 p-8">

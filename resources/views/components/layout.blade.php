@@ -87,7 +87,7 @@
                     </button>
 
                     <!-- Page Title -->
-                    <h1 class="text-xl font-semibold text-gray-800 flex-1 text-center lg:text-left">AM Agenda Pembelajaran Harian</h1>
+                    <h1 class="text-sm sm:text-xl font-semibold text-gray-800 flex-1 text-center lg:text-left">AM Agenda Pembelajaran Harian</h1>
 
                     <!-- Notifications -->
                     @if (Auth::user()->role == 'Sekretaris')

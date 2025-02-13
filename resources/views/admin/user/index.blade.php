@@ -63,13 +63,13 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                            <tr class="font-medium text-gray-500 uppercase tracking-wider text-center">
-                                <th class="px-4 py-2 text-xs">No</th>
-                                <th class="px-4 py-2 text-xs">Username</th>
-                                <th class="px-4 py-2 text-xs">Role</th>
-                                <th class="px-4 py-2 text-xs">Mapel & Kelas Mengajar</th>
-                                <th class="px-4 py-2 text-xs">Kelas</th>
-                                <th class="px-4 py-2 text-xs">Aksi</th>
+                            <tr class="font-medium text-gray-500 uppercase tracking-wider text-center text-xs">
+                                <th class="px-4 py-2">No</th>
+                                <th class="px-4 py-2">Username</th>
+                                <th class="px-4 py-2">Role</th>
+                                <th class="px-4 py-2">Mapel & Kelas Mengajar</th>
+                                <th class="px-4 py-2">Kelas</th>
+                                <th class="px-4 py-2">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">

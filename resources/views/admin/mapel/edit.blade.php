@@ -4,7 +4,7 @@
     <div class="">
         <div class="container mx-auto">
             <!-- Main Content -->
-            <div class="overflow-hidden">
+            <div class="">
                 <div class="flex flex-col lg:flex-row">
                     <!-- Form Section -->
                     <div class="w-full lg:w-1/2 p-6 lg:px-8">

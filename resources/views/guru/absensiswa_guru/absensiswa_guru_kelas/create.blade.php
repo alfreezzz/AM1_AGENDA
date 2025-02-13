@@ -2,7 +2,7 @@
     <x-slot:title>{{$title}}</x-slot:title>
 
     <div class="max-w-7xl mx-auto">
-        <div class="overflow-hidden">
+        <div class="">
 
             <form action="{{ url('absensiswa_guru') }}" method="post" enctype="multipart/form-data" class="p-6 space-y-6">
                 @csrf
