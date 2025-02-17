@@ -26,7 +26,7 @@
                         <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" 
                              class="w-16 h-16 transform hover:scale-105 transition-transform duration-300">
                         <div class="text-white">
-                            <h1 class="text-2xl font-serif font-semibold">SMK Amaliah 1&2 Ciawi</h1>
+                            <h1 class="text-xl font-serif font-semibold">SMK Amaliah 1&2 Ciawi</h1>
                             <p class="text-sm italic text-gray-300">Tauhid is Our Fundament</p>
                         </div>
                     </div>

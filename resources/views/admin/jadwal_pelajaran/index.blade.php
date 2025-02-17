@@ -26,7 +26,7 @@
 
                     <!-- Add Button -->
                     @if(Auth::user()->role == 'Admin')
-                  <x-btn-add  href="{{ url('jadwal_pelajaran/create') }}" >Tambah Jadwal Pelajaran</x-btn-add>
+                  <x-btn-add  href="{{ url('jadwal_pelajaran/create') }}" >Tambah Jadwal</x-btn-add>
                     @endif
                 </div>
             </div>
