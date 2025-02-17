@@ -29,7 +29,7 @@
                                     </label>
                                     <div class="relative">
                                         <select x-model="formData.kelas_id"
-                                                class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('kelas_id') border-red-500 @enderror"
+                                                class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('kelas_id') border-red-500 @enderror"
                                                 name="kelas_id" 
                                                 id="kelas_id">
                                             <option value="">--Pilih Kelas--</option>
@@ -46,7 +46,12 @@
                                         </div>
                                     </div>
                                     @error('kelas_id')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
                                     @enderror
                                 </div>
 
@@ -62,9 +67,14 @@
                                            name="nama_siswa" 
                                            value="{{ old('nama_siswa') }}"
                                            placeholder="Masukkan nama lengkap">
-                                    @error('nama_siswa')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
+                                        @error('nama_siswa')
+                                           <p class="mt-2 text-sm text-red-600 flex items-center">
+                                               <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                               </svg>
+                                               {{ $message }}
+                                           </p>
+                                       @enderror
                                 </div>
 
                                 <!-- NIS Input -->
@@ -79,9 +89,14 @@
                                            name="nis_id" 
                                            value="{{ old('nis_id') }}"
                                            placeholder="Masukkan NIS">
-                                    @error('nis_id')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
+                                        @error('nis_id')
+                                           <p class="mt-2 text-sm text-red-600 flex items-center">
+                                               <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                               </svg>
+                                               {{ $message }}
+                                           </p>
+                                       @enderror
                                 </div>
 
                                 <!-- Gender Selection -->
@@ -112,7 +127,12 @@
                                         </div>
                                     </div>
                                     @error('gender')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
                                     @enderror
                                 </div>
 

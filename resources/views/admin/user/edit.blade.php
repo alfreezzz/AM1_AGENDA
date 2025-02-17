@@ -19,7 +19,7 @@
 
                             <!-- Role Selection -->
                             <div class="space-y-4">
-                                <label class="text-sm font-semibold text-gray-700">Select Role</label>
+                                <label class="text-sm font-semibold text-gray-700">Pilih Role</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <!-- Admin Role -->
                                     <label class="relative flex items-center p-4 cursor-pointer bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
@@ -28,7 +28,9 @@
                                                class="peer sr-only">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-600">
-                                                <i class="fas fa-user-shield"></i>
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
                                             </div>
                                             <span class="ml-3 font-medium text-gray-900">Admin</span>
                                         </div>
@@ -42,7 +44,9 @@
                                                class="peer sr-only">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                                                <i class="fas fa-chalkboard-teacher"></i>
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path d="M12 14L8 11H16L12 14ZM12 4L18 8.5L12 13L6 8.5L12 4ZM2 9.5V14.5L6 16.5V11.5L2 9.5ZM22 9.5L18 11.5V16.5L22 14.5V9.5ZM12 13V20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
                                             </div>
                                             <span class="ml-3 font-medium text-gray-900">Guru</span>
                                         </div>
@@ -56,7 +60,13 @@
                                                class="peer sr-only">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-100 text-purple-600">
-                                                <i class="fas fa-users"></i>
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M14 2V8H20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M16 13H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M16 17H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M10 9H9H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
                                             </div>
                                             <span class="ml-3 font-medium text-gray-900">Sekretaris</span>
                                         </div>
@@ -64,7 +74,12 @@
                                     </label>
                                 </div>
                                 @error('role')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -79,10 +94,10 @@
                                     <label class="text-sm font-semibold text-gray-700 mb-3 block">Mata Pelajaran</label>
                                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
                                         @foreach($mapel as $item)
-                                            <label class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-md transition-colors">
+                                            <label class="relative flex items-center space-x-2 p-2 rounded-lg border border-gray-200 hover:border-green-500 cursor-pointer transition-colors">
                                                 <input type="checkbox" name="mapel_ids[]" value="{{ $item->id }}" 
                                                        {{ in_array($item->id, $user->mapels->pluck('id')->toArray()) ? 'checked' : '' }}
-                                                       class="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
+                                                       class="h-4 w-4 text-green-500 focus:ring-green-500 border border-gray-300 rounded">
                                                 <span class="text-sm text-gray-700">{{ $item->nama_mapel }}</span>
                                             </label>
                                         @endforeach
@@ -94,10 +109,10 @@
                                     <label class="text-sm font-semibold text-gray-700 mb-3 block">Kelas Mengajar</label>
                                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
                                         @foreach($kelas as $item)
-                                            <label class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-md transition-colors">
+                                            <label class="relative flex items-center space-x-2 p-2 rounded-lg border border-gray-200 hover:border-green-500 cursor-pointer transition-colors">
                                                 <input type="checkbox" name="kelas_ids[]" value="{{ $item->id }}" 
                                                        {{ in_array($item->id, $user->dataKelas->pluck('id')->toArray()) ? 'checked' : '' }}
-                                                       class="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
+                                                       class="h-4 w-4 text-green-500 focus:ring-green-500 border border-gray-300 rounded">
                                                 <span class="text-sm text-gray-700">
                                                     {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} 
                                                     <span class="text-gray-500">({{ $item->thn_ajaran }})</span>
@@ -127,7 +142,12 @@
                                         @endforeach
                                     </select>
                                     @error('kelas_id')
-                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
                                     @enderror
                                 </div>
                             </div>
@@ -138,7 +158,12 @@
                                 <input type="text" name="name" value="{{ old('name', $user->name) }}"
                                        class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                 @error('name')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -147,25 +172,33 @@
                                 <label class="block text-sm font-semibold text-gray-700">Password</label>
                                 <div class="relative">
                                     <input :type="showPassword ? 'text' : 'password'" 
-                                           name="password"
-                                           placeholder="Leave empty if no change needed"
-                                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                        name="password"
+                                        placeholder="Leave empty if no change needed"
+                                        class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                     <button type="button" 
                                             @click="showPassword = !showPassword"
-                                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                                        <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-800">
+                                        <svg x-show="!showPassword" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg x-show="showPassword" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
                                     </button>
                                 </div>
                                 @error('password')
-                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
-                            <!-- Submit Button -->
-                            <button type="submit" 
-                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
-                                Update Account
-                            </button>
+                            <x-btn-submit>Update Akun</x-btn-submit>
                         </form>
                     </div>
 

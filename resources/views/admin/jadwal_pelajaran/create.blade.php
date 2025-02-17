@@ -39,6 +39,14 @@
                                         this.isMapelDisabled = false;
                                         this.formData.mapel_id = '';
                                     }
+                                },
+                                formatTahunAjaran() {
+                                    let value = this.formData.thn_ajaran.replace(/\D/g, '');
+                                    if (value.length >= 4) {
+                                        const tahun1 = value.substr(0, 4);
+                                        const tahun2 = String(Number(tahun1) + 1);
+                                        this.formData.thn_ajaran = `${tahun1}/${tahun2}`;
+                                    }
                                 }
                             }">
                                 
@@ -52,7 +60,7 @@
                                         <label class="text-sm font-medium text-gray-700 block">Hari</label>
                                         <div class="relative">
                                             <select x-model="formData.hari"
-                                                    class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('hari') border-red-500 @enderror"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('hari') border-red-500 @enderror"
                                                     name="hari">
                                                 <option value="">--Pilih Hari--</option>
                                                 @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $hari)
@@ -66,7 +74,12 @@
                                             </div>
                                         </div>
                                         @error('hari')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                     </div>
 
@@ -80,13 +93,18 @@
                                                            name="jam_ke[]" 
                                                            value="{{ $i }}"
                                                            x-model="formData.jam_ke"
-                                                           class="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300 rounded">
+                                                           class="h-4 w-4 text-green-500 focus:ring-green-500 border border-gray-300 rounded">
                                                     <span class="ml-3 text-sm">Jam {{ $i }}</span>
                                                 </label>
                                             @endfor
                                         </div>
                                         @error('jam_ke')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                     </div>
 
@@ -96,7 +114,7 @@
                                         <div class="relative">
                                             <select x-model="formData.kelas_id"
                                                     @change="loadGuru()"
-                                                    class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('kelas_id') border-red-500 @enderror"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('kelas_id') border-red-500 @enderror"
                                                     name="kelas_id">
                                                 <option value="">--Pilih Kelas--</option>
                                                 @foreach($kelas as $item)
@@ -112,7 +130,12 @@
                                             </div>
                                         </div>
                                         @error('kelas_id')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                     </div>
 
@@ -123,7 +146,7 @@
                                             <select x-model="formData.guru_id"
                                                     @change="loadMapel()"
                                                     :disabled="isGuruDisabled"
-                                                    class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white disabled:bg-gray-100 @error('guru_id') border-red-500 @enderror"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white disabled:bg-gray-100 @error('guru_id') border-red-500 @enderror"
                                                     name="guru_id">
                                                 <option value="">--Pilih Guru--</option>
                                                 <template x-for="guru in guruList" :key="guru.id">
@@ -137,7 +160,12 @@
                                             </div>
                                         </div>
                                         @error('guru_id')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                     </div>
 
@@ -147,7 +175,7 @@
                                         <div class="relative">
                                             <select x-model="formData.mapel_id"
                                                     :disabled="isMapelDisabled"
-                                                    class="block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white disabled:bg-gray-100 @error('mapel_id') border-red-500 @enderror"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white disabled:bg-gray-100 @error('mapel_id') border-red-500 @enderror"
                                                     name="mapel_id">
                                                 <option value="">--Pilih Mata Pelajaran--</option>
                                                 <template x-for="mapel in mapelList" :key="mapel.id">
@@ -161,21 +189,38 @@
                                             </div>
                                         </div>
                                         @error('mapel_id')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                     </div>
 
                                     <!-- Tahun Ajaran Input -->
                                     <div class="space-y-2">
-                                        <label class="text-sm font-medium text-gray-700 block">Tahun Ajaran</label>
-                                        <input type="text" 
-                                               x-model="formData.thn_ajaran"
-                                               class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('thn_ajaran') border-red-500 @enderror"
-                                               name="thn_ajaran"
-                                               placeholder="Contoh: 2024/2025"
-                                               value="{{ old('thn_ajaran') }}">
+                                        <label for="thn_ajaran" class="block text-sm font-medium text-gray-700">
+                                            Tahun Ajaran <span class="text-gray-500 italic">Format: 2024/2025</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="text" 
+                                                   x-model="formData.thn_ajaran"
+                                                   @input="formatTahunAjaran"
+                                                   class="block w-full px-4 py-3 border border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('thn_ajaran') border-red-500 @enderror"
+                                                   id="thn_ajaran" 
+                                                   name="thn_ajaran"
+                                                   placeholder="YYYY/YYYY"
+                                                   maxlength="9"
+                                                   value="{{ old('thn_ajaran') }}">
+                                        </div>
                                         @error('thn_ajaran')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
                                         @enderror
                                     </div>
 

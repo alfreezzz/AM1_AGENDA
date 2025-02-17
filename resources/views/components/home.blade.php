@@ -31,15 +31,15 @@
 
     <div class="py-8 mt-8">
         <div class="container mx-auto">
-            <div class="flex flex-wrap justify-center items-center gap-3 md:gap-4 px-4">
-                <img src="assets/images/LOGO-ANIMASI-01-500x500.png" alt="AN" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/TKJ-Baru-500x500.png" alt="TJKT" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/LOGO-RPL-01-500x500.png" alt="PPLG" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/LOGO-AKL-01-500x500.png" alt="AKL" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/BR-500x500.png" alt="BR" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/Logo-TB-OK-01-500x500.png" alt="DPB" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/LOGO-LPS-01-500x500.png" alt="LPS" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
-                <img src="assets/images/MP-Baru-500x500.png" alt="MP" class="w-8 md:w-12 h-8 md:h-12 object-contain hover:scale-110 transition-all duration-300">
+            <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4">
+                <img src="assets/images/LOGO-ANIMASI-01-500x500.png" alt="AN" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/TKJ-Baru-500x500.png" alt="TJKT" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/LOGO-RPL-01-500x500.png" alt="PPLG" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/LOGO-AKL-01-500x500.png" alt="AKL" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/BR-500x500.png" alt="BR" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/Logo-TB-OK-01-500x500.png" alt="DPB" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/LOGO-LPS-01-500x500.png" alt="LPS" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
+                <img src="assets/images/MP-Baru-500x500.png" alt="MP" class="h-7 md:h-10 object-contain hover:scale-110 transition-all duration-300">
             </div>
         </div>
     </div>

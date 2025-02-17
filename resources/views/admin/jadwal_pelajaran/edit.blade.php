@@ -2,109 +2,239 @@
     <x-slot:title>{{$title}}</x-slot:title>
 
     <div class="">
-        <div class="container mx-auto">
+        <div class="container mx-auto pb-8">
             <div class="">
                 <div class="flex flex-col md:flex-row">
                     <!-- Form Section -->
                     <div class="w-full px-8">
                         @if (Auth::user()->role == 'Admin')
+                            <div x-data="{ 
+                                formData: {
+                                    hari: '{{ $jadwal->hari }}',
+                                    jam_ke: {{ json_encode($jadwal->jam_ke) }},
+                                    kelas_id: '{{ $jadwal->kelas_id }}',
+                                    guru_id: '{{ $jadwal->guru_id }}',
+                                    mapel_id: '{{ $jadwal->mapel_id }}',
+                                    thn_ajaran: '{{ $jadwal->thn_ajaran }}'
+                                },
+                                isSubmitting: false,
+                                guruList: [],
+                                mapelList: [],
+                                isGuruDisabled: false,
+                                isMapelDisabled: false,
+                                async loadGuru() {
+                                    if (this.formData.kelas_id) {
+                                        const response = await fetch(`/get-guru/${this.formData.kelas_id}`);
+                                        this.guruList = await response.json();
+                                        this.isGuruDisabled = false;
+                                        this.formData.guru_id = '';
+                                        this.formData.mapel_id = '';
+                                        this.isMapelDisabled = true;
+                                    }
+                                },
+                                async loadMapel() {
+                                    if (this.formData.guru_id) {
+                                        const response = await fetch(`/get-mapel/${this.formData.guru_id}`);
+                                        this.mapelList = await response.json();
+                                        this.isMapelDisabled = false;
+                                        this.formData.mapel_id = '';
+                                    }
+                                },
+                                formatTahunAjaran() {
+                                    let value = this.formData.thn_ajaran.replace(/\D/g, '');
+                                    if (value.length >= 4) {
+                                        const tahun1 = value.substr(0, 4);
+                                        const tahun2 = String(Number(tahun1) + 1);
+                                        this.formData.thn_ajaran = `${tahun1}/${tahun2}`;
+                                    }
+                                },
+                                init() {
+                                    // Load initial data
+                                    this.loadGuru();
+                                    this.loadMapel();
+                                }
+                            }">
+                                
+                                <form action="{{ url('jadwal_pelajaran/' . $jadwal->id) }}" method="post" 
+                                      @submit="isSubmitting = true" 
+                                      class="space-y-6">
+                                    @method('PUT')
+                                    @csrf
 
-                            <form action="{{ url('jadwal_pelajaran/' . $jadwal->id) }}" method="post" enctype="multipart/form-data" class="space-y-6">
-                                @method('PUT')
-                                @csrf
-
-                                <!-- Hari -->
-                                <div class="space-y-2">
-                                    <label for="hari" class="text-sm font-medium text-gray-900">Hari</label>
-                                    <select class="w-full rounded-lg border-gray-200 bg-gray-50 p-3 text-sm focus:border-green-500 focus:ring-green-500 @error('hari') border-red-500 @enderror" name="hari" id="hari">
-                                        @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $day)
-                                            <option value="{{ $day }}" {{ $jadwal->hari == $day ? 'selected' : '' }}>{{ $day }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('hari')
-                                        <p class="text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Jam Pelajaran -->
-                                <div class="space-y-2">
-                                    <label class="text-sm font-medium text-gray-900">Jam Pelajaran</label>
-                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 bg-gray-50 p-4 rounded-lg">
-                                        @for ($i = 1; $i <= 10; $i++)
-                                            <div class="flex items-center space-x-2">
-                                                <input type="checkbox" id="jam_ke_{{ $i }}" name="jam_ke[]" value="{{ $i }}" 
-                                                    class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                                                    {{ is_array($jadwal->jam_ke) && in_array($i, $jadwal->jam_ke) ? 'checked' : '' }}>
-                                                <label for="jam_ke_{{ $i }}" class="text-sm text-gray-700">Jam {{ $i }}</label>
+                                    <!-- Hari Selection -->
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-700 block">Hari</label>
+                                        <div class="relative">
+                                            <select x-model="formData.hari"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('hari') border-red-500 @enderror"
+                                                    name="hari">
+                                                <option value="">--Pilih Hari--</option>
+                                                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $hari)
+                                                    <option value="{{ $hari }}">{{ $hari }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
                                             </div>
-                                        @endfor
+                                        </div>
+                                        @error('hari')
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
                                     </div>
-                                    @error('jam_ke')
-                                        <p class="text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
 
-                                <!-- Kelas -->
-                                <div class="space-y-2">
-                                    <label for="kelas_id" class="text-sm font-medium text-gray-900">Kelas</label>
-                                    <select class="w-full rounded-lg border-gray-200 bg-gray-50 p-3 text-sm focus:border-green-500 focus:ring-green-500 @error('kelas_id') border-red-500 @enderror" name="kelas_id" id="kelas_id">
-                                        @foreach($kelas as $item)
-                                            <option value="{{ $item->id }}" {{ $jadwal->kelas_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('kelas_id')
-                                        <p class="text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    <!-- Jam Pelajaran Selection -->
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-700 block">Jam Pelajaran</label>
+                                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                                            @for ($i = 1; $i <= 10; $i++)
+                                                <label class="relative flex items-center p-3 rounded-lg border border-gray-200 hover:border-green-500 cursor-pointer transition-colors">
+                                                    <input type="checkbox" 
+                                                           name="jam_ke[]" 
+                                                           value="{{ $i }}"
+                                                           x-model="formData.jam_ke"
+                                                           class="h-4 w-4 text-green-500 focus:ring-green-500 border border-gray-300 rounded">
+                                                    <span class="ml-3 text-sm">Jam {{ $i }}</span>
+                                                </label>
+                                            @endfor
+                                        </div>
+                                        @error('jam_ke')
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
+                                    </div>
 
-                                <!-- Guru -->
-                                <div class="space-y-2">
-                                    <label for="guru_id" class="text-sm font-medium text-gray-900">Guru</label>
-                                    <select class="w-full rounded-lg border-gray-200 bg-gray-50 p-3 text-sm focus:border-green-500 focus:ring-green-500 @error('guru_id') border-red-500 @enderror" name="guru_id" id="guru_id">
-                                        @foreach($user as $item)
-                                            <option value="{{ $item->id }}" {{ $jadwal->guru_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('guru_id')
-                                        <p class="text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    <!-- Kelas Selection -->
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-700 block">Kelas</label>
+                                        <div class="relative">
+                                            <select x-model="formData.kelas_id"
+                                                    @change="loadGuru()"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white @error('kelas_id') border-red-500 @enderror"
+                                                    name="kelas_id">
+                                                <option value="">--Pilih Kelas--</option>
+                                                @foreach($kelas as $item)
+                                                    <option value="{{ $item->id }}">
+                                                        {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }} ({{ $item->thn_ajaran }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        @error('kelas_id')
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
+                                    </div>
 
-                                <!-- Mata Pelajaran -->
-                                <div class="space-y-2">
-                                    <label for="mapel_id" class="text-sm font-medium text-gray-900">Mata Pelajaran</label>
-                                    <select class="w-full rounded-lg border-gray-200 bg-gray-50 p-3 text-sm focus:border-green-500 focus:ring-green-500 @error('mapel_id') border-red-500 @enderror" name="mapel_id" id="mapel_id">
-                                        @foreach($mapel as $item)
-                                            <option value="{{ $item->id }}" {{ $jadwal->mapel_id == $item->id ? 'selected' : '' }}>
-                                                {{ $item->nama_mapel }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('mapel_id')
-                                        <p class="text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    <!-- Guru Selection -->
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-700 block">Guru</label>
+                                        <div class="relative">
+                                            <select x-model="formData.guru_id"
+                                                    @change="loadMapel()"
+                                                    :disabled="isGuruDisabled"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white disabled:bg-gray-100 @error('guru_id') border-red-500 @enderror"
+                                                    name="guru_id">
+                                                <option value="">--Pilih Guru--</option>
+                                                <template x-for="guru in guruList" :key="guru.id">
+                                                    <option :value="guru.id" x-text="guru.name"></option>
+                                                </template>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        @error('guru_id')
+                                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Mapel Selection -->
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium text-gray-700 block">Mata Pelajaran</label>
+                                        <div class="relative">
+                                            <select x-model="formData.mapel_id"
+                                                    :disabled="isMapelDisabled"
+                                                    class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-lg transition duration-150 ease-in-out bg-white disabled:bg-gray-100 @error('mapel_id') border-red-500 @enderror"
+                                                    name="mapel_id">
+                                                <option value="">--Pilih Mata Pelajaran--</option>
+                                                <template x-for="mapel in mapelList" :key="mapel.id">
+                                                    <option :value="mapel.id" x-text="mapel.nama_mapel"></option>
+                                                </template>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 <!-- Tahun Ajaran -->
                                 <div class="space-y-2">
-                                    <label for="thn_ajaran" class="text-sm font-medium text-gray-900">Tahun Ajaran</label>
-                                    <input type="text" class="w-full rounded-lg border-gray-200 bg-gray-50 p-3 text-sm focus:border-green-500 focus:ring-green-500 @error('thn_ajaran') border-red-500 @enderror" id="thn_ajaran" name="thn_ajaran" value="{{ $jadwal->thn_ajaran }}" placeholder="Contoh: 2023/2024">
+                                    <label for="thn_ajaran" class="block text-sm font-medium text-gray-700">
+                                        Tahun Ajaran <span class="text-gray-500 italic">Format: 2024/2025</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" 
+                                               x-model="formData.thn_ajaran"
+                                               @input="formatTahunAjaran"
+                                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('thn_ajaran') border-red-500 @enderror"
+                                               id="thn_ajaran" 
+                                               name="thn_ajaran"
+                                               placeholder="YYYY/YYYY"
+                                               maxlength="9"
+                                               value="{{ old('thn_ajaran', $jadwal->thn_ajaran) }}">
+                                    </div>
                                     @error('thn_ajaran')
-                                        <p class="text-sm text-red-600">{{ $message }}</p>
+                                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                                            <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
                                     @enderror
                                 </div>
 
-                                <!-- Submit Button -->
                                 <div class="pt-4">
-                                    <button type="submit" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Simpan Perubahan
+                                    <button type="submit" 
+                                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+                                            :disabled="isSubmitting"
+                                            :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                                        <span x-show="!isSubmitting">Simpan Jadwal</span>
+                                        <span x-show="isSubmitting" class="flex items-center">
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Menyimpan...
+                                        </span>
                                     </button>
                                 </div>
                             </form>

@@ -184,6 +184,16 @@ class Absensiswa_GuruController extends Controller
         ]);
 
         foreach ($request->siswa as $siswa_id => $data) {
+            // Cek apakah sudah ada absen untuk siswa ini pada hari ini
+            $alreadyExists = Absensiswa_Guru::where('nis_id', $siswa_id)
+                ->whereDate('tgl', Carbon::today())
+                ->where('mapel_id', $request->mapel_id)
+                ->exists();
+
+            if ($alreadyExists) {
+                return back()->withErrors(['error' => 'Data absen untuk siswa ini sudah ada untuk hari ini.']);
+            }
+
             // Ambil data siswa berdasarkan ID siswa
             $siswa = Data_siswa::findOrFail($siswa_id);
 

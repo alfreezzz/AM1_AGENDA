@@ -3,7 +3,7 @@
 
     <div class="min-h-screen pb-8">
         @if(auth()->user()->role === 'Admin')
-            <div class="container mx-auto px-4 flex justify-end mb-8 space-x-4">
+            <div class="container mx-auto px-4 flex justify-end mb-8 space-x-4 text-xs sm:text-base">
                 <a href="{{ url()->current() }}" 
                     class="px-6 py-2 rounded-full font-medium transition-all duration-300 transform hover:scale-105
                         {{ request()->query('show_all') 
@@ -44,7 +44,7 @@
                          x-transition:enter-start="opacity-0 transform -translate-y-4"
                          x-transition:enter-end="opacity-100 transform translate-y-0">
                         <div class="flex justify-center mb-6">
-                            <h2 class="text-2xl font-bold text-green-700 px-6 py-2 bg-green-100 rounded-full">
+                            <h2 class="text-base md:text-lg font-bold text-green-700 px-6 py-2 bg-green-100 rounded-full">
                                 Kelas {{ $grade }}
                             </h2>
                         </div>
@@ -59,7 +59,7 @@
                                         class="group relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                                         <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         <div class="relative p-6 text-center">
-                                            <h3 class="text-xl font-semibold text-gray-800 group-hover:text-white transition-colors duration-300">
+                                            <h3 class="text-base md:text-xl font-semibold text-gray-800 group-hover:text-white transition-colors duration-300">
                                                 {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }}
                                             </h3>
                                             <p class="mt-2 text-green-600 group-hover:text-green-100 transition-colors duration-300">
