@@ -89,10 +89,10 @@
                                     <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Indikator Kompetensi</th>
                                     <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan Tugas</th>
                                     @if(Auth::user()->role == 'Admin')
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Ditambahkan</th>
+                                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Ditambahkan</th>
                                     @endif
                                     @if(Auth::user()->role == 'Guru')
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                     @endif
                                 </tr>
                             </thead>

@@ -4,6 +4,7 @@
     @if (Auth::user()->role == 'Sekretaris')
     <div class="max-w-6xl mx-auto px-4" x-data="{ 
         currentDate: new Date().toISOString().split('T')[0],
+        isSubmitting: false,
         toggleAttendance(studentId) {
             return {
                 selected: null,
@@ -17,7 +18,7 @@
             }
         }
     }">
-        <form action="{{ route('absen_siswa.store') }}" method="post" enctype="multipart/form-data" class="space-y-8">
+        <form action="{{ route('absen_siswa.store') }}" method="post" enctype="multipart/form-data" class="space-y-8" @submit="isSubmitting = true">
             @csrf
             
             <!-- Date Input Section -->
@@ -30,10 +31,15 @@
                     x-model="currentDate"
                     :min="currentDate"
                     :max="currentDate"
-                    class="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition duration-200 bg-gray-50"
+                    class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('tgl') border-red-500 @enderror"
                 >
                 @error('tgl')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
@@ -42,14 +48,12 @@
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="bg-emerald-600 text-white">
-                                <th class="px-6 py-4 text-center w-16">No</th>
-                                <th class="px-6 py-4 text-center">Nama Siswa</th>
-                                <th class="px-6 py-4 text-center">
-                                    <span class="flex items-center justify-center gap-2">
-                                        Keterangan
-                                        <span class="text-emerald-200 text-sm italic">(Kosongkan Jika Hadir)</span>
-                                    </span>
+                            <tr class="bg-gradient-to-r from-green-500 to-green-600">
+                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">No</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Nama Siswa</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                    Keterangan
+                                    <span class="text-green-200 font-normal">(Kosongkan Jika Hadir)</span>
                                 </th>
                             </tr>
                         </thead>
@@ -58,34 +62,23 @@
                             <tr class="hover:bg-gray-50 transition duration-150">
                                 <td class="px-6 py-4 text-gray-500 text-center">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 font-medium">{{ $item->nama_siswa }}</td>
-                                <td class="px-6 py-4" x-data="toggleAttendance({{ $item->id }})">
-                                    <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" :value="selected || 'Hadir'">
-                                    
-                                    <div class="flex justify-center gap-6">
-                                        <button 
-                                            type="button"
-                                            @click="select('Sakit')"
-                                            :class="{'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500': selected === 'Sakit'}"
-                                            class="px-4 py-2 rounded-full text-sm font-medium hover:bg-emerald-50 transition duration-150"
-                                        >
-                                            Sakit
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            @click="select('Izin')"
-                                            :class="{'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500': selected === 'Izin'}"
-                                            class="px-4 py-2 rounded-full text-sm font-medium hover:bg-emerald-50 transition duration-150"
-                                        >
-                                            Izin
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            @click="select('Alpha')"
-                                            :class="{'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500': selected === 'Alpha'}"
-                                            class="px-4 py-2 rounded-full text-sm font-medium hover:bg-emerald-50 transition duration-150"
-                                        >
-                                            Alpha
-                                        </button>
+                                <td class="px-6 py-4">
+                                    <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" value="Hadir">
+                                    <div class="flex justify-center space-x-6">
+                                        @foreach(['Sakit' => 'bg-yellow-100 text-yellow-800', 
+                                                 'Izin' => 'bg-blue-100 text-blue-800', 
+                                                 'Alpha' => 'bg-red-100 text-red-800'] as $status => $colors)
+                                            <label class="relative inline-flex items-center group">
+                                                <input type="radio" 
+                                                       class="absolute w-0 h-0 opacity-0 peer"
+                                                       name="siswa[{{ $item->id }}][keterangan]" 
+                                                       value="{{ $status }}"
+                                                       onclick="toggleRadio(this)">
+                                                <span class="px-4 py-2 rounded-full cursor-pointer {{ $colors }} text-sm font-medium opacity-50 peer-checked:opacity-100 hover:opacity-75 transition-all duration-200">
+                                                    {{ $status }}
+                                                </span>
+                                            </label>
+                                        @endforeach
                                     </div>
                                 </td>
                             </tr>
@@ -96,15 +89,19 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="flex justify-end">
-                <button 
-                    type="submit" 
-                    class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-200 transition duration-150 flex items-center gap-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    Simpan Absensi
+            <div class="pt-4">
+                <button type="submit" 
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+                        :disabled="isSubmitting"
+                        :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                    <span x-show="!isSubmitting">Simpan Absensi</span>
+                    <span x-show="isSubmitting" class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Menyimpan...
+                    </span>
                 </button>
             </div>
         </form>

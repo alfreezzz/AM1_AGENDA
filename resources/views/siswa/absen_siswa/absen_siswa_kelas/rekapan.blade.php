@@ -18,10 +18,38 @@
                             <tr>
                                 <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">No</th>
                                 <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider text-left">Nama Siswa</th>
-                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Hadir</th>
-                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Sakit</th>
-                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Izin</th>
-                                <th class="px-6 py-4 text-white text-sm font-semibold uppercase tracking-wider">Alpha</th>
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                    <div class="flex items-center justify-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        <span>Hadir</span>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                    <div class="flex items-center justify-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>Sakit</span>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                    <div class="flex items-center justify-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>Izin</span>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">
+                                    <div class="flex items-center justify-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        <span>Alpha</span>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">

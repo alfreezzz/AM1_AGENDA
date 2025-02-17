@@ -4,6 +4,7 @@
     <div class="" x-data="{ 
         files: [],
         message: '',
+        isSubmitting: false,
         updateMessage(type) {
             this.message = type === 'Sakit' ? 'Semoga lekas sembuh' : 'Semoga urusanmu lancar';
         }
@@ -14,7 +15,7 @@
                     <!-- Form Section -->
                     <div class="w-full md:w-1/2 p-8">
                         
-                        <form action="{{ url('absen_guru') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+                        <form action="{{ url('absen_guru') }}" method="post" enctype="multipart/form-data" class="space-y-6" @submit="isSubmitting = true">
                             @csrf
                             <input type="hidden" name="kelas_id" value="{{ $kelas_id }}">
 
@@ -22,14 +23,19 @@
                             <div class="space-y-2">
                                 <label for="mapel_id" class="text-sm font-medium text-gray-700 block">Mata Pelajaran</label>
                                 <select id="mapel_id" name="mapel_id" 
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors duration-200">
+                                    class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                     <option value="">--Pilih Mata Pelajaran--</option>
                                     @foreach($mapel as $item)
                                         <option value="{{ $item->id }}">{{ $item->nama_mapel }}</option>
                                     @endforeach
                                 </select>
                                 @error('mapel_id')
-                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -37,12 +43,17 @@
                             <div class="space-y-2">
                                 <label for="tgl" class="text-sm font-medium text-gray-700 block">Tanggal</label>
                                 <input type="date" id="tgl" name="tgl" 
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors duration-200"
+                                    class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('tgl') border-red-500 @enderror"
                                     value="{{ old('tgl', date('Y-m-d')) }}" 
                                     min="{{ date('Y-m-d') }}" 
                                     max="{{ date('Y-m-d') }}">
                                 @error('tgl')
-                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -64,7 +75,12 @@
                                     </label>
                                 </div>
                                 @error('keterangan')
-                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -96,7 +112,12 @@
                                     </template>
                                 </div>
                                 @error('tugas')
-                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -104,27 +125,42 @@
                             <div class="space-y-2">
                                 <label for="keterangantugas" class="text-sm font-medium text-gray-700 block">Keterangan Tugas</label>
                                 <input type="text" id="keterangantugas" name="keterangantugas" 
-                                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 transition-colors duration-200"
-                                    value="{{ old('keterangantugas') }}">
+                                    class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('keterangantugas') border-red-500 @enderror"
+                                    value="{{ old('keterangantugas') }}"
+                                    placeholder="Masukkan Keterangan Tugas">
                                 @error('keterangantugas')
-                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600 flex items-center">
+                                        <svg class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
                             <!-- Submit Button -->
                             <div class="pt-4">
                                 <button type="submit" 
-                                    class="w-full bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200">
-                                    Simpan
+                                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+                                        :disabled="isSubmitting"
+                                        :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                                    <span x-show="!isSubmitting">Simpan Absensi</span>
+                                    <span x-show="isSubmitting" class="flex items-center">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Menyimpan...
+                                    </span>
                                 </button>
                             </div>
                         </form>
                     </div>
 
                     <!-- Image & Message Section -->
-                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-center items-center">
+                    <div class="w-full md:w-1/2 px-8 flex flex-col justify-center items-center">
                         <img src="{{ asset('assets/images/hero.png') }}" alt="Hero Image" 
-                            class="w-full max-w-md h-auto mb-8 transform transition-transform duration-500 hover:scale-105">
+                            class="w-full max-w-md h-auto mb-8">
                         <div x-show="message" 
                             x-text="message"
                             class="text-xl font-bold text-green-600 text-center animate-fade-in"

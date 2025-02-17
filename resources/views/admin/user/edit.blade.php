@@ -11,9 +11,10 @@
                         <form action="{{ url('user/' . $user->id) }}" method="post" enctype="multipart/form-data" 
                               x-data="{ 
                                   role: '{{ old('role', $user->role) }}',
-                                  showPassword: false 
+                                  showPassword: false,
+                                  isSubmitting: false,
                               }" 
-                              class="space-y-6">
+                              class="space-y-6" @submit="isSubmitting = true">
                             @csrf
                             @method('PUT')
 
@@ -198,7 +199,21 @@
                                 @enderror
                             </div>
 
-                            <x-btn-submit>Update Akun</x-btn-submit>
+                            <div class="pt-4">
+                                <button type="submit" 
+                                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+                                        :disabled="isSubmitting"
+                                        :class="{'opacity-75 cursor-not-allowed': isSubmitting}">
+                                    <span x-show="!isSubmitting">Update Pengguna</span>
+                                    <span x-show="isSubmitting" class="flex items-center">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Menyimpan...
+                                    </span>
+                                </button>
+                            </div>
                         </form>
                     </div>
 
