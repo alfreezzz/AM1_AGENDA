@@ -29,12 +29,7 @@
                 </button>
             </form>
 
-            <a href="{{ url('mapel/create') }}" class="inline-flex items-center justify-center bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition duration-200 font-medium">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Tambah Data
-            </a>
+            <x-btn-add href="{{ url('mapel/create') }}">Tambah Mapel</x-btn-add>
         </div>
 
         @if($mapel->isEmpty())
@@ -105,32 +100,8 @@
                             </td>
                             <td class="px-4 py-2 whitespace-nowrap text-center text-sm">
                                 <div class="flex justify-center items-center space-x-2">
-                                    <a 
-                                        href="{{ url('mapel/' . $item->id . '/edit') }}" 
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition duration-200"
-                                    >
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                        Edit
-                                    </a>
-                                    <form 
-                                        action="{{ url('mapel/' . $item->id) }}" 
-                                        method="POST" 
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');"
-                                    >
-                                        @csrf
-                                        @method('DELETE')
-                                        <button 
-                                            type="submit" 
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200"
-                                        >
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <x-btn-edit href="{{ url('mapel/' . $item->id . '/edit') }}"></x-btn-edit>
+                                    <x-btn-delete action="{{ url('mapel/' . $item->id) }}" ></x-btn-delete>
                                 </div>
                             </td>
                         </tr>

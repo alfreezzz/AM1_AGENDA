@@ -13,10 +13,10 @@
                                 name="search" 
                                 value="{{ request('search') }}" 
                                 placeholder="Cari guru..." 
-                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors duration-200"
+                                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200"
                             >
                         </div>
-                        <button type="submit" class="inline-flex justify-center items-center px-6 py-2.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200">
+                        <button type="submit" class="inline-flex justify-center items-center px-6 py-2.5 rounded-lg bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
@@ -26,13 +26,7 @@
 
                     <!-- Add Button -->
                     @if(Auth::user()->role == 'Admin')
-                    <a href="{{ url('jadwal_pelajaran/create') }}" 
-                        class="inline-flex justify-center items-center px-6 py-2.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-200">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Tambah Data
-                    </a>
+                  <x-btn-add  href="{{ url('jadwal_pelajaran/create') }}" >Tambah Jadwal Pelajaran</x-btn-add>
                     @endif
                 </div>
             </div>
@@ -108,21 +102,9 @@
                                                             @endphp
                                                         </td>
                                                         @if(Auth::user()->role == 'Admin')
-                                                        <td class="px-4 py-2 whitespace-nowrap text-center text-sm font-medium">
-                                                            <a href="{{ url('jadwal_pelajaran/' . $item->id . '/edit') }}" 
-                                                                class="inline-flex items-center px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors duration-200 mr-2">
-                                                                Edit
-                                                            </a>
-                                                            <form action="{{ url('jadwal_pelajaran/' . $item->id) }}" method="POST" 
-                                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');" 
-                                                                class="inline-block">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" 
-                                                                    class="inline-flex items-center px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                                                                    Delete
-                                                                </button>
-                                                            </form>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-center text-sm font-medium space-x-2">
+                                                           <x-btn-edit  href="{{ url('jadwal_pelajaran/' . $item->id . '/edit') }}" ></x-btn-edit>
+                                                            <x-btn-delete  action="{{ url('jadwal_pelajaran/' . $item->id) }}"></x-btn-delete>
                                                         </td>
                                                         @endif
                                                     </tr>

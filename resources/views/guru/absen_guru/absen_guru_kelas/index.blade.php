@@ -12,13 +12,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                 <!-- Action Button -->
                 @if(Auth::user()->role == 'Guru')
-                    <a href="{{ url('absen_guru/create/' . $kelas->id) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                        </svg>
-                        Tambah Absensi
-                    </a>
+                   <x-btn-add href="{{ url('absen_guru/create/' . $kelas->id) }}" >Tambah Absensi</x-btn-add>
                 @endif
 
                 <!-- Enhanced Filter Form -->
@@ -26,17 +20,12 @@
                       class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
                     <div class="relative">
                         <select name="filter" x-model="currentFilter"
-                                class="appearance-none bg-white border border-gray-300 rounded-md pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-gray-700 text-sm">
+                                class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                             <option value="">Semua Tanggal</option>
                             <option value="last_week">Minggu Lalu</option>
                             <option value="last_month">Bulan Lalu</option>
                             <option value="range">Rentang Tanggal</option>
                         </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </div>
                     </div>
 
                     <!-- Date Range Inputs with smooth transition -->
@@ -46,9 +35,9 @@
                          x-transition:enter-end="opacity-100 transform scale-100"
                          class="flex space-x-4">
                         <input type="date" name="start_date" x-model="startDate"
-                               class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm">
+                               class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                         <input type="date" name="end_date" x-model="endDate"
-                               class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm">
+                               class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                     </div>
                 </form>
             </div>
@@ -80,7 +69,7 @@
                         <table class="w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th class="px-4 borderpy-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                     @if(Auth::user()->role == 'Admin')
                                         <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Guru</th>
                                     @endif
@@ -135,25 +124,8 @@
                                         @if(Auth::user()->role == 'Guru')
                                             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <div class="flex space-x-2">
-                                                    <a href="{{ url('absen_guru/' . $item->id . '/edit') }}" 
-                                                       class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-md transition-colors duration-150">
-                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                        </svg>
-                                                        Edit
-                                                    </a>
-                                                    <form action="{{ url('absen_guru/' . $item->id) }}" method="POST" 
-                                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" 
-                                                                class="inline-flex items-center px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-md transition-colors duration-150">
-                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                            </svg>
-                                                            Delete
-                                                        </button>
-                                                    </form>
+                                                   <x-btn-edit href="{{ url('absen_guru/' . $item->id . '/edit') }}" ></x-btn-edit>
+                                                   <x-btn-delete action="{{ url('absen_guru/' . $item->id) }}"></x-btn-delete>
                                                 </div>
                                             </td>
                                         @endif

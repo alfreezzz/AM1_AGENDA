@@ -39,7 +39,7 @@
             </div>
         @else
             <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr class="text-center text-xs font-medium text-gray-500 uppercase tracking-wider">

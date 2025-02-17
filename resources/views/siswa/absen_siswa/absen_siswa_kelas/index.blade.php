@@ -14,7 +14,7 @@
                       class="flex-1 flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
                     <select name="filter" id="filter" 
                             x-on:change="showDateRange = $event.target.value === 'range'; if($event.target.value !== 'range') $el.form.submit()"
-                            class="w-full sm:w-auto px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                            class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                         <option value="">Semua Tanggal</option>
                         <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
                         <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
@@ -28,21 +28,15 @@
                          class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
                         <input type="date" name="start_date" x-model="startDate"
                                x-on:change="$el.form.submit()"
-                               class="w-full sm:w-auto px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                               class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                         <input type="date" name="end_date" x-model="endDate"
                                x-on:change="$el.form.submit()"
-                               class="w-full sm:w-auto px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                               class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                     </div>
                 </form>
 
                 @if (Auth::user()->role == 'Sekretaris')
-                    <a href="{{ route('absen_siswa.create') }}" 
-                       class="inline-flex items-center justify-center px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                        </svg>
-                        Tambah Absensi
-                    </a>
+                    <x-btn-add href="{{ route('absen_siswa.create') }}" >Tambah Absensi</x-btn-add>
                 @endif
             </div>
         </div>
@@ -122,13 +116,7 @@
                                                 {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
                                             </td>
                                             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                                <a href="{{ route('absen_siswa.edit', $item->id) }}" 
-                                                   class="inline-flex items-center px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition-colors duration-200">
-                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                    </svg>
-                                                    Edit
-                                                </a>
+                                               <x-btn-edit href="{{ route('absen_siswa.edit', $item->id) }}" ></x-btn-edit>
                                             </td>
                                         @endif
                                     </tr>

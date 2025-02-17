@@ -7,13 +7,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                 <!-- Action Button -->
                 @if(Auth::user()->role == 'Guru')
-                    <a href="{{ url('agenda/create/' . $kelas->id) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors duration-150 ease-in-out">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                        </svg>
-                        Tambah Agenda
-                    </a>
+                    <x-btn-add href="{{ url('agenda/create/' . $kelas->id) }}" >Tambah Agenda</x-btn-add>
                 @endif
 
                 <!-- Filter Section -->
@@ -23,7 +17,7 @@
                           class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                         <select name="filter" id="filter" 
                                 x-on:change="showDateRange = $event.target.value === 'range'; if($event.target.value !== 'range') $event.target.form.submit()"
-                                class="block w-full sm:w-auto rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm">
                             <option value="">Semua Tanggal</option>
                             <option value="last_week" {{ request('filter') == 'last_week' ? 'selected' : '' }}>Minggu Lalu</option>
                             <option value="last_month" {{ request('filter') == 'last_month' ? 'selected' : '' }}>Bulan Lalu</option>
@@ -36,9 +30,9 @@
                              x-transition:enter-end="opacity-100 transform scale-100"
                              class="flex flex-col sm:flex-row gap-4">
                             <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
-                                   class="block rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                                   class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                             <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
-                                   class="block rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                                   class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                         </div>
                     </form>
                 </div>
@@ -101,26 +95,15 @@
                                             <td class="px-4 py-2 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->jam_msk }}</td>
                                             <td class="px-4 py-2 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->jam_keluar }}</td>
                                             @if(Auth::user()->role == 'Admin')
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                <td class="px-4 py-2 whitespace-nowrap text-center text-sm text-gray-900">
                                                     {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
                                                 </td>
                                             @endif
                                             @if(Auth::user()->role == 'Guru')
                                                 <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-900">
                                                     <div class="flex items-center justify-center space-x-2">
-                                                        <a href="{{ url('agenda/' . $item->id . '/edit') }}" 
-                                                           class="inline-flex items-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-md transition-colors duration-150 ease-in-out">
-                                                            Edit
-                                                        </a>
-                                                        <form action="{{ url('agenda/' . $item->id) }}" method="POST" 
-                                                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" 
-                                                                    class="inline-flex items-center px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-md transition-colors duration-150 ease-in-out">
-                                                                Delete
-                                                            </button>
-                                                        </form>
+                                                      <x-btn-edit href="{{ url('agenda/' . $item->id . '/edit') }}" ></x-btn-edit>
+                                                        <x-btn-delete action="{{ url('agenda/' . $item->id) }}" ></x-btn-delete>
                                                     </div>
                                                 </td>
                                             @endif
