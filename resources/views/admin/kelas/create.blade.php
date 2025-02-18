@@ -13,6 +13,15 @@
                             thn_ajaran: ''
                         },
                         isSubmitting: false,
+                        init() {
+                            const today = new Date();
+                            const currentYear = today.getFullYear();
+                            const currentMonth = today.getMonth() + 1; // getMonth() dimulai dari 0 (Januari = 0)
+                            
+                            // Jika bulan sekarang sebelum Juli (Januari - Juni), gunakan tahun sebelumnya
+                            const startYear = currentMonth < 7 ? currentYear - 1 : currentYear;
+                            this.formData.thn_ajaran = `${startYear}/${startYear + 1}`;
+                        },
                         formatTahunAjaran() {
                             let value = this.formData.thn_ajaran.replace(/\D/g, '');
                             if (value.length >= 4) {
@@ -21,7 +30,7 @@
                                 this.formData.thn_ajaran = `${tahun1}/${tahun2}`;
                             }
                         }
-                    }">
+                    }"                     
                         <div class="max-w-md mx-auto">
                             <form action="{{ url('kelas') }}" 
                                   method="post" 

@@ -10,6 +10,8 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -19,6 +21,7 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
     protected $filter;
     protected $start_date;
     protected $end_date;
+    protected $headerRows = [];
 
     public function __construct($kelas_id, $filter = null, $start_date = null, $end_date = null)
     {
@@ -30,107 +33,164 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
 
     public function collection()
     {
-        $query = Absensiswa_Guru::where('kelas_id', $this->kelas_id)->with(['data_siswa', 'mapel', 'user']);
+        $query = Absensiswa_Guru::where('kelas_id', $this->kelas_id)
+            ->with(['data_siswa', 'mapel', 'user']);
 
-        if ($this->filter == 'last_week') {
-            $query->whereBetween('tgl', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()]);
-        } elseif ($this->filter == 'last_month') {
-            $query->whereBetween('tgl', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()]);
-        } elseif ($this->filter == 'range' && $this->start_date && $this->end_date) {
+        if ($this->filter == 'range' && $this->start_date && $this->end_date) {
             $query->whereBetween('tgl', [$this->start_date, $this->end_date]);
         }
 
-        $data = $query->orderBy('tgl', 'desc')->get();
+        $data = $query->orderBy('tgl')->get();
 
-        return $this->groupData($data);
+        return $this->formatData($data);
     }
 
-    private function groupData($data)
+    private function formatData($data)
     {
-        $grouped = collect();
-        $lastDate = null;
-        $lastGuru = null;
-        $lastMapel = null;
-        $counter = 1;
+        $formatted = collect();
+        $currentGuru = null;
+        $currentMapel = null;
 
-        foreach ($data as $absen) {
-            $currentDate = Carbon::parse($absen->tgl)->format('d M Y');
-            $currentGuru = $absen->user->name ?? 'Tidak Ada';
-            $currentMapel = $absen->mapel->nama_mapel ?? 'Tidak Ada';
+        // Group data by guru and mapel
+        $groupedData = $data->groupBy(['user.name', 'mapel.nama_mapel']);
 
-            if ($lastDate !== $currentDate) {
-                $grouped->push((object) ['header' => $currentDate]);
-                $lastGuru = null;
-                $lastMapel = null;
+        foreach ($groupedData as $guru => $mapelGroup) {
+            // Add Guru row
+            $formatted->push(['Guru:', $guru]);
+
+            foreach ($mapelGroup as $mapel => $attendanceData) {
+                // Add Mapel row
+                $formatted->push(['Mapel:', $mapel]);
+
+                // Get unique dates for the header
+                $dates = $attendanceData->pluck('tgl')->unique()->sort()->map(function ($date) {
+                    return Carbon::parse($date)->format('d/m/Y');
+                })->values();
+
+                // Add table headers
+                $headers = ['No', 'Nama Siswa'];
+                foreach ($dates as $date) {
+                    $headers[] = $date;
+                }
+                $formatted->push($headers);
+
+                // Group attendance by student
+                $studentAttendance = $attendanceData->groupBy('data_siswa.nama_siswa');
                 $counter = 1;
+
+                foreach ($studentAttendance as $student => $records) {
+                    $row = [$counter++, $student];
+
+                    // Fill attendance status for each date
+                    foreach ($dates as $date) {
+                        $status = $records->first(function ($record) use ($date) {
+                            return Carbon::parse($record->tgl)->format('d/m/Y') === $date;
+                        });
+                        $row[] = $status ? strtoupper($status->keterangan) : '-';
+                    }
+
+                    $formatted->push($row);
+                }
+
+                // Add empty row after each mapel section
+                $formatted->push([]);
             }
-
-            if ($lastGuru !== $currentGuru) {
-                $grouped->push((object) ['subheader_guru' => $currentGuru]);
-                $lastMapel = null;
-                $counter = 1;
-            }
-
-            if ($lastMapel !== $currentMapel) {
-                $grouped->push((object) ['subheader_mapel' => $currentMapel]);
-                $counter = 1;
-            }
-
-            $grouped->push((object) [
-                'no' => $counter++,
-                'nama_siswa' => $absen->data_siswa->nama_siswa ?? 'Tidak Ada',
-                'keterangan' => $absen->keterangan,
-                'created_at' => Carbon::parse($absen->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s'),
-            ]);
-
-            $lastDate = $currentDate;
-            $lastGuru = $currentGuru;
-            $lastMapel = $currentMapel;
         }
 
-        return $grouped;
+        return $formatted;
     }
 
     public function headings(): array
     {
-        return [
-            'No',
-            'Nama Siswa',
-            'Keterangan',
-            'Waktu Ditambahkan',
-        ];
+        return []; // Headers are handled in formatData
     }
 
-    public function map($absen): array
+    public function map($row): array
     {
-        if (isset($absen->header)) {
-            return [$absen->header, '', '', ''];
-        }
-        if (isset($absen->subheader_guru)) {
-            return [$absen->subheader_guru, '', '', ''];
-        }
-        if (isset($absen->subheader_mapel)) {
-            return [$absen->subheader_mapel, '', '', ''];
-        }
-
-        return [
-            $absen->no ?? '',
-            $absen->nama_siswa ?? '',
-            $absen->keterangan ?? '',
-            $absen->created_at ?? '',
-        ];
+        return $row;
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:D1')->applyFromArray([
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER],
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '90EE90']],
-        ]);
+        // Get the last row and column
+        $lastRow = $sheet->getHighestRow();
+        $lastColumn = $sheet->getHighestColumn();
 
-        $sheet->getStyle('C:C')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('D:D')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        // Border style for table content
+        $borderStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000'],
+                ],
+            ],
+        ];
+
+        $row = 1;
+        $tableStart = null;
+        $currentTableEnd = null;
+
+        while ($row <= $lastRow) {
+            $firstCellValue = $sheet->getCellByColumnAndRow(1, $row)->getValue();
+
+            if ($firstCellValue === 'Guru:' || $firstCellValue === 'Mapel:') {
+                // Style header rows without borders
+                $sheet->getStyle("A{$row}:B{$row}")->applyFromArray([
+                    'font' => ['bold' => true],
+                ]);
+
+                if ($firstCellValue === 'Mapel:' && $currentTableEnd) {
+                    // Apply borders to previous table section
+                    $sheet->getStyle("A{$tableStart}:{$lastColumn}{$currentTableEnd}")
+                        ->applyFromArray($borderStyle);
+                    $tableStart = null;
+                }
+            } elseif ($firstCellValue === 'No') {
+                // Start of new table section
+                $tableStart = $row;
+
+                // Style header row
+                $sheet->getStyle("A{$row}:{$lastColumn}{$row}")->applyFromArray([
+                    'font' => ['bold' => true],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID,
+                        'startColor' => ['rgb' => 'DCE6F1'],
+                    ],
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    ],
+                ]);
+            } elseif (is_numeric($firstCellValue)) {
+                // Data row - update current table end
+                $currentTableEnd = $row;
+
+                // Center align all cells except student name
+                $sheet->getStyle("A{$row}")->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("C{$row}:{$lastColumn}{$row}")->getAlignment()
+                    ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            } elseif (empty($firstCellValue) && $tableStart && $currentTableEnd) {
+                // Empty row after table - apply borders to completed section
+                $sheet->getStyle("A{$tableStart}:{$lastColumn}{$currentTableEnd}")
+                    ->applyFromArray($borderStyle);
+                $tableStart = null;
+                $currentTableEnd = null;
+            }
+
+            $row++;
+        }
+
+        // Apply borders to last table section if exists
+        if ($tableStart && $currentTableEnd) {
+            $sheet->getStyle("A{$tableStart}:{$lastColumn}{$currentTableEnd}")
+                ->applyFromArray($borderStyle);
+        }
+
+        // Set column widths
+        $sheet->getColumnDimension('B')->setWidth(30);
+        foreach (range('C', $lastColumn) as $column) {
+            $sheet->getColumnDimension($column)->setWidth(15);
+        }
 
         return [];
     }

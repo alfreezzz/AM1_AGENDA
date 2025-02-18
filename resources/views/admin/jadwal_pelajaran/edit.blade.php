@@ -203,14 +203,10 @@
                                     </label>
                                     <div class="relative">
                                         <input type="text" 
-                                               x-model="formData.thn_ajaran"
-                                               @input="formatTahunAjaran"
-                                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out @error('thn_ajaran') border-red-500 @enderror"
-                                               id="thn_ajaran" 
-                                               name="thn_ajaran"
-                                               placeholder="YYYY/YYYY"
-                                               maxlength="9"
-                                               value="{{ old('thn_ajaran', $jadwal->thn_ajaran) }}">
+                                           class="w-full px-4 py-3 rounded-lg bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" 
+                                           value="{{ $jadwal->thn_ajaran }}" 
+                                           disabled>
+                                        <input type="hidden" name="thn_ajaran" value="{{ $jadwal->thn_ajaran }}">
                                     </div>
                                     @error('thn_ajaran')
                                         <p class="mt-2 text-sm text-red-600 flex items-center">
