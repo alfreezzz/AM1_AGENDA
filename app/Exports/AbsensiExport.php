@@ -21,14 +21,18 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
     protected $filter;
     protected $start_date;
     protected $end_date;
+    protected $isGuru;
+    protected $userId;
     protected $headerRows = [];
 
-    public function __construct($kelas_id, $filter = null, $start_date = null, $end_date = null)
+    public function __construct($kelas_id, $filter = null, $start_date = null, $end_date = null, $isGuru = false, $userId = null)
     {
         $this->kelas_id = $kelas_id;
         $this->filter = $filter;
         $this->start_date = $start_date;
         $this->end_date = $end_date;
+        $this->isGuru = $isGuru;
+        $this->userId = $userId;
     }
 
     public function collection()
@@ -36,8 +40,22 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
         $query = Absensiswa_Guru::where('kelas_id', $this->kelas_id)
             ->with(['data_siswa', 'mapel', 'user']);
 
-        if ($this->filter == 'range' && $this->start_date && $this->end_date) {
+        if ($this->filter === 'last_week') {
+            $query->whereBetween('tgl', [
+                Carbon::now()->subWeek()->startOfWeek(),
+                Carbon::now()->subWeek()->endOfWeek()
+            ]);
+        } elseif ($this->filter === 'last_month') {
+            $query->whereBetween('tgl', [
+                Carbon::now()->subMonth()->startOfMonth(),
+                Carbon::now()->subMonth()->endOfMonth()
+            ]);
+        } elseif ($this->filter === 'range' && $this->start_date && $this->end_date) {
             $query->whereBetween('tgl', [$this->start_date, $this->end_date]);
+        }
+
+        if ($this->isGuru) {
+            $query->where('added_by', $this->userId);
         }
 
         $data = $query->orderBy('tgl')->get();

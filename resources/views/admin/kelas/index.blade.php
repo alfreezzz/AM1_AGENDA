@@ -36,7 +36,7 @@
                             <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }}
                             </td>
-                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{{ $item->thn_ajaran }}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-center">{{ $item->thn_ajaran }}</td>
                             <td class="px-4 py-2">
                                 <div x-data="{ open: false }" class="relative">
                                     <button @click="open = !open" 

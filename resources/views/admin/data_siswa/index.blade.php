@@ -58,7 +58,7 @@
                                 <td class="px-4 py-2 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">{{ $item->nama_siswa }}</div>
                                 </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{{ $item->nis_id }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-center">{{ $item->nis_id }}</td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-center">
                                     @if ($item->gender == 'Pria')
                                         <span class="text-blue-600 text-2xl">&#9794;</span>

@@ -94,8 +94,8 @@
                                                     @foreach ($jadwalClass as $item)
                                                     <tr class="hover:bg-gray-50">
                                                         <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $item->user->name }}</td>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $item->mapel->nama_mapel }}</td>
-                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">{{ $item->mapel->nama_mapel }}</td>
+                                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900 text-center">
                                                             @php
                                                                 $jamKeArray = json_decode($item->jam_ke);
                                                                 echo implode(', ', $jamKeArray);

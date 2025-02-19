@@ -81,8 +81,9 @@ class AgendaController extends Controller
         }
 
         if (auth()->user()->role === 'Guru') {
-            $assignedMapels = DB::table('guru_mapel')
-                ->where('user_id', auth()->id())
+            $user = auth()->user();
+            $assignedMapels = Agenda::where('kelas_id', $kelas->id)
+                ->where('added_by', $user->id)
                 ->pluck('mapel_id');
 
             $agendaQuery->whereIn('mapel_id', $assignedMapels);

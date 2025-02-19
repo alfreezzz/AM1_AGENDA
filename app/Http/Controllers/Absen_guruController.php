@@ -89,9 +89,9 @@ class Absen_guruController extends Controller
         }
 
         if (auth()->user()->role === 'Guru') {
-            $user = auth()->user(); // Ambil data user yang login
-            $assignedMapels = DB::table('guru_mapel')
-                ->where('user_id', auth()->user()->id)
+            $user = auth()->user();
+            $assignedMapels = Absen_guru::where('kelas_id', $kelas->id)
+                ->where('added_by', $user->id)
                 ->pluck('mapel_id');
 
             // Filter agenda berdasarkan mapel yang diajarkan

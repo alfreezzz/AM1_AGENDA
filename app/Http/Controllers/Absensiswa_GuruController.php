@@ -85,8 +85,8 @@ class Absensiswa_GuruController extends Controller
         // Jika user adalah Guru, terapkan filter berdasarkan `mapel_id` dari `guru_mapel`
         if (auth()->user()->role === 'Guru') {
             $user = auth()->user(); // Ambil data user yang login
-            $assignedMapels = DB::table('guru_mapel')
-                ->where('user_id', auth()->user()->id)
+            $assignedMapels = Absensiswa_Guru::where('kelas_id', $kelas->id)
+                ->where('added_by', $user->id)
                 ->pluck('mapel_id');
 
             // Filter agenda berdasarkan mapel yang diajarkan
@@ -96,7 +96,7 @@ class Absensiswa_GuruController extends Controller
         $absensi = $absensiQuery->get();
 
         return view('guru.absensiswa_guru.absensiswa_guru_kelas.index', compact('absensi', 'kelas', 'filter', 'startDate', 'endDate'), [
-            'title' => 'Absensi Siswa Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
+            'title' => 'Absensi Siswa Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
         ]);
     }
 
@@ -107,9 +107,19 @@ class Absensiswa_GuruController extends Controller
         $start_date = $request->query('start_date', '');
         $end_date = $request->query('end_date', '');
 
-        $filename = 'absensi_siswa_' . str_replace(['/', '\\'], '', $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id . '(guru)_TA_' . $kelas->thn_ajaran) . '.xlsx';
+        // Tentukan apakah user adalah Guru
+        $isGuru = auth()->user()->role === 'Guru';
+        $userId = auth()->user()->id;
 
-        return Excel::download(new AbsensiExport($kelas->id, $filter, $start_date, $end_date), $filename);
+        // Sesuaikan nama file berdasarkan peran
+        $filename = 'absensi_siswa_' . str_replace(
+            ['/', '\\'],
+            '',
+            $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id
+                . ($isGuru ? '_(guru)' : '_(admin)') . '_TA_' . $kelas->thn_ajaran
+        ) . '.xlsx';
+
+        return Excel::download(new AbsensiExport($kelas->id, $filter, $start_date, $end_date, $isGuru, $userId), $filename);
     }
 
     /**
@@ -156,7 +166,7 @@ class Absensiswa_GuruController extends Controller
             'mapel' => $mapel,
             'data_siswa' => $data_siswa, // Kirim data siswa ke view
         ], [
-            'title' => 'Tambah Absensi Siswa Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
+            'title' => 'Tambah Absensi Siswa Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id,
         ]);
     }
 
@@ -260,7 +270,7 @@ class Absensiswa_GuruController extends Controller
         $mapel = Mapel::whereIn('id', $mapelIds)->get();
 
         return view('guru.absensiswa_guru.absensiswa_guru_kelas.edit', compact('absensi', 'kelas_id', 'mapel'), [
-            'title' => 'Edit Absensi Siswa Harian Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
+            'title' => 'Edit Absensi Siswa Kelas ' . $kelas->kelas . ' ' . $kelas->jurusan->jurusan_id . ' ' . $kelas->kelas_id
         ]);
     }
 
