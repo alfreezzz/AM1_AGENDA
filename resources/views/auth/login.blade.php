@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ asset('assets/images/icon.png') }}">
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-black min-h-screen relative flex flex-col justify-between">
     <!-- Background with overlay -->
