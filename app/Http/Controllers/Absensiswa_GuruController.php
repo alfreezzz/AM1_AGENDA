@@ -116,7 +116,7 @@ class Absensiswa_GuruController extends Controller
             ['/', '\\'],
             '',
             $kelas->kelas . $kelas->jurusan->jurusan_id . $kelas->kelas_id
-                . ($isGuru ? '_(guru)' : '_(admin)') . '_TA_' . $kelas->thn_ajaran
+                . '_(guru)' . '_TA_' . $kelas->thn_ajaran
         ) . '.xlsx';
 
         return Excel::download(new AbsensiExport($kelas->id, $filter, $start_date, $end_date, $isGuru, $userId), $filename);
