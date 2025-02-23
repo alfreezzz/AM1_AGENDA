@@ -32,7 +32,7 @@
             </div>
         @else
             <div class="container mx-auto px-4">
-                <h1 class="text-center lg:text-3xl sm:text-2xl text-xl font-bold mb-12 text-green-800">
+                <h1 class="text-center lg:text-3xl sm:text-2xl text-base font-bold mb-12 text-green-800">
                     <span class="inline-block border-b-4 border-green-400 pb-2">
                         Pilih Kelas untuk Melihat Agenda
                     </span>
@@ -44,12 +44,12 @@
                          x-transition:enter-start="opacity-0 transform -translate-y-4"
                          x-transition:enter-end="opacity-100 transform translate-y-0">
                         <div class="flex justify-center mb-6">
-                            <h2 class="text-base md:text-lg font-bold text-green-700 px-6 py-2 bg-green-100 rounded-full">
+                            <h2 class="text-base sm:text-lg font-bold text-green-700 px-6 py-2 bg-green-100 rounded-full">
                                 Kelas {{ $grade }}
                             </h2>
                         </div>
                         
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                             @foreach ($kelas as $item)
                                 @if (Str::startsWith(trim($item->kelas), $grade) && 
                                     ($grade !== 'XI' || !Str::startsWith(trim($item->kelas), 'XII')) && 
@@ -59,10 +59,10 @@
                                         class="group relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
                                         <div class="absolute inset-0 bg-gradient-to-r from-green-600 to-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                         <div class="relative p-6 text-center">
-                                            <h3 class="text-base md:text-xl font-semibold text-gray-800 group-hover:text-white transition-colors duration-300">
+                                            <h3 class="text-sm sm:text-xl font-semibold text-gray-800 group-hover:text-white transition-colors duration-300">
                                                 {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }}
                                             </h3>
-                                            <p class="mt-2 text-green-600 group-hover:text-green-100 transition-colors duration-300">
+                                            <p class="mt-2 text-green-600 sm:text-base text-xs group-hover:text-green-100 transition-colors duration-300">
                                                 {{ $item->thn_ajaran }}
                                             </p>
                                         </div>

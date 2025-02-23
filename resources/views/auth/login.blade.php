@@ -90,15 +90,15 @@
     <!-- Footer -->
     <footer class="relative z-10 bg-gradient-to-t from-black via-black/90 to-transparent py-8">
         <div class="container mx-auto px-4">
-            <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4">
-                <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/LOGO-AKL-01-500x500.png') }}" alt="AKL" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/BR-500x500.png') }}" alt="BR" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/Logo-TB-OK-01-500x500.png') }}" alt="DPB" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/LOGO-LPS-01-500x500.png') }}" alt="LPS" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
-                <img src="{{ asset('assets/images/MP-Baru-500x500.png') }}" alt="MP" class="md:h-10 h-8 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+            <div class="flex flex-wrap justify-center items-center gap-2 sm:gap-4">
+                <img src="{{ asset('assets/images/LOGO-ANIMASI-01-500x500.png') }}" alt="AN" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/TKJ-Baru-500x500.png') }}" alt="TJKT" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/LOGO-RPL-01-500x500.png') }}" alt="PPLG" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/LOGO-AKL-01-500x500.png') }}" alt="AKL" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/BR-500x500.png') }}" alt="BR" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/Logo-TB-OK-01-500x500.png') }}" alt="DPB" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/LOGO-LPS-01-500x500.png') }}" alt="LPS" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
+                <img src="{{ asset('assets/images/MP-Baru-500x500.png') }}" alt="MP" class="sm:h-10 h-7 hover:scale-110 transition-transform duration-300 filter hover:brightness-125">
             </div>
         </div>
     </footer>

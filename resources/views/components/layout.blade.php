@@ -80,14 +80,14 @@
             <header class="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-40 lg:w-[calc(100%-16rem)] lg:left-64" x-data="{ isNotificationOpen: false }">
                 <div class="flex items-center justify-between h-16 px-4 lg:px-8">
                     <!-- Mobile Menu Button -->
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-600 lg:hidden focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-600 lg:hidden focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-1">
+                        <svg class="sm:w-6 sm:h-6 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
 
                     <!-- Page Title -->
-                    <h1 class="text-sm sm:text-xl font-semibold text-gray-800 flex-1 text-center ">AM Agenda Pembelajaran Harian</h1>
+                    <h1 class="lg:text-xl text-base sm:text-lg font-semibold text-gray-800 flex-1 text-center tracking-wide">{{ $title }}</h1>
 
                     <!-- Notifications -->
                     @if (Auth::user()->role == 'Sekretaris')
@@ -95,7 +95,7 @@
                         <button @click="isNotificationOpen = !isNotificationOpen" 
                                 class="relative p-2 text-gray-600 hover:text-gray-800 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
                             <span class="sr-only">View notifications</span>
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="sm:w-6 sm:h-6 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                             @if(Auth::user()->unreadNotifications->count())
@@ -112,17 +112,17 @@
                              x-transition:leave="transition ease-in duration-75"
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+                             class="absolute right-0 mt-3 sm:w-96 w-64 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                             <div class="p-4">
-                                <h3 class="text-gray-900 font-medium mb-2">Notifikasi</h3>
+                                <h3 class="text-gray-900 font-medium mb-2 text-sm sm:text-base">Notifikasi</h3>
                                 <div class="divide-y divide-gray-200">
                                     @forelse (Auth::user()->unreadNotifications as $notification)
                                     <div id="notification-{{ $notification->id }}" class="py-3">
                                         <div class="flex justify-between items-start">
                                             <div>
-                                                <p class="text-sm font-medium text-gray-900">{{ $notification->data['title'] }}</p>
-                                                <p class="text-sm text-gray-600 mt-1">{{ $notification->data['message'] }}</p>
-                                                <a href="{{ $notification->data['link'] ?? '#' }}" class="text-sm text-blue-600 hover:text-blue-800 mt-2 inline-block">Lihat Detail</a>
+                                                <p class="sm:text-sm text-xs font-medium text-gray-900">{{ $notification->data['title'] }}</p>
+                                                <p class="sm:text-sm text-xs text-gray-600 mt-1">{{ $notification->data['message'] }}</p>
+                                                <a href="{{ $notification->data['link'] ?? '#' }}" class="sm:text-sm text-xs text-blue-600 hover:text-blue-800 mt-2 inline-block">Lihat Detail</a>
                                             </div>
                                             <button onclick="deleteNotification('{{ $notification->id }}')" class="text-gray-400 hover:text-red-500 transition-colors duration-200">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@
                                         </div>
                                     </div>
                                     @empty
-                                    <p class="py-4 text-sm text-gray-500 text-center">Tidak ada notifikasi baru.</p>
+                                    <p class="py-4 sm:text-sm text-xs text-gray-500 text-center">Tidak ada notifikasi baru.</p>
                                     @endforelse
                                 </div>
                             </div>
@@ -144,7 +144,7 @@
 
             <!-- Main Content Area -->
             <main class="px-4 lg:px-6 pt-20">
-              <x-header>{{ $title }}</x-header>
+              {{-- <x-header>{{ $title }}</x-header> --}}
               <div class="bg-white shadow-md rounded-lg p-4">
                 {{ $slot }}
               </div>

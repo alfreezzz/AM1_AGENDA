@@ -62,7 +62,7 @@
                             <tr class="hover:bg-gray-50 transition duration-150">
                                 <td class="px-6 py-4 text-gray-500 text-center">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 font-medium">{{ $item->nama_siswa }}</td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4" x-data="{selected: null}">
                                     <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" value="Hadir">
                                     <div class="flex justify-center space-x-6">
                                         @foreach(['Sakit' => 'bg-yellow-100 text-yellow-800', 
@@ -73,14 +73,16 @@
                                                        class="absolute w-0 h-0 opacity-0 peer"
                                                        name="siswa[{{ $item->id }}][keterangan]" 
                                                        value="{{ $status }}"
-                                                       onclick="toggleRadio(this)">
-                                                <span class="px-4 py-2 rounded-full cursor-pointer {{ $colors }} text-sm font-medium opacity-50 peer-checked:opacity-100 hover:opacity-75 transition-all duration-200">
+                                                       x-model="selected"
+                                                       @click="selected = (selected === '{{ $status }}' ? null : '{{ $status }}')">
+                                                <span class="px-4 py-2 rounded-full cursor-pointer {{ $colors }} text-sm font-medium opacity-50 peer-checked:opacity-100 hover:opacity-75 transition-all duration-200"
+                                                      :class="{'opacity-100': selected === '{{ $status }}'}">
                                                     {{ $status }}
                                                 </span>
                                             </label>
                                         @endforeach
                                     </div>
-                                </td>
+                                </td>                                
                             </tr>
                             @endforeach
                         </tbody>
