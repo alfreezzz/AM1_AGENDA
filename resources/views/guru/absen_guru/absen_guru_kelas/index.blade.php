@@ -1,30 +1,48 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8" x-data="{ 
-        showDateRange: {{ request('filter') === 'range' ? 'true' : 'false' }},
-        currentFilter: '{{ request('filter') }}',
-        startDate: '{{ request('start_date') }}',
-        endDate: '{{ request('end_date') }}'
-    }">
-    @if(session('status'))
-            <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
-                <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
-            </div>
-        @endif
-        <!-- Header Section with improved spacing and shadow -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8" 
+         x-data="{ 
+            showDateRange: '{{ request('filter') }}' === 'range',
+            currentFilter: '{{ request('filter') }}',
+            startDate: '{{ request('start_date') }}',
+            endDate: '{{ request('end_date') }}',
+            
+            init() {
+                this.$watch('currentFilter', (value) => {
+                    if (value !== 'range') {
+                        this.$el.querySelector('#filter-form').submit();
+                    }
+                });
+                
+                this.$watch('startDate', (value) => {
+                    if (this.currentFilter === 'range' && this.endDate && value) {
+                        this.$el.querySelector('#filter-form').submit();
+                    }
+                });
+                
+                this.$watch('endDate', (value) => {
+                    if (this.currentFilter === 'range' && this.startDate && value) {
+                        this.$el.querySelector('#filter-form').submit();
+                    }
+                });
+            }
+         }">
+        
+        <!-- Rest of your existing header content -->
+        
+        <!-- Modified Filter Form -->
         <div class="mb-12">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                <!-- Action Button -->
                 @if(Auth::user()->role == 'Guru')
-                   <x-btn-add href="{{ url('absen_guru/create/' . $kelas->id) }}" >Tambah Absensi</x-btn-add>
+                    <x-btn-add href="{{ url('absen_guru/create/' . $kelas->id) }}">Tambah Absensi</x-btn-add>
                 @endif
 
-                <!-- Enhanced Filter Form -->
                 <form id="filter-form" method="GET" action="{{ url('absen_guru/kelas/' . $kelas->slug) }}" 
                       class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
                     <div class="relative">
-                        <select name="filter" x-model="currentFilter"
+                        <select name="filter" 
+                                x-model="currentFilter"
                                 class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                             <option value="">Semua Tanggal</option>
                             <option value="last_week">Minggu Lalu</option>
@@ -33,15 +51,18 @@
                         </select>
                     </div>
 
-                    <!-- Date Range Inputs with smooth transition -->
                     <div x-show="currentFilter === 'range'"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 transform scale-95"
                          x-transition:enter-end="opacity-100 transform scale-100"
                          class="flex space-x-4">
-                        <input type="date" name="start_date" x-model="startDate"
+                        <input type="date" 
+                               name="start_date" 
+                               x-model="startDate"
                                class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
-                        <input type="date" name="end_date" x-model="endDate"
+                        <input type="date" 
+                               name="end_date" 
+                               x-model="endDate"
                                class="block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition duration-150 ease-in-out">
                     </div>
                 </form>

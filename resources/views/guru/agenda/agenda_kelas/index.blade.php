@@ -122,4 +122,43 @@
             </div>
         @endif
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelect = document.getElementById('filter');
+            const startDate = document.getElementById('start_date');
+            const endDate = document.getElementById('end_date');
+            const filterForm = document.getElementById('filter-form');
+        
+            // Function to automatically submit form
+            function submitForm() {
+                // Only submit if both dates are selected when filter is 'range'
+                if (filterSelect.value === 'range') {
+                    if (startDate.value && endDate.value) {
+                        filterForm.submit();
+                    }
+                } else {
+                    filterForm.submit();
+                }
+            }
+        
+            // Add event listeners
+            filterSelect.addEventListener('change', function(e) {
+                if (e.target.value !== 'range') {
+                    submitForm();
+                }
+            });
+        
+            startDate.addEventListener('change', function() {
+                if (endDate.value) {
+                    submitForm();
+                }
+            });
+        
+            endDate.addEventListener('change', function() {
+                if (startDate.value) {
+                    submitForm();
+                }
+            });
+        });
+        </script>
 </x-layout>
