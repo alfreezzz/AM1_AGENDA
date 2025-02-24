@@ -172,7 +172,7 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
                     'font' => ['bold' => true],
                     'fill' => [
                         'fillType' => Fill::FILL_SOLID,
-                        'startColor' => ['rgb' => 'DCE6F1'],
+                        'startColor' => ['rgb' => '9BBB59'],
                     ],
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,

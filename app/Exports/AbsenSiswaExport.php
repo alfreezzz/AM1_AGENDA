@@ -127,7 +127,7 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping, Wit
             ],
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => 'E2E2E2'],
+                'startColor' => ['rgb' => '9BBB59'],
             ],
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -142,7 +142,7 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping, Wit
             ],
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => ['rgb' => 'E2E2E2'],
+                'startColor' => ['rgb' => '9BBB59'],
             ],
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
