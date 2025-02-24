@@ -30,7 +30,7 @@
                                 this.formData.thn_ajaran = `${tahun1}/${tahun2}`;
                             }
                         }
-                    }"                     
+                    }">                 
                         <div class="max-w-md mx-auto">
                             <form action="{{ url('kelas') }}" 
                                   method="post" 
