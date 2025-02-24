@@ -7,6 +7,11 @@
         endDate: '{{ request('end_date') }}'
     }">
         <!-- Header Section -->
+        @if(session('status'))
+                <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                    <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+                </div>
+            @endif
         <div class="mb-12">
             <div class="flex flex-col lg:flex-row justify-between items-stretch space-y-4 lg:space-y-0 lg:space-x-4">
                 <!-- Filter Form -->

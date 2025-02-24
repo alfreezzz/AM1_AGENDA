@@ -210,7 +210,7 @@ class Absen_guruController extends Controller
             $user->notify(new YourCustomNotification($data));
         }
 
-        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
+        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil ditambahkan');
     }
 
     /**
@@ -300,7 +300,7 @@ class Absen_guruController extends Controller
 
         $absen_guru->save();
         $kelas = Kelas::findOrFail($request->kelas_id);
-        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil Diedit');
+        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil diupdate');
     }
 
     /**
@@ -313,6 +313,6 @@ class Absen_guruController extends Controller
         $absen_guru->delete();
 
         $kelas = Kelas::findOrFail($kelas_id);
-        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
+        return redirect('absen_guru/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil dihapus');
     }
 }

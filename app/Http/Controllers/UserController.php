@@ -93,7 +93,7 @@ class UserController extends Controller
             $add->dataKelas()->sync($request->kelas_ids);
         }
 
-        return redirect('user')->with('status', 'Data berhasil ditambah');
+        return redirect('user')->with('status', 'Pengguna berhasil ditambahkan');
     }
 
     public function edit(string $id)
@@ -152,7 +152,7 @@ class UserController extends Controller
             $user->dataKelas()->sync($request->kelas_ids);
         }
 
-        return redirect('user')->with('status', 'Data berhasil diupdate');
+        return redirect('user')->with('status', 'Pengguna berhasil diupdate');
     }
 
     public function destroy(string $id)
@@ -160,6 +160,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect('user')->with('status', 'Data berhasil dihapus');
+        return redirect('user')->with('status', 'Pengguna berhasil dihapus');
     }
 }

@@ -1,7 +1,12 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
-
+    
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
+        @if(session('status'))
+                <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                    <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+                </div>
+            @endif
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
             <form action="{{ url('jurusan/' . $jurusan->slug . '/kelas') }}" method="GET" 

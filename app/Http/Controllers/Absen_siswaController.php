@@ -172,7 +172,7 @@ class Absen_siswaController extends Controller
         }
 
         $kelas = Kelas::findOrFail($siswa->kelas_id);
-        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
+        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil ditambahkan');
     }
 
     /**
@@ -220,7 +220,7 @@ class Absen_siswaController extends Controller
         $absen_siswa->save(); // Save the changes
 
         $kelas = $absen_siswa->kelas;
-        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Data berhasil diedit');
+        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil diedit');
     }
 
     /**
@@ -232,6 +232,6 @@ class Absen_siswaController extends Controller
         $absen_siswa->delete();
 
         $kelas = $absen_siswa->kelas;
-        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
+        return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil dihapus');
     }
 }

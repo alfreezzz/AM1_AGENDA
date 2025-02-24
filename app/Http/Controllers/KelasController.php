@@ -87,7 +87,7 @@ class KelasController extends Controller
         $kelas->load('jurusan'); // Pastikan relasi jurusan dimuat
         $kelas->save();
 
-        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Data berhasil ditambah');
+        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Kelas berhasil ditambahkan');
     }
 
     /**
@@ -133,7 +133,7 @@ class KelasController extends Controller
         $kelas->load('jurusan'); // Pastikan relasi jurusan dimuat
         $kelas->save();
 
-        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Data berhasil diupdate');
+        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Kelas berhasil diupdate');
     }
 
     /**
@@ -145,6 +145,6 @@ class KelasController extends Controller
         $jurusanId = $kelas->jurusan_id;
         $kelas->delete();
 
-        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Data berhasil dihapus');
+        return redirect('jurusan/' . $kelas->jurusan->slug . '/kelas')->with('status', 'Kelas berhasil dihapus');
     }
 }

@@ -1,29 +1,28 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
-
+    
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
+        @if(session('status'))
+                <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                    <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+                </div>
+            @endif
         <!-- Header Section -->
         <div class="mb-12">
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 <!-- Search Form -->
-                <form action="{{ url('data_siswa') }}" method="GET" id="searchForm" class="flex-1 flex flex-col sm:flex-row gap-3">
-                    <div class="relative flex-1">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <form action="{{ url('data_siswa') }}" method="GET" 
+                    class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+                    <div class="relative flex-grow">
+                        <input type="search" name="search" value="{{ request('search') }}" 
+                                placeholder="Cari Siswa atau Kelas..."
+                                class="w-full py-2.5 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200" />
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-5 h-5 text-gray-400 hover:text-green-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                        </span>
-                        <input 
-                            type="search" 
-                            name="search" 
-                            value="{{ request('search') }}" 
-                            placeholder="Cari siswa atau kelas..." 
-                            class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                        >
+                        </button>
                     </div>
-                    <button type="submit" class="inline-flex justify-center items-center px-4 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
-                        Cari
-                    </button>
                 </form>
                 
                 <x-btn-add href="{{ url('data_siswa/create') }}">Tambah Siswa</x-btn-add>

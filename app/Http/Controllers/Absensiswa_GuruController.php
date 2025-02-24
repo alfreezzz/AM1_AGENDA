@@ -223,7 +223,7 @@ class Absensiswa_GuruController extends Controller
         }
 
         $kelas = Kelas::findOrFail($request->kelas_id);
-        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil ditambah');
+        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil ditambah');
     }
 
     /**
@@ -296,7 +296,7 @@ class Absensiswa_GuruController extends Controller
         $absensi->save();
 
         $kelas = Kelas::findOrFail($request->kelas_id);
-        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil Diedit');
+        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil diupdate');
     }
 
     /**
@@ -309,6 +309,6 @@ class Absensiswa_GuruController extends Controller
         $absensi->delete();
 
         $kelas = Kelas::findOrFail($kelas_id);
-        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Data berhasil dihapus');
+        return redirect('absensiswa_guru/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil dihapus');
     }
 }

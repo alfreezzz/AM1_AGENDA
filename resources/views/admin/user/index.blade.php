@@ -2,23 +2,25 @@
     <x-slot:title>{{$title}}</x-slot:title>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-4 lg:px-8 py-8">
+        @if(session('status'))
+                <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                    <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+                </div>
+            @endif
         <!-- Header Section -->
         <div class="mb-12">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <!-- Search and Filter Form -->
                 <form action="{{ url('user') }}" method="GET" id="filterForm" class="flex-1 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="relative">
-                        <input type="search" 
-                               name="search" 
-                               value="{{ request('search') }}" 
-                               placeholder="Cari username..." 
-                               class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:ring-opacity-20 transition-colors duration-200"
-                        >
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    <div class="relative flex-grow">
+                        <input type="search" name="search" value="{{ request('search') }}" 
+                                placeholder="Cari Username..."
+                                class="w-full py-2.5 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200" />
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-5 h-5 text-gray-400 hover:text-green-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                        </span>
+                        </button>
                     </div>
                     
                     <select name="filterRole" 
@@ -31,13 +33,6 @@
                         <option value="Guru" {{ request('filterRole') == 'Guru' ? 'selected' : '' }}>Guru</option>
                         <option value="Sekretaris" {{ request('filterRole') == 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
                     </select>
-                    
-                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                        Cari
-                    </button>
                 </form>
 
                 <!-- Add User Button -->

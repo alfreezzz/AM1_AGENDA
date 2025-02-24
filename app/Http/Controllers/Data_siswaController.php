@@ -94,7 +94,7 @@ class Data_siswaController extends Controller
         $add->kelas_id = $request->kelas_id;
 
         $add->save();
-        return redirect('data_siswa')->with('status', 'Data berhasil ditambah');
+        return redirect('data_siswa')->with('status', 'Siswa berhasil ditambahkan');
     }
 
     /**
@@ -161,7 +161,7 @@ class Data_siswaController extends Controller
         $data_siswa->kelas_id = $request->kelas_id;
         $data_siswa->save();
 
-        return redirect('data_siswa')->with('status', 'Data berhasil diupdate');
+        return redirect('data_siswa')->with('status', 'Siswa berhasil diupdate');
     }
 
     /**
@@ -172,6 +172,6 @@ class Data_siswaController extends Controller
         $data_siswa = Data_siswa::findOrFail($id);
         $data_siswa->delete();
 
-        return redirect('data_siswa')->with('status', 'Data berhasil dihapus');
+        return redirect('data_siswa')->with('status', 'Siswa berhasil dihapus');
     }
 }

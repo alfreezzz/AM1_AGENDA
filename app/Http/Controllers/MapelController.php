@@ -58,7 +58,7 @@ class MapelController extends Controller
             $mapel->dataGurus()->attach($request->data_guru_ids);
         }
 
-        return redirect('mapel')->with('status', 'Data berhasil ditambah');
+        return redirect('mapel')->with('status', 'Mapel berhasil ditambahkan');
     }
 
     /**
@@ -92,7 +92,7 @@ class MapelController extends Controller
         $mapel->nama_mapel = $request->nama_mapel;
         $mapel->save();
 
-        return redirect('mapel')->with('status', 'Data berhasil diupdate');
+        return redirect('mapel')->with('status', 'Mapel berhasil diupdate');
     }
 
     /**
@@ -103,6 +103,6 @@ class MapelController extends Controller
         $mapel = Mapel::findOrFail($id);
         $mapel->delete();
 
-        return redirect('mapel')->with('status', 'Data berhasil dihapus');
+        return redirect('mapel')->with('status', 'Mapel berhasil dihapus');
     }
 }

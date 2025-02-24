@@ -1,31 +1,27 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
-
+    
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        @if(session('status'))
+            <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+            </div>
+        @endif
         <!-- Search and Add Section -->
         <div class="flex flex-col md:flex-row md:justify-between items-center mb-8 gap-4">
             <!-- Form Pencarian Mapel -->
-            <form action="{{ url('mapel') }}" method="GET" class="w-full md:w-auto flex flex-col md:flex-row md:items-center gap-4">
+            <form action="{{ url('mapel') }}" method="GET" 
+                class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
                 <div class="relative flex-grow">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                    <input type="search" name="search" value="{{ request('search') }}" 
+                            placeholder="Cari Mapel atau Guru..."
+                            class="w-full py-2.5 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200" />
+                    <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2">
+                        <svg class="w-5 h-5 text-gray-400 hover:text-green-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                    </div>
-                    <input 
-                        type="search" 
-                        name="search" 
-                        value="{{ request('search') }}" 
-                        placeholder="Cari mapel atau guru..." 
-                        class="pl-10 w-full py-3 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200"
-                    >
+                    </button>
                 </div>
-                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg font-medium flex items-center justify-center transition duration-200 w-full md:w-auto">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    Cari
-                </button>
             </form>
 
             <x-btn-add href="{{ url('mapel/create') }}">Tambah Mapel</x-btn-add>

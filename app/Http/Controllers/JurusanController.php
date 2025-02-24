@@ -32,7 +32,7 @@ class JurusanController extends Controller
         $jurusan->slug = Str::slug($request->jurusan_id);
         $jurusan->save();
 
-        return redirect('jurusan/' . $jurusan->slug . '/kelas')->with('status', 'Jurusan berhasil ditambah');
+        return redirect('jurusan/' . $jurusan->slug . '/kelas')->with('status', 'Jurusan berhasil ditambahkan');
     }
 
     public function edit($id)

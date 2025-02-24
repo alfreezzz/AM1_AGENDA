@@ -1,7 +1,12 @@
 <x-layout>
     <x-slot:title>{{$title}}</x-slot:title>
-
+    
     <div class="p-6 max-w-7xl mx-auto space-y-6">
+        @if(session('status'))
+                <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                    <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+                </div>
+            @endif
         <!-- Header Section -->
         <div class="flex justify-end">
            <x-btn-add href="{{ url('jurusan/create') }}">Tambah Jurusan</x-btn-add>
@@ -48,7 +53,7 @@
                                     <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-600">
                                         {{ $loop->iteration }}
                                     </td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600 font-bold">
                                         {{ $item->jurusan_id }}
                                     </td>
                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600">

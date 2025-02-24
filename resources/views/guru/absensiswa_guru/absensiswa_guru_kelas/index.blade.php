@@ -7,6 +7,11 @@
         startDate: '{{ request('start_date') }}',
         endDate: '{{ request('end_date') }}'
     }">
+    @if(session('status'))
+            <div class="bg-gradient-to-r from-gray-700 to-gray-900 border-b border-gray-900 text-[#C7EEFF] text-center p-4 rounded-lg mb-4">
+                <h1 class="text-sm sm:text-lg font-bold tracking-wide text-white text-center drop-shadow-lg hover:scale-105 transition-transform duration-300">{{ session('status') }}</h1>
+            </div>
+        @endif
         <!-- Action Buttons Section -->
         <div class="space-y-6 mb-8">
             <div class="flex flex-col md:flex-row justify-between items-stretch gap-4">
