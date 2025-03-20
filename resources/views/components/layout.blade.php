@@ -53,7 +53,7 @@
                 <div class="flex items-center space-x-3">
                     <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" class="w-12 h-12 rounded-lg shadow-lg">
                     <div>
-                        <h1 class="text-sm font-bold leading-tight">SMK Amaliah 1&2 Ciawi Bogor</h1>
+                        <h1 class="text-sm font-bold leading-tight">SMK Amaliah 1&2 Ciawi</h1>
                         <p class="text-xs italic text-gray-400">Tauhid is Our Fundament</p>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
         <div class="flex-1 ml-0 overflow-y-auto h-full">
             <!-- Header -->
             <header class="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-40 lg:w-[calc(100%-16rem)] lg:left-64" x-data="{ isNotificationOpen: false }">
-                <div class="flex items-center justify-between h-16 px-4 lg:px-8">
+                <div class="flex items-center justify-between h-16 px-3 gap-3 lg:px-8">
                     <!-- Mobile Menu Button -->
                     <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-600 lg:hidden focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-1">
                         <svg class="sm:w-6 sm:h-6 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +87,7 @@
                     </button>
 
                     <!-- Page Title -->
-                    <h1 class="lg:text-xl text-base sm:text-lg font-semibold text-gray-800 flex-1 text-center tracking-wide">{{ $title }}</h1>
+                    <h1 class="lg:text-xl text-sm sm:text-lg font-semibold text-gray-800 flex-1 text-center tracking-wide">{{ $title }}</h1>
 
                     <!-- Notifications -->
                     @if (Auth::user()->role == 'Sekretaris')

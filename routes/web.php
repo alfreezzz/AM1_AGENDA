@@ -25,7 +25,7 @@ use App\Http\Controllers\Absen_siswaController;
 use App\Http\Controllers\RekapanController;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
 
 // Halaman Admin

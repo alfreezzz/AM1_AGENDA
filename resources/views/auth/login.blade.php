@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AM Agenda Pembelajaran Harian</title>
+    <title>Login</title>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -27,7 +27,7 @@
                         <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" 
                              class="w-16 h-16 transform hover:scale-105 transition-transform duration-300">
                         <div class="text-white">
-                            <h1 class="text-xl font-serif font-semibold">SMK Amaliah 1&2 Ciawi</h1>
+                            <h1 class="text-lg font-serif font-semibold">SMK Amaliah 1&2 Ciawi</h1>
                             <p class="text-sm italic text-gray-300">Tauhid is Our Fundament</p>
                         </div>
                     </div>

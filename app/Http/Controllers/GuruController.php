@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Guru;
 
 class GuruController extends Controller
 {
@@ -12,7 +11,8 @@ class GuruController extends Controller
      */
     public function index()
     {
-        return view('guru.index', ['title' => 'Selamat Datang']);
+        $user = auth()->user();
+        return view('guru.index', ['title' => 'Selamat Datang Kembali, ' . $user->name . '!']);
     }
 
     /**

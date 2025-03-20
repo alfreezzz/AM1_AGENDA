@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Admin;
 
 class AdminController extends Controller
 {
@@ -12,7 +11,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.index', ['title' => 'Selamat Datang']);
+        $user = auth()->user();
+        return view('admin.index', ['title' => 'Selamat Datang Kembali, ' . $user->name . '!']);
     }
 
     /**
