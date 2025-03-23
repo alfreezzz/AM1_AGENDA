@@ -45,11 +45,11 @@
         
         <div class="relative container mx-auto px-4 py-6">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3 max-sm:hidden">
+                <div class="flex items-center space-x-3">
                     <div class="shadow-lg">
                         <img src="{{ asset('assets/images/icon.png') }}" alt="SMK Amaliah" class="w-16 h-16">
                     </div>
-                    <div>
+                    <div class="max-sm:hidden">
                         <h1 class="text-xl font-bold text-white text-shadow">SMK Amaliah 1&2 Ciawi</h1>
                         <p class="text-indigo-200 italic text-sm font-light">Tauhid is Our Fundament</p>
                     </div>
