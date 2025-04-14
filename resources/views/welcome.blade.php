@@ -85,11 +85,100 @@
             </svg>
         </div>
     </header>
+<section class="bg-gradient-to-b from-indigo-100 to-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h3 class="text-4xl font-extrabold text-indigo-800 mb-2">Keunggulan Aplikasi</h3>
+            <p class="text-gray-600 text-base">Mengapa memilih <strong>AM Agenda Pembelajaran Harian</strong>?</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Reusable Card -->
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg border-t-4 border-indigo-500 transform transition-all duration-200 hover:-translate-y-1 active:scale-105 cursor-pointer">
+                <div class="flex items-center mb-4 text-indigo-600">
+                    <!-- Calendar Icon -->
+                    <svg class="w-8 h-8 mr-3 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <h4 class="text-xl font-bold">Agenda Terstruktur</h4>
+                </div>
+                <p class="text-gray-600">Guru dapat mencatat dan mengelola agenda harian dengan sistematis dan mudah diakses.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-green-500 transform transition-all duration-200 hover:-translate-y-1 active:scale-105 cursor-pointer">
+                <div class="flex items-center mb-4 text-green-600">
+                    <svg class="w-8 h-8 mr-3 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14c-4.418 0-8 1.79-8 4v2h16v-2c0-2.21-3.582-4-8-4z" />
+                    </svg>
+                    <h4 class="text-xl font-bold">Akses Berdasarkan Peran</h4>
+                </div>
+                <p class="text-gray-600">Admin, guru, dan siswa memiliki tampilan dan hak akses yang berbeda sesuai tugasnya.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-500 transform transition-all duration-200 hover:-translate-y-1 active:scale-105 cursor-pointer">
+                <div class="flex items-center mb-4 text-blue-600">
+                    <svg class="w-8 h-8 mr-3 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a4 4 0 014-4h3m4 4v4m0 0v4m0-4h4m-4 0h-4" />
+                    </svg>
+                    <h4 class="text-xl font-bold">Monitoring Efektif</h4>
+                </div>
+                <p class="text-gray-600">Admin dapat memantau agenda dan absensi real-time untuk pengawasan optimal.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-yellow-500 transform transition-all duration-200 hover:-translate-y-1 active:scale-105 cursor-pointer">
+                <div class="flex items-center mb-4 text-yellow-600">
+                    <svg class="w-8 h-8 mr-3 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L8 15.25m0 0L6.25 17m1.75-1.75v4.25m8.5-4.25L16 15.25m0 0L14.25 17m1.75-1.75v4.25M12 3v18" />
+                    </svg>
+                    <h4 class="text-xl font-bold">Responsif & Mobile Friendly</h4>
+                </div>
+                <p class="text-gray-600">Nyaman digunakan baik di desktop maupun smartphone tanpa kehilangan fungsionalitas.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-red-500 transform transition-all duration-200 hover:-translate-y-1 active:scale-105 cursor-pointer">
+                <div class="flex items-center mb-4 text-red-600">
+                    <svg class="w-8 h-8 mr-3 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0-1.1.9-2 2-2s2 .9 2 2a2 2 0 11-4 0zm-6 3a6 6 0 1112 0v2H6v-2z" />
+                    </svg>
+                    <h4 class="text-xl font-bold">Keamanan Terjamin</h4>
+                </div>
+                <p class="text-gray-600">Role-based access dan proteksi CSRF menjaga keamanan data pengguna.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-purple-500 transform transition-all duration-200 hover:-translate-y-1 active:scale-105 cursor-pointer">
+                <div class="flex items-center mb-4 text-purple-600">
+                    <svg class="w-8 h-8 mr-3 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6 4a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h4 class="text-xl font-bold">Riwayat Data Tersimpan</h4>
+                </div>
+                <p class="text-gray-600">Semua catatan agenda tersimpan rapi dan dapat diakses untuk evaluasi & dokumentasi.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Optional animation helper -->
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fade-in 0.7s ease forwards;
+}
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+</style>
 
     <footer class="bg-white border-t border-gray-200 py-4 mt-auto">
         <div class="container mx-auto px-4">
             <p class="text-center text-gray-500 sm:text-sm text-xs">&copy; {{ date('Y') }} SMK Amaliah 1&2 Ciawi. Hak Cipta Dilindungi.</p>
         </div>
+
     </footer>
 </body>
 </html>
