@@ -12,7 +12,7 @@
             <form action="{{ url('jurusan/' . $jurusan->slug . '/kelas') }}" method="GET" 
                 class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
                 <div class="relative flex-grow">
-                    <input type="search" name="search" value="{{ $search }}" 
+                    <input type="text" name="search" value="{{ $search }}" 
                             placeholder="Cari Tahun Ajaran..."
                             class="w-full py-2.5 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200" />
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2">
@@ -27,9 +27,7 @@
 
         @if($kelas->isEmpty())
             <div class="flex flex-col items-center justify-center py-12 px-4 bg-white rounded-lg shadow-sm border border-gray-100">
-                <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                </svg>
+            <svg class="w-16 h-16 text-gray-300 mb-4 fill-gray-500" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440q17 0 28.5-11.5T480-480q0-17-11.5-28.5T440-520q-17 0-28.5 11.5T400-480q0 17 11.5 28.5T440-440ZM280-120v-80l240-40v-445q0-15-9-27t-23-14l-208-34v-80l220 36q44 8 72 41t28 77v512l-320 54Zm-160 0v-80h80v-560q0-34 23.5-57t56.5-23h400q34 0 57 23t23 57v560h80v80H120Zm160-80h400v-560H280v560Z"/></svg>
                 <p class="text-gray-500 text-lg">Data kelas belum ditemukan.</p>
             </div>
         @else

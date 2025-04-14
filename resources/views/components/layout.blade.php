@@ -77,7 +77,7 @@
         <!-- Main Content -->
         <div class="flex-1 ml-0 overflow-y-auto h-full">
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 w-full z-40 lg:w-[calc(100%-16rem)] lg:left-64" x-data="{ isNotificationOpen: false }">
+            <header class="bg-white shadow-sm border-b border-gray-400 fixed top-0 left-0 w-full z-40 lg:w-[calc(100%-16rem)] lg:left-64" x-data="{ isNotificationOpen: false }">
                 <div class="flex items-center justify-between h-16 px-3 gap-3 lg:px-8">
                     <!-- Mobile Menu Button -->
                     <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-600 lg:hidden focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-1">

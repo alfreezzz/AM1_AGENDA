@@ -14,7 +14,7 @@
                     <form action="{{ url('jadwal_pelajaran') }}" method="GET" 
                         class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
                         <div class="relative flex-grow">
-                            <input type="search" name="search" value="{{ request('search') }}" 
+                            <input type="text" name="search" value="{{ request('search') }}" 
                                     placeholder="Cari Guru..."
                                     class="w-full py-2.5 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200" />
                             <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2">
@@ -31,6 +31,17 @@
                     @endif
                 </div>
             </div>
+
+            @if($jadwal->isEmpty())
+                <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+                <svg class="w-16 h-16 mx-auto text-gray-400 fill-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
+                </svg>
+
+                        
+                    <p class="mt-4 text-lg text-gray-600">Data pengguna belum ditambahkan.</p>
+                </div>
+            @else
 
             <!-- Schedule Section -->
             <div class="space-y-6">
@@ -123,6 +134,7 @@
                     @endif
                 @endforeach
             </div>
+            @endif
         </div>
     </div>
 </x-layout>

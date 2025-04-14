@@ -13,7 +13,7 @@
             <form action="{{ url('mapel') }}" method="GET" 
                 class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
                 <div class="relative flex-grow">
-                    <input type="search" name="search" value="{{ request('search') }}" 
+                    <input type="text" name="search" value="{{ request('search') }}" 
                             placeholder="Cari Mapel atau Guru..."
                             class="w-full py-2.5 px-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200" />
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2">

@@ -63,9 +63,9 @@
         @if($absensi->isEmpty())
             <div class="flex items-center justify-center min-h-[200px] bg-white rounded-xl shadow-md">
                 <div class="text-center p-8">
-                    <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4M12 20V4"/>
-                    </svg>
+                <svg class="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
                     <p class="text-gray-600 text-lg">Tidak ada absen siswa untuk kelas ini.</p>
                 </div>
             </div>
