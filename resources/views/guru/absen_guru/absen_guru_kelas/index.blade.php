@@ -119,7 +119,13 @@
                                             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->user->name }}</td>
                                         @endif
                                         <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->mapel->nama_mapel }}</td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $item->keterangan }}</td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                                            <span class="px-3 py-1 rounded-full text-sm font-medium
+                                                {{ $item->keterangan === 'Izin' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                {{ $item->keterangan === 'Sakit' ? 'bg-blue-100 text-blue-800' : '' }}">
+                                                {{ $item->keterangan }}
+                                            </span>
+                                        </td>
                                         <td class="px-4 py-4 text-sm text-gray-900">
                                             @php
                                                 $tugasList = json_decode($item->tugas);
