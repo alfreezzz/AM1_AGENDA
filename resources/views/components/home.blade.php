@@ -1,5 +1,5 @@
 <!-- Main Container -->
-<div class="py-6">
+<div class="py-6 min-h-screen flex flex-col justify-center items-center">
     <div class="container mx-auto">
         <!-- Character and Content Container -->
         <div class="flex justify-between items-center md:px-16">
