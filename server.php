@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Laravel - A PHP Framework For Web Artisan
+ * Laravel - A PHP Framework For Web Artisans
  */
 
 $uri = urldecode(
