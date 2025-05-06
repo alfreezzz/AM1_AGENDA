@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Kelas;
+use App\Models\Jurusan;
+use App\Models\Mapel;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -11,8 +15,20 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        return view('admin.index', ['title' => 'Selamat Datang Kembali, ' . $user->name . '!']);
+        $currentUser = auth()->user(); // untuk salam selamat datang
+
+        $totalJurusan = Jurusan::count();
+        $totalKelas = Kelas::count();
+        $totalMapel = Mapel::count();
+        $totalUser = User::count();
+
+        return view('admin.index', [
+            'title' => 'Selamat Datang Kembali, ' . $currentUser->name . '!',
+            'totalJurusan' => $totalJurusan,
+            'totalKelas' => $totalKelas,
+            'totalMapel' => $totalMapel,
+            'totalUser' => $totalUser
+        ]);
     }
 
     /**
