@@ -60,8 +60,13 @@
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <x-navigasi></x-navigasi>
+            @if (Auth::user()->role == 'Admin')
+                <x-nav-admin></x-nav-admin>
+            @elseif (Auth::user()->role == 'Guru')
+                <x-nav-guru></x-nav-guru>
+            @elseif (Auth::user()->role == 'Sekretaris')
+                <x-nav-sekretaris></x-nav-sekretaris>
+            @endif
 
             <!-- Logout Button -->
             <form method="POST" action="{{ route('logout') }}" class="p-4 mt-auto border-t border-gray-700">

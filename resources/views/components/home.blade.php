@@ -29,6 +29,8 @@
         </div>
     </div>
 
+    {{ $slot }}
+
     <!-- Program Icons -->
     <div class="py-8 mt-8">
         <div class="container mx-auto">
