@@ -12,6 +12,7 @@ class SiswaController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $kelas = $user->kelas;
         return view('siswa.index', ['title' => 'Selamat Datang Kembali, ' . $user->name . '!']);
     }
 
