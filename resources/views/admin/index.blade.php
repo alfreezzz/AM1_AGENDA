@@ -13,7 +13,9 @@
         >
             <!-- Stats Overview -->
             <div class="mb-4">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">Statistik Sistem</h2>
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Statistik Sistem</h1>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Total Mapel Card -->
                     <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
@@ -89,124 +91,141 @@
             </div>
 
             <div class="container mx-auto px-4 py-8 mt-16">
-                <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Log Aktivitas</h1>
-                
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Log Aktivitas</h1>
+                </div>
+                <!-- Action Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <!-- Agenda Harian CTA -->
+                    <!-- Agenda Harian CTA Card -->
                     <div 
-                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
                         x-data="{ hover: false }"
                         @mouseenter="hover = true"
                         @mouseleave="hover = false"
                     >
-                        <div class="p-6">
-                            <div class="h-16 w-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                        <div class="relative h-40 bg-gradient-to-r from-blue-500 to-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 h-full w-full text-white opacity-10" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"></path>
+                            </svg>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h2 class="text-2xl font-bold text-white">Agenda Harian</h2>
                             </div>
-                            <h2 class="text-xl font-bold text-center text-gray-800 mb-2">Lihat Agenda Harian</h2>
-                            
-                            <div class="flex justify-center">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Lihat dan kelola semua agenda kegiatan sekolah dalam satu tempat.</p>
+                            <div class="flex justify-between items-center">
                                 <a 
                                     href="{{ url('agenda') }}" 
-                                    class="inline-flex items-center justify-center px-5 py-3 bg-blue-600 text-white font-medium rounded-lg transition-all duration-300"
+                                    class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg transition-all duration-300"
                                     :class="{ 'bg-blue-700 transform scale-105': hover }"
                                 >
-                                    <span>Lihat</span>
+                                    <span>Lihat Agenda</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
+                                <span class="text-sm text-gray-500">5 agenda hari ini</span>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- Ketidakhadiran CTA -->
+
+                    <!-- Ketidakhadiran Guru CTA Card -->
                     <div 
-                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
                         x-data="{ hover: false }"
                         @mouseenter="hover = true"
                         @mouseleave="hover = false"
                     >
-                        <div class="p-6">
-                            <div class="h-16 w-16 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                        <div class="relative h-40 bg-gradient-to-r from-red-500 to-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 h-full w-full text-white opacity-10" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                            </svg>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h2 class="text-2xl font-bold text-white">Ketidakhadiran Guru</h2>
                             </div>
-                            <h2 class="text-xl font-bold text-center text-gray-800 mb-2">Lihat Ketidakhadiran Guru</h2>
-                            
-                            <div class="flex justify-center">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Pantau ketidakhadiran guru dan cek status penggantinya.</p>
+                            <div class="flex justify-between items-center">
                                 <a 
                                     href="{{ url('absen_guru') }}"
-                                    class="inline-flex items-center justify-center px-5 py-3 bg-red-600 text-white font-medium rounded-lg transition-all duration-300"
+                                    class="inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg transition-all duration-300"
                                     :class="{ 'bg-red-700 transform scale-105': hover }"
                                 >
-                                    <span>Lihat</span>
+                                    <span>Lihat Absensi</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
+                                <span class="text-sm text-gray-500">2 guru tidak hadir</span>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- Absensi Siswa CTA -->
+
+                    <!-- Absensi Siswa (Sekretaris) CTA Card -->
                     <div 
-                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
                         x-data="{ hover: false }"
                         @mouseenter="hover = true"
                         @mouseleave="hover = false"
                     >
-                        <div class="p-6">
-                            <div class="h-16 w-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                                </svg>
+                        <div class="relative h-40 bg-gradient-to-r from-green-500 to-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 h-full w-full text-white opacity-10" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M64,140a7.9,7.9,0,0,1-8,8H40a8,8,0,0,1,0-16H56A7.9,7.9,0,0,1,64,140Zm112,24H160a8,8,0,0,0,0,16h16a8,8,0,0,0,0-16Zm-64,0H96a8,8,0,0,0,0,16h16a8,8,0,0,0,0-16Zm-64,0H32a8,8,0,0,0,0,16H48a8,8,0,0,0,0-16Zm200-80H184V52a12,12,0,0,0-12-12H84A12,12,0,0,0,72,52V84H32a12,12,0,0,0-12,12V208a12,12,0,0,0,12,12H216a12,12,0,0,0,12-12V96A12,12,0,0,0,216,84ZM88,56h80V84H88ZM212,204H44V100H212Zm-56-44a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h16A8,8,0,0,1,164,160Zm-48-8H96a8,8,0,0,1,0,16h16a8,8,0,0,1,0-16Zm-64,0H32a8,8,0,0,1,0,16H48a8,8,0,0,1,0-16Zm112-24H160a8,8,0,0,1,0,16h16a8,8,0,0,1,0-16Zm-64,0H96a8,8,0,0,1,0,16h16a8,8,0,0,1,0-16Z"></path>
+                            </svg>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h2 class="text-2xl font-bold text-white">Absensi Siswa</h2>
+                                <p class="text-green-100">Dari Sekretaris</p>
                             </div>
-                            <h2 class="text-xl font-bold text-center text-gray-800 mb-2">Lihat Absensi Siswa dari Sekretaris</h2>
-                            
-                            <div class="flex justify-center">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Lihat data kehadiran siswa yang dilaporkan oleh sekretaris kelas.</p>
+                            <div class="flex justify-between items-center">
                                 <a 
                                     href="{{ url('absen_siswa') }}" 
-                                    class="inline-flex items-center justify-center px-5 py-3 bg-green-600 text-white font-medium rounded-lg transition-all duration-300"
+                                    class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg transition-all duration-300"
                                     :class="{ 'bg-green-700 transform scale-105': hover }"
                                 >
-                                    <span>Lihat</span>
+                                    <span>Lihat Absensi</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
+                                <span class="text-sm text-gray-500">8 kelas tercatat</span>
                             </div>
                         </div>
                     </div>
-                    <!-- Daily Attendance CTA -->
+
+                    <!-- Absensi Siswa (Guru) CTA Card -->
                     <div 
-                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1"
                         x-data="{ hover: false }"
                         @mouseenter="hover = true"
                         @mouseleave="hover = false"
                     >
-                        <div class="p-6">
-                            <div class="h-16 w-16 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                                </svg>
+                        <div class="relative h-40 bg-gradient-to-r from-yellow-500 to-yellow-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 h-full w-full text-white opacity-10" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216s78.84-24.47,91.94-39.06a15.91,15.91,0,0,0,4.06-10.65V117.87l16-8.53V152a8,8,0,0,0,16,0V104.06A8,8,0,0,0,251.76,88.94ZM208,166.29c-8.44,9.37-32.28,27.51-72,29.59V120a8,8,0,0,0-16,0v75.88c-39.72-2.08-63.56-20.22-72-29.59V122.46l72,38.4a8,8,0,0,0,7.52,0l72-38.4ZM128,144.7,37.73,96,128,47.3,218.27,96Z"></path>
+                            </svg>
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h2 class="text-2xl font-bold text-white">Absensi Siswa</h2>
+                                <p class="text-yellow-100">Dari Guru</p>
                             </div>
-                            <h2 class="text-xl font-bold text-center text-gray-800 mb-2">Lihat Absensi Siswa dari Guru</h2>
-                            
-                            <div class="flex justify-center">
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-4">Akses data absensi siswa yang diinput oleh guru mata pelajaran.</p>
+                            <div class="flex justify-between items-center">
                                 <a 
                                     href="{{ route('absensiswa_guru.index') }}" 
-                                    class="inline-flex items-center justify-center px-5 py-3 bg-yellow-600 text-white font-medium rounded-lg transition-all duration-300"
+                                    class="inline-flex items-center justify-center px-4 py-2 bg-yellow-600 text-white font-medium rounded-lg transition-all duration-300"
                                     :class="{ 'bg-yellow-700 transform scale-105': hover }"
                                 >
-                                    <span>Lihat</span>
+                                    <span>Lihat Absensi</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
+                                <span class="text-sm text-gray-500">12 laporan hari ini</span>
                             </div>
                         </div>
                     </div>

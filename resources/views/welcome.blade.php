@@ -56,7 +56,19 @@
                     </div>
                 </div>
                 
-                <a href="{{ route('login') }}" class="ml-auto px-5 py-2 bg-white text-indigo-700 rounded-full font-medium shadow-md hover:bg-indigo-50 transition duration-300 transform hover:scale-105">Masuk</a>
+                @auth
+                    @php
+                        $route = match (auth()->user()->role) {
+                            'Admin' => route('admin.index'),
+                            'Guru' => route('guru.index'),
+                            'Sekretaris' => route('siswa.index'),
+                            default => '/',
+                        };
+                    @endphp
+                    <a href="{{ $route }}" class="ml-auto px-5 py-2 bg-white text-indigo-700 rounded-full font-medium shadow-md hover:bg-indigo-50 transition duration-300 transform hover:scale-105">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="ml-auto px-5 py-2 bg-white text-indigo-700 rounded-full font-medium shadow-md hover:bg-indigo-50 transition duration-300 transform hover:scale-105">Masuk</a>
+                @endauth
             </div>
         </div>
         
@@ -67,14 +79,33 @@
                 <p class="lg:text-xl sm:text-lg text-sm text-indigo-100 mb-8 animate-fade-in opacity-0" style="animation-delay: 0.3s">Sistem Manajemen Agenda Pembelajaran Terpadu untuk Meningkatkan Kualitas Pendidikan</p>
                 
                 <div class="flex flex-wrap justify-center gap-4 animate-fade-in opacity-0" style="animation-delay: 0.6s">
-                    <a href="{{ route('login') }}" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-500 hover:to-blue-400 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2">
-                        <div class="flex items-center max-sm:text-sm">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                            </svg>
-                            Masuk ke Aplikasi
-                        </div>
-                    </a>
+                    @auth
+                        @php
+                            $route = match (auth()->user()->role) {
+                                'Admin' => route('admin.index'),
+                                'Guru' => route('guru.index'),
+                                'Sekretaris' => route('siswa.index'),
+                                default => '/',
+                            };
+                        @endphp
+                        <a href="{{ $route }}" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-500 hover:to-blue-400 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2">
+                            <div class="flex items-center max-sm:text-sm">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                </svg>
+                                Masuk ke Aplikasi
+                            </div>
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-500 hover:to-blue-400 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2">
+                            <div class="flex items-center max-sm:text-sm">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                                </svg>
+                                Masuk ke Aplikasi
+                            </div>
+                        </a>
+                    @endauth    
                 </div>
             </div>
         </div>
