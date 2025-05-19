@@ -190,27 +190,22 @@
         </div>
     </section>
 
-<!-- Optional animation helper -->
-<style>
-@keyframes fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in {
-    animation: fade-in 0.7s ease forwards;
-}
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
-</style>
+    <!-- Optional animation helper -->
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.7s ease forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+    </style>
 
-    <footer class="bg-white border-t border-gray-200 py-4 mt-auto">
-        <div class="container mx-auto px-4">
-            <p class="text-center text-gray-500 sm:text-sm text-xs">&copy; {{ date('Y') }} SMK Amaliah 1&2 Ciawi. Hak Cipta Dilindungi.</p>
-        </div>
-
-    </footer>
+    <x-footer></x-footer>
 </body>
 </html>
