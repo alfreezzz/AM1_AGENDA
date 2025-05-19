@@ -15,9 +15,7 @@ class MapelController extends Controller
     {
         $search = $request->input('search');
 
-        // Ambil data mapel dengan data guru terkait, termasuk pencarian
         $mapel = Mapel::with(['dataGurus' => function ($query) {
-            // Order guru berdasarkan kode_guru
             $query->orderByRaw("CAST(SUBSTRING_INDEX(kode_guru, '-', 1) AS UNSIGNED), SUBSTRING_INDEX(kode_guru, '-', -1)");
         }])
             ->when($search, function ($query, $search) {
@@ -26,7 +24,8 @@ class MapelController extends Controller
                         $query->where('users.name', 'like', '%' . $search . '%');
                     });
             })
-            ->get();
+            ->paginate(10)  // <- paginate di sini, 10 per halaman
+            ->appends(['search' => $search]); // agar query search tetap di URL saat pindah halaman
 
         return view('admin.mapel.index', compact('mapel'), ['title' => 'Mata Pelajaran']);
     }

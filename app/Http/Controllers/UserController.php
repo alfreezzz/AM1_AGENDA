@@ -27,7 +27,12 @@ class UserController extends Controller
             $userQuery->where('name', 'like', '%' . $search . '%');
         }
 
-        $user = $userQuery->with('kelas')->get();
+        // Paginate hasil query user, dan bawa parameter query di URL
+        $user = $userQuery->with('kelas')->paginate(10)
+            ->appends([
+                'filterRole' => $role,
+                'search' => $search,
+            ]);
 
         // Mendapatkan data kelas dan data guru dengan pengurutan kode_guru
         $kelas = Kelas::all();
@@ -36,7 +41,7 @@ class UserController extends Controller
         $data_guru = $data_guru->toArray();
         $data_guru = collect($data_guru);
 
-        return view('admin.user.index', compact('user', 'kelas'), ['title' => 'Data Pengguna']);
+        return view('admin.user.index', compact('user', 'kelas', 'data_guru'), ['title' => 'Data Pengguna']);
     }
 
     public function create()

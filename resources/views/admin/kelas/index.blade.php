@@ -83,6 +83,9 @@
             @endforeach
         </tbody>
     </table>
+    <div class="my-4 px-4">
+        {{ $kelas->links() }}
+    </div>
 </div>
 
         @endif

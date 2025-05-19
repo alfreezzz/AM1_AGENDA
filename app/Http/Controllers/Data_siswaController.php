@@ -33,7 +33,8 @@ class Data_siswaController extends Controller
             });
         }
 
-        $data_siswa = $data_siswaQuery->get();
+        $data_siswa = $data_siswaQuery->paginate(10)
+            ->appends(['search' => $search]);
 
         return view('admin.data_siswa.index', compact('data_siswa'), ['title' => 'Data Siswa']);
     }
