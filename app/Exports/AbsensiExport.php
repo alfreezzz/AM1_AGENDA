@@ -24,6 +24,7 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
     protected $isGuru;
     protected $userId;
     protected $headerRows = [];
+    protected $dataMap = [];
 
     public function __construct($kelas_id, $filter = null, $start_date = null, $end_date = null, $isGuru = false, $userId = null)
     {
@@ -68,6 +69,7 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
         $formatted = collect();
         $currentGuru = null;
         $currentMapel = null;
+        $this->dataMap = [];
 
         // Group data by guru and mapel
         $groupedData = $data->groupBy(['user.name', 'mapel.nama_mapel']);
@@ -92,22 +94,42 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
                 }
                 $formatted->push($headers);
 
+                // Track the current row for data mapping
+                $currentRow = count($formatted);
+
                 // Group attendance by student
                 $studentAttendance = $attendanceData->groupBy('data_siswa.nama_siswa');
                 $counter = 1;
 
                 foreach ($studentAttendance as $student => $records) {
                     $row = [$counter++, $student];
-
+                    
+                    // Store the starting column position for status values (column C = index 3)
+                    $colIndex = 3;
+                    
                     // Fill attendance status for each date
                     foreach ($dates as $date) {
                         $status = $records->first(function ($record) use ($date) {
                             return Carbon::parse($record->tgl)->format('d/m/Y') === $date;
                         });
-                        $row[] = $status ? strtoupper($status->keterangan) : '-';
+                        
+                        $statusValue = $status ? strtoupper($status->keterangan) : '-';
+                        $row[] = $statusValue;
+                        
+                        // Store status value for cell coloring
+                        if ($statusValue !== '-') {
+                            $this->dataMap[] = [
+                                'row' => $currentRow + 1,  // +1 because we're adding this row
+                                'col' => $colIndex,
+                                'value' => $statusValue
+                            ];
+                        }
+                        
+                        $colIndex++;
                     }
 
                     $formatted->push($row);
+                    $currentRow++;
                 }
 
                 // Add empty row after each mapel section
@@ -142,6 +164,14 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
                     'color' => ['rgb' => '000000'],
                 ],
             ],
+        ];
+
+        // Define fill colors for attendance status
+        $fillColors = [
+            'HADIR' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '92D050']], // Green
+            'IZIN'  => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFFF00']], // Yellow
+            'SAKIT' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '00B0F0']],  // Blue
+            'ALPHA' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FF0000']]  // Red 
         ];
 
         $row = 1;
@@ -202,6 +232,17 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
         if ($tableStart && $currentTableEnd) {
             $sheet->getStyle("A{$tableStart}:{$lastColumn}{$currentTableEnd}")
                 ->applyFromArray($borderStyle);
+        }
+
+        // Apply colors to attendance status cells
+        foreach ($this->dataMap as $cellData) {
+            $cellAddress = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($cellData['col']) . $cellData['row'];
+            
+            if (isset($fillColors[$cellData['value']])) {
+                $sheet->getStyle($cellAddress)->applyFromArray([
+                    'fill' => $fillColors[$cellData['value']]
+                ]);
+            }
         }
 
         // Set column widths

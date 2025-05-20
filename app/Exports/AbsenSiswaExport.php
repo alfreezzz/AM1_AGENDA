@@ -21,6 +21,7 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping, Wit
     protected $start_date;
     protected $end_date;
     protected $dates = [];
+    protected $studentAttendance = [];
     private static $counter = 1;
 
     public function __construct($kelas_id, $filter, $start_date, $end_date)
@@ -73,6 +74,9 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping, Wit
                 'attendance' => $attendance
             ];
         })->values();
+
+        // Store the student attendance data for later use in styles method
+        $this->studentAttendance = $students;
 
         return $students;
     }
@@ -159,6 +163,31 @@ class AbsenSiswaExport implements FromCollection, WithHeadings, WithMapping, Wit
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Nama Siswa');
         $sheet->setCellValue('C2', 'Keterangan');
+
+        // Define fill colors for attendance status
+        $fillColors = [
+            'HADIR' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '92D050']], // Green
+            'IZIN'  => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFFF00']], // Yellow
+            'SAKIT' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '00B0F0']], // Blue
+            'ALPHA' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FF0000']]  // Red
+        ];
+
+        // Apply colors to attendance status cells
+        foreach ($this->studentAttendance as $index => $student) {
+            $rowIndex = $index + 3; // +3 because we have 2 header rows and rows are 1-indexed
+
+            $colIndex = 3; // Start from column C
+            foreach ($this->dates as $date) {
+                $status = $student['attendance'][$date];
+                if (isset($fillColors[$status])) {
+                    $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex);
+                    $sheet->getStyle($colLetter . $rowIndex)->applyFromArray([
+                        'fill' => $fillColors[$status]
+                    ]);
+                }
+                $colIndex++;
+            }
+        }
 
         // Borders for all cells
         $sheet->getStyle('A1:' . $lastColumn . ($lastRow + 1))->applyFromArray([
