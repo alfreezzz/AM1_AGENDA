@@ -44,7 +44,8 @@ class KelasController extends Controller
             })
             ->orderByRaw("FIELD(kelas, 'X', 'XI', 'XII')")
             ->orderBy('kelas_id', 'asc')
-            ->get();
+            ->paginate(10)               // <-- paginate 10 per halaman
+            ->appends(['search' => $search]);  // <-- bawa query pencarian di URL
 
         return view('admin.kelas.index', compact('kelas', 'jurusan', 'search'))
             ->with('title', 'Data Kelas untuk Jurusan ' . $jurusan->jurusan_id);

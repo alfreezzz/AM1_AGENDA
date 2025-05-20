@@ -77,6 +77,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="my-4 px-4">
+                    {{ $mapel->links() }}
+                </div>
             </div>
         @endif
     </div>
