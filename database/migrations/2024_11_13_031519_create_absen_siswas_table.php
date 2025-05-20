@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('tgl');
             $table->foreignId('nis_id')->constrained('data_siswas')->onDelete('cascade')->onUpdate('cascade');
             $table->string('keterangan');
+            $table->string('surat_sakit')->nullable();
             $table->timestamps();
         });
     }

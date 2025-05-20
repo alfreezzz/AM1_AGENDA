@@ -96,6 +96,7 @@
                                     <th class="px-4 py-2">No</th>
                                     <th class="px-4 py-2">Nama Siswa</th>
                                     <th class="px-4 py-2">Keterangan</th>
+                                    <th class="px-4 py-2">Surat Sakit</th>
                                     @if(Auth::user()->role == 'Admin')
                                         <th class="px-4 py-2">Waktu Ditambahkan</th>
                                         <th class="px-4 py-2">Aksi</th>
@@ -107,14 +108,49 @@
                                     <tr class="hover:bg-gray-50 transition-colors duration-200">
                                         <td class="px-4 py-2 whitespace-nowrap text-sm text-center text-gray-500">{{ $loop->iteration }}</td>
                                         <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{{ $item->data_siswa->nama_siswa }}</td>
-                                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-center">
-                                            <span class="px-3 py-1 rounded-full text-sm font-medium
-                                                {{ $item->keterangan === 'Hadir' ? 'bg-green-100 text-green-800' : '' }}
-                                                {{ $item->keterangan === 'Izin' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                {{ $item->keterangan === 'Sakit' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                {{ $item->keterangan === 'Alpha' ? 'bg-red-100 text-red-800' : '' }}">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+                                                {{ $item->keterangan === 'Hadir' ? 'bg-green-100 text-green-800 border border-green-200' : '' }}
+                                                {{ $item->keterangan === 'Izin' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' : '' }}
+                                                {{ $item->keterangan === 'Sakit' ? 'bg-blue-100 text-blue-800 border border-blue-200' : '' }}
+                                                {{ $item->keterangan === 'Alpha' ? 'bg-red-100 text-red-800 border border-red-200' : '' }}">
+                                                @if ($item->keterangan === 'Hadir')
+                                                    <svg class="w-4 h-4 mr-1 text-green-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                @elseif ($item->keterangan === 'Izin')
+                                                    <svg class="w-4 h-4 mr-1 text-yellow-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                @elseif ($item->keterangan === 'Sakit')
+                                                    <svg class="w-4 h-4 mr-1 text-blue-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                @elseif ($item->keterangan === 'Alpha')
+                                                    <svg class="w-4 h-4 mr-1 text-red-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                @endif
                                                 {{ $item->keterangan }}
                                             </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            @if ($item->surat_sakit)
+                                                <a href="{{ asset('storage/' . $item->surat_sakit) }}" 
+                                                target="_blank"
+                                                class="relative group inline-block">
+                                                    <div class="overflow-hidden rounded-lg shadow-sm border border-gray-200 transition-all duration-300 group-hover:shadow-md group-hover:border-blue-300">
+                                                        <img src="{{ asset('storage/' . $item->surat_sakit) }}" 
+                                                            alt="Surat Sakit" 
+                                                            class="h-20 w-auto object-cover transition-transform duration-300 group-hover:scale-105">
+                                                    </div>
+                                                    <div class="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-10 flex items-center justify-center transition-all duration-300 rounded-lg">
+                                                        <span class="opacity-0 group-hover:opacity-100 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow transition-opacity duration-300">Lihat</span>
+                                                    </div>
+                                                </a>
+                                            @else
+                                                <span class="text-gray-400 text-sm italic">Tidak ada dokumen</span>
+                                            @endif
                                         </td>
                                         @if(Auth::user()->role == 'Admin')
                                             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-center">

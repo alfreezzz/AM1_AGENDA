@@ -126,7 +126,6 @@ class Absen_siswaController extends Controller
             return redirect()->back()->withErrors(['tgl' => 'Data tidak dapat ditambahkan pada hari Sabtu atau Minggu.']);
         }
 
-        // Validasi input
         $request->validate([
             'tgl' => [
                 'required',
@@ -138,8 +137,19 @@ class Absen_siswaController extends Controller
                 },
             ],
             'siswa' => 'required|array',
-            'siswa.*.keterangan' => 'nullable', // Allow keterangan to be nullable
         ]);
+
+        foreach ($request->siswa as $siswa_id => $data) {
+            if (isset($data['keterangan']) && $data['keterangan'] === 'Sakit') {
+                if (!isset($data['surat_sakit'])) {
+                    return redirect()->back()->withErrors(["siswa.$siswa_id.surat_sakit" => "Surat sakit wajib diunggah jika keterangan adalah Sakit."]);
+                }
+
+                $request->validate([
+                    "siswa.$siswa_id.surat_sakit" => 'image|mimes:jpeg,png,jpg,gif,svg',
+                ]);
+            }
+        }
 
         // Cek apakah sudah ada data absensi untuk tanggal ini dan kelas yang sama
         $existingRecord = Absen_siswa::where('tgl', $request->tgl)
@@ -161,13 +171,19 @@ class Absen_siswaController extends Controller
             // Tetapkan nilai default 'Hadir' jika keterangan tidak diisi
             $keterangan = $data['keterangan'] ?? 'Hadir';
 
-            // Simpan absen siswa dengan nama siswa, kelas_id, dan nis_id
+            $suratSakitPath = null;
+
+            if (isset($data['keterangan']) && $data['keterangan'] === 'Sakit' && isset($data['surat_sakit'])) {
+                $suratSakitPath = $data['surat_sakit']->store('surat_sakit', 'public');
+            }
+
             Absen_siswa::create([
                 'tgl' => $request->tgl,
                 'nama_siswa' => $siswa->nama_siswa,
                 'keterangan' => $keterangan,
                 'kelas_id' => $siswa->kelas_id,
                 'nis_id' => $siswa->id,
+                'surat_sakit' => $suratSakitPath,
             ]);
         }
 
@@ -206,18 +222,42 @@ class Absen_siswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validate the incoming request
+        // Validasi request
         $request->validate([
-            'keterangan' => 'nullable', // Allow keterangan to be nullable
+            'keterangan' => 'nullable',
+            'surat_sakit' => 'required_if:keterangan,Sakit|file|mimes:jpg,jpeg,png,pdf',
+        ], [
+            'surat_sakit.required_if' => 'Surat sakit harus diunggah jika keterangan adalah Sakit.',
+            'surat_sakit.mimes' => 'Surat sakit harus berupa file JPG, JPEG, PNG, atau PDF.',
         ]);
 
-        // Find the attendance record (absen_siswa) by its ID
+        // Temukan data absen
         $absen_siswa = Absen_siswa::findOrFail($id);
 
-        // Update the attendance record
-        //$absen_siswa->tgl = $request->tgl; // Update the date
-        $absen_siswa->keterangan = $request->keterangan; // Allow nullable keterangan
-        $absen_siswa->save(); // Save the changes
+        // Update keterangan
+        $absen_siswa->keterangan = $request->keterangan;
+
+        // Jika keterangan bukan "Sakit", hapus file lama jika ada
+        if ($request->keterangan !== 'Sakit') {
+            if ($absen_siswa->surat_sakit && \Storage::exists($absen_siswa->surat_sakit)) {
+                \Storage::delete($absen_siswa->surat_sakit);
+            }
+            $absen_siswa->surat_sakit = null;
+        }
+
+        // Jika ada file surat sakit diupload saat keterangan = "Sakit"
+        if ($request->keterangan === 'Sakit' && $request->hasFile('surat_sakit')) {
+            // Hapus file lama jika ada
+            if ($absen_siswa->surat_sakit && \Storage::exists($absen_siswa->surat_sakit)) {
+                \Storage::delete($absen_siswa->surat_sakit);
+            }
+
+            // Simpan file baru
+            $path = $request->file('surat_sakit')->store('surat_sakit', 'public');
+            $absen_siswa->surat_sakit = $path;
+        }
+
+        $absen_siswa->save();
 
         $kelas = $absen_siswa->kelas;
         return redirect('absen_siswa/kelas/' . $kelas->slug)->with('status', 'Absensi berhasil diedit');
