@@ -119,7 +119,9 @@
                                                         <th class="px-4 py-2">Nama Siswa</th>
                                                         <th class="px-4 py-2">Keterangan</th>
                                                         <th class="px-4 py-2">Surat Sakit</th>
-                                                        <th class="px-4 py-2">Waktu Ditambahkan</th>
+                                                        @if(Auth::user()->role == 'Admin')
+                                                            <th class="px-4 py-2">Waktu Ditambahkan</th>
+                                                        @endif
                                                         @if(Auth::user()->role == 'Guru')
                                                             <th class="px-4 py-2">Aksi</th>
                                                         @endif
@@ -174,9 +176,11 @@
                                                                     <span class="text-gray-400 text-sm italic">Tidak ada dokumen</span>
                                                                 @endif
                                                             </td>
-                                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-center">
-                                                                {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
-                                                            </td>
+                                                            @if(Auth::user()->role == 'Admin')
+                                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-center">
+                                                                    {{ \Carbon\Carbon::parse($item->created_at)->timezone('Asia/Jakarta')->format('d M Y H:i:s') }}
+                                                                </td>
+                                                            @endif
                                                             @if(Auth::user()->role == 'Guru')
                                                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-center text-gray-500">
                                                                    <x-btn-edit href="{{ url('absensiswa_guru/' . $item->id . '/edit') }}" ></x-btn-edit>
