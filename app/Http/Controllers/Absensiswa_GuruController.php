@@ -190,8 +190,19 @@ class Absensiswa_GuruController extends Controller
             ],
             'mapel_id' => 'required',
             'siswa' => 'required|array',
-            'siswa.*.keterangan' => 'nullable',
         ]);
+
+        foreach ($request->siswa as $siswa_id => $data) {
+            if (isset($data['keterangan']) && $data['keterangan'] === 'Sakit') {
+                if (!isset($data['surat_sakit'])) {
+                    return redirect()->back()->withErrors(["siswa.$siswa_id.surat_sakit" => "Surat sakit wajib diunggah jika keterangan adalah Sakit."]);
+                }
+
+                $request->validate([
+                    "siswa.$siswa_id.surat_sakit" => 'image|mimes:jpeg,png,jpg,gif,svg',
+                ]);
+            }
+        }
 
         foreach ($request->siswa as $siswa_id => $data) {
             // Cek apakah sudah ada absen untuk siswa ini pada hari ini
@@ -210,11 +221,18 @@ class Absensiswa_GuruController extends Controller
             // Tetapkan nilai default 'Hadir' jika keterangan tidak diisi
             $keterangan = $data['keterangan'] ?? 'Hadir';
 
+            $suratSakitPath = null;
+
+            if (isset($data['keterangan']) && $data['keterangan'] === 'Sakit' && isset($data['surat_sakit'])) {
+                $suratSakitPath = $data['surat_sakit']->store('surat_sakit', 'public');
+            }
+
             // Simpan absen siswa dengan nama siswa, kelas_id, dan nis_id
             Absensiswa_Guru::create([
                 'tgl' => $request->tgl,
                 'nama_siswa' => $siswa->nama_siswa,
                 'keterangan' => $keterangan,
+                'surat_sakit' => $suratSakitPath,
                 'kelas_id' => $siswa->kelas_id,
                 'nis_id' => $siswa->id,
                 'mapel_id' => $request->mapel_id,
@@ -282,6 +300,10 @@ class Absensiswa_GuruController extends Controller
         $request->validate([
             'mapel_id' => 'required',
             'keterangan' => 'nullable',
+            'surat_sakit' => 'required_if:keterangan,Sakit|file|mimes:jpg,jpeg,png,pdf',
+        ], [
+            'surat_sakit.required_if' => 'Surat sakit harus diunggah jika keterangan adalah Sakit.',
+            'surat_sakit.mimes' => 'Surat sakit harus berupa file JPG, JPEG, PNG, atau PDF.',
         ]);
 
         $absensi = Absensiswa_Guru::findOrFail($id);
@@ -292,6 +314,25 @@ class Absensiswa_GuruController extends Controller
         $absensi->mapel_id = $request->mapel_id;
         $absensi->keterangan = $request->keterangan;
 
+        // Jika keterangan bukan "Sakit", hapus file lama jika ada
+        if ($request->keterangan !== 'Sakit') {
+            if ($absensi->surat_sakit && \Storage::exists($absensi->surat_sakit)) {
+                \Storage::delete($absensi->surat_sakit);
+            }
+            $absensi->surat_sakit = null;
+        }
+
+        // Jika ada file surat sakit diupload saat keterangan = "Sakit"
+        if ($request->keterangan === 'Sakit' && $request->hasFile('surat_sakit')) {
+            // Hapus file lama jika ada
+            if ($absensi->surat_sakit && \Storage::exists($absensi->surat_sakit)) {
+                \Storage::delete($absensi->surat_sakit);
+            }
+
+            // Simpan file baru
+            $path = $request->file('surat_sakit')->store('surat_sakit', 'public');
+            $absensi->surat_sakit = $path;
+        }
 
         $absensi->save();
 

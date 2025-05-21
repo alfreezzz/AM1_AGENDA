@@ -4,25 +4,13 @@
     @if (Auth::user()->role == 'Sekretaris')
     <div class="max-w-6xl mx-auto px-4" x-data="{ 
         currentDate: new Date().toISOString().split('T')[0],
-        isSubmitting: false,
-        toggleAttendance(studentId) {
-            return {
-                selected: null,
-                select(value) {
-                    if (this.selected === value) {
-                        this.selected = null;
-                    } else {
-                        this.selected = value;
-                    }
-                }
-            }
-        }
+        isSubmitting: false
     }">
         <form action="{{ route('absen_siswa.store') }}" method="post" enctype="multipart/form-data" class="space-y-8" @submit="isSubmitting = true">
             @csrf
             
             <!-- Date Input Section -->
-            <div class="">
+            <div class="mb-6">
                 <label for="tgl" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Absensi</label>
                 <input 
                     type="date" 
@@ -44,45 +32,62 @@
             </div>
 
             <!-- Attendance Table Section -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
-                            <tr class="bg-gradient-to-r from-green-500 to-green-600">
-                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">No</th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Nama Siswa</th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">
+                            <tr class="bg-gradient-to-r from-green-600 to-green-700">
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider w-16">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Nama Siswa</th>
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">
                                     Keterangan
-                                    <span class="text-green-200 font-normal">(Kosongkan Jika Hadir)</span>
+                                    <span class="text-green-200 font-normal block mt-1">(Kosongkan Jika Hadir)</span>
                                 </th>
+                                <th class="px-6 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">Surat Sakit</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($data_siswa as $item)
-                            <tr class="hover:bg-gray-50 transition duration-150">
+                            <tr class="hover:bg-gray-50 transition duration-150" x-data="{ attendance: null }">
                                 <td class="px-6 py-4 text-gray-500 text-center">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-4 font-medium">{{ $item->nama_siswa }}</td>
-                                <td class="px-6 py-4" x-data="{selected: null}">
-                                    <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" value="Hadir">
-                                    <div class="flex justify-center space-x-6">
-                                        @foreach(['Sakit' => 'bg-yellow-100 text-yellow-800', 
-                                                 'Izin' => 'bg-blue-100 text-blue-800', 
-                                                 'Alpha' => 'bg-red-100 text-red-800'] as $status => $colors)
+                                <td class="px-6 py-4 font-medium text-gray-800">{{ $item->nama_siswa }}</td>
+                                <td class="px-6 py-4">
+                                    <input type="hidden" name="siswa[{{ $item->id }}][keterangan]" :value="attendance === null ? 'Hadir' : attendance">
+                                    <div class="flex justify-center space-x-4">
+                                        @foreach(['Sakit' => 'bg-yellow-100 text-yellow-800 border-yellow-300', 
+                                                 'Izin' => 'bg-blue-100 text-blue-800 border-blue-300', 
+                                                 'Alpha' => 'bg-red-100 text-red-800 border-red-300'] as $status => $colors)
                                             <label class="relative inline-flex items-center group">
                                                 <input type="radio" 
                                                        class="absolute w-0 h-0 opacity-0 peer"
-                                                       name="siswa[{{ $item->id }}][keterangan]" 
-                                                       value="{{ $status }}"
-                                                       x-model="selected"
-                                                       @click="selected = (selected === '{{ $status }}' ? null : '{{ $status }}')">
-                                                <span class="px-4 py-2 rounded-full cursor-pointer {{ $colors }} text-sm font-medium opacity-50 peer-checked:opacity-100 hover:opacity-75 transition-all duration-200"
-                                                      :class="{'opacity-100': selected === '{{ $status }}'}">
+                                                       x-model="attendance"
+                                                       :value="'{{ $status }}'"
+                                                       @click="attendance = (attendance === '{{ $status }}') ? null : '{{ $status }}'">
+                                                <span class="px-4 py-2 rounded-full cursor-pointer border {{ $colors }} text-sm font-medium opacity-60 hover:opacity-80 transition-all duration-200"
+                                                      :class="{'opacity-100 ring-2 ring-offset-2 ring-{{ explode('-', $colors)[0] }}-400': attendance === '{{ $status }}'}">
                                                     {{ $status }}
                                                 </span>
                                             </label>
                                         @endforeach
                                     </div>
-                                </td>                                
+                                </td>      
+                                <td class="px-6 py-4">
+                                    <div x-show="attendance === 'Sakit'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload Surat Sakit</label>
+                                        <input 
+                                            type="file" 
+                                            name="siswa[{{ $item->id }}][surat_sakit]" 
+                                            accept="image/*" 
+                                            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                                        >
+                                    </div>
+                                    @error("siswa.$item->id.surat_sakit")
+                                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                    @enderror
+                                    <div x-show="attendance !== 'Sakit'" class="text-gray-400 text-sm italic text-center">
+                                        -
+                                    </div>
+                                </td>                          
                             </tr>
                             @endforeach
                         </tbody>
@@ -91,7 +96,7 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="pt-4">
+            <div class="pt-6">
                 <button type="submit" 
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
                         :disabled="isSubmitting"

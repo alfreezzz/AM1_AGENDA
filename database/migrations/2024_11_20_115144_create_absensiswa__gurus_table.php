@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('mapel_id')->constrained('mapels')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('nis_id')->constrained('data_siswas')->onDelete('cascade')->onUpdate('cascade');
             $table->string('keterangan');
+            $table->string('surat_sakit')->nullable();
             $table->unsignedBigInteger('added_by')->nullable(); // Tambahkan kolom di sini
             $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade'); // Tambahkan relasi
             $table->timestamps();

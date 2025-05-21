@@ -11,7 +11,7 @@ class Absensiswa_Guru extends Model
 
     protected $table = 'absensiswa__gurus';
 
-    protected $fillable = ['tgl', 'keterangan', 'kelas_id', 'nis_id', 'mapel_id', 'added_by'];
+    protected $fillable = ['tgl', 'keterangan', 'kelas_id', 'nis_id', 'mapel_id', 'added_by', 'surat_sakit'];
 
     public function kelas()
     {

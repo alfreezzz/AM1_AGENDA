@@ -12,7 +12,7 @@ class Absen_siswa extends Model
     protected $table = 'absen_siswas';
 
     // Menambahkan properti fillable untuk memungkinkan mass assignment
-    protected $fillable = ['tgl', 'keterangan', 'kelas_id', 'nis_id'];
+    protected $fillable = ['tgl', 'keterangan', 'kelas_id', 'nis_id', 'surat_sakit'];
 
     public function kelas()
     {
