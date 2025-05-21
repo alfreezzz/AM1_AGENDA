@@ -234,6 +234,21 @@ class AbsensiExport implements FromCollection, WithHeadings, WithMapping, WithSt
                 ->applyFromArray($borderStyle);
         }
 
+        $this->dataMap = [];
+
+        for ($row = 1; $row <= $lastRow; $row++) {
+            for ($col = 3; $col <= \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($lastColumn); $col++) {
+                $cellValue = $sheet->getCellByColumnAndRow($col, $row)->getValue();
+                if (in_array($cellValue, array_keys($fillColors))) {
+                    $this->dataMap[] = [
+                        'row' => $row,
+                        'col' => $col,
+                        'value' => $cellValue
+                    ];
+                }
+            }
+        }
+
         // Apply colors to attendance status cells
         foreach ($this->dataMap as $cellData) {
             $cellAddress = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($cellData['col']) . $cellData['row'];

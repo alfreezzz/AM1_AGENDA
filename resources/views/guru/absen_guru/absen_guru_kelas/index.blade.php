@@ -157,7 +157,7 @@
                                             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <div class="flex space-x-2">
                                                    <x-btn-edit href="{{ url('absen_guru/' . $item->id . '/edit') }}" ></x-btn-edit>
-                                                   <x-btn-delete action="{{ url('absen_guru/' . $item->id) }}"></x-btn-delete>
+                                                   <!-- <x-btn-delete action="{{ url('absen_guru/' . $item->id) }}"></x-btn-delete> -->
                                                 </div>
                                             </td>
                                         @endif
