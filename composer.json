@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "doctrine/dbal": "^4.3",
         "kreait/firebase-php": "*",
         "laravel-notification-channels/webpush": "^9.0",
         "laravel/framework": "^11.9",

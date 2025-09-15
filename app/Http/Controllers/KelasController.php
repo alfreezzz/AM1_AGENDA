@@ -69,12 +69,11 @@ class KelasController extends Controller
         $request->validate([
             'kelas' => 'required',
             'thn_ajaran' => 'required',
-            'kelas_id' => 'required',
+            'kelas_id' => 'nullable',
             'jurusan' => 'required',
         ], [
             'kelas.required' => 'Kelas tidak boleh kosong',
             'thn_ajaran.required' => 'Tahun ajaran tidak boleh kosong',
-            'kelas_id.required' => 'No kelas tidak boleh kosong',
             'jurusan.required' => 'Jurusan tidak boleh kosong',
         ]);
 
@@ -117,11 +116,10 @@ class KelasController extends Controller
         $request->validate([
             'kelas' => 'required',
             'thn_ajaran' => 'required',
-            'kelas_id' => 'required',
+            'kelas_id' => 'nullable',
         ], [
             'kelas.required' => 'Kelas tidak boleh kosong',
             'thn_ajaran.required' => 'Tahun ajaran tidak boleh kosong',
-            'kelas_id.required' => 'No kelas tidak boleh kosong',
         ]);
 
         $kelas = Kelas::findOrFail($id);
