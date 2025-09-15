@@ -38,11 +38,33 @@ class Absen_guruController extends Controller
         $showAll = $request->query('show_all', false);
 
         if (auth()->user()->role === 'Guru') {
-            // Guru hanya melihat kelas yang diajarkan
-            $kelas = auth()->user()->dataKelas()
+            $user = auth()->user();
+
+            // Ambil kelas yang diajarkan oleh guru
+            $kelas = $user->dataKelas()
                 ->where('thn_ajaran', $currentAcademicYear)
                 ->with('jurusan')
                 ->get();
+
+            // Tambahkan penanda apakah kelas ini sesuai jadwal hari ini
+            foreach ($kelas as $kls) {
+                $jadwalHariIni = DB::table('jadwal_pelajarans')
+                    ->where('guru_id', $user->id)
+                    ->where('hari', $hariIni)
+                    ->where('kelas_id', $kls->id)
+                    ->where('thn_ajaran', $currentAcademicYear)
+                    ->exists();
+
+                $kls->harus_diisi = $jadwalHariIni; // true kalau ada jadwal hari ini
+
+                // ✅ Tambahan: cek apakah absen sudah diisi hari ini
+                $absenHariIni = Absen_guru::where('kelas_id', $kls->id)
+                    ->whereDate('tgl', now()->toDateString())
+                    ->where('added_by', $user->id)
+                    ->exists();
+
+                $kls->sudah_diisi = $absenHariIni; // true kalau sudah diisi
+            }
         } elseif (auth()->user()->role === 'Admin' && $showAll) {
             $kelas = Kelas::with('jurusan')->get(); // Admin dapat melihat semua kelas
         } else {
