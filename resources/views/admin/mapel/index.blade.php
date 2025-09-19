@@ -39,6 +39,7 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr class="text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-4 py-3">No</th>
                             <th class="px-4 py-3">Nama Mapel</th>
                             <th class="px-4 py-3">Nama Guru</th>
                             <th class="px-4 py-3">Aksi</th>
@@ -47,6 +48,9 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($mapel as $item)
                         <tr class="hover:bg-gray-50 transition duration-200">
+                            <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-500">
+                                {{ $loop->iteration + ($mapel->currentPage() - 1) * $mapel->perPage() }}
+                            </td>
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $item->nama_mapel }}</td>
                             <td class="px-4 py-3">
                                 <div x-data="{ openGuru: false }">

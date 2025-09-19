@@ -28,7 +28,7 @@ class UserController extends Controller
         }
 
         // Paginate hasil query user, dan bawa parameter query di URL
-        $user = $userQuery->with('kelas')->paginate(10)
+        $user = $userQuery->with('kelas')->paginate(50)
             ->appends([
                 'filterRole' => $role,
                 'search' => $search,

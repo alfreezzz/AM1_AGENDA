@@ -24,7 +24,7 @@ class MapelController extends Controller
                         $query->where('users.name', 'like', '%' . $search . '%');
                     });
             })
-            ->paginate(10)  // <- paginate di sini, 10 per halaman
+            ->paginate(50)  // <- paginate di sini, 10 per halaman
             ->appends(['search' => $search]); // agar query search tetap di URL saat pindah halaman
 
         return view('admin.mapel.index', compact('mapel'), ['title' => 'Mata Pelajaran']);

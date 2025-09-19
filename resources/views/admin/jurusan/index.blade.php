@@ -50,8 +50,8 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($jurusan as $item)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                    <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-600">
-                                        {{ $loop->iteration }}
+                                    <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-500">
+                                        {{ $loop->iteration + ($jurusan->currentPage() - 1) * $jurusan->perPage() }}
                                     </td>
                                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600 font-bold">
                                         {{ $item->jurusan_id }}

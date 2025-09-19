@@ -11,7 +11,7 @@ class JurusanController extends Controller
 
     public function index()
     {
-        $jurusan = Jurusan::paginate(10);
+        $jurusan = Jurusan::paginate(50);
         return view('admin.jurusan.index', compact('jurusan'), ['title' => 'Data Kelas & Jurusan']);
     }
 

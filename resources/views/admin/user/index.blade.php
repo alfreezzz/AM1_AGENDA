@@ -65,8 +65,8 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($user as $item)
                             <tr class="hover:bg-gray-50 transition duration-200">
-                                <td class="px-4 py-2 whitespace-nowrap text-center text-sm text-gray-500">
-                                    {{ $loop->iteration }}
+                                <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-500">
+                                    {{ $loop->iteration + ($user->currentPage() - 1) * $user->perPage() }}
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ $item->name }}

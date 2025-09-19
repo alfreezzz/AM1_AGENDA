@@ -46,7 +46,7 @@
             @foreach ($kelas as $item)
             <tr class="hover:bg-gray-50 transition-colors duration-200">
                 <td class="px-4 py-2 text-center whitespace-nowrap text-sm text-gray-500">
-                    {{ $loop->iteration }}
+                    {{ $loop->iteration + ($kelas->currentPage() - 1) * $kelas->perPage() }}
                 </td>
                 <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
                     {{ $item->kelas }} {{ $item->jurusan->jurusan_id }} {{ $item->kelas_id }}
