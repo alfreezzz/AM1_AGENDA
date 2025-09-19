@@ -16,6 +16,8 @@ class UserController extends Controller
         $role = $request->query('filterRole');
         $search = $request->query('search');
 
+        $perPage = $request->query('per_page', 25);
+
         // Query pengguna dengan filter dan pencarian
         $userQuery = User::query();
 
@@ -27,21 +29,22 @@ class UserController extends Controller
             $userQuery->where('name', 'like', '%' . $search . '%');
         }
 
-        // Paginate hasil query user, dan bawa parameter query di URL
-        $user = $userQuery->with('kelas')->paginate(50)
+        $user = $userQuery->with('kelas')->paginate($perPage)
             ->appends([
                 'filterRole' => $role,
-                'search' => $search,
+                'search'     => $search,
+                'per_page'   => $perPage,
             ]);
 
         // Mendapatkan data kelas dan data guru dengan pengurutan kode_guru
         $kelas = Kelas::all();
 
-        $data_guru = User::with('mapels')->get();
-        $data_guru = $data_guru->toArray();
+        $data_guru = User::with('mapels')->get()->toArray();
         $data_guru = collect($data_guru);
 
-        return view('admin.user.index', compact('user', 'kelas', 'data_guru'), ['title' => 'Data Pengguna']);
+        return view('admin.user.index', compact('user', 'kelas', 'data_guru'), [
+            'title' => 'Data Pengguna',
+        ]);
     }
 
     public function create()

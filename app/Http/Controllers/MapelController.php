@@ -15,6 +15,8 @@ class MapelController extends Controller
     {
         $search = $request->input('search');
 
+        $perPage = $request->input('per_page', 25);
+
         $mapel = Mapel::with(['dataGurus' => function ($query) {
             $query->orderByRaw("CAST(SUBSTRING_INDEX(kode_guru, '-', 1) AS UNSIGNED), SUBSTRING_INDEX(kode_guru, '-', -1)");
         }])
@@ -24,8 +26,11 @@ class MapelController extends Controller
                         $query->where('users.name', 'like', '%' . $search . '%');
                     });
             })
-            ->paginate(50)  // <- paginate di sini, 10 per halaman
-            ->appends(['search' => $search]); // agar query search tetap di URL saat pindah halaman
+            ->paginate($perPage)
+            ->appends([
+                'search'   => $search,
+                'per_page' => $perPage,
+            ]);
 
         return view('admin.mapel.index', compact('mapel'), ['title' => 'Mata Pelajaran']);
     }

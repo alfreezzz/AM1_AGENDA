@@ -9,11 +9,17 @@ use Illuminate\Http\Request;
 class JurusanController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $jurusan = Jurusan::paginate(50);
-        return view('admin.jurusan.index', compact('jurusan'), ['title' => 'Data Kelas & Jurusan']);
+        $perPage = $request->input('per_page', 25);
+
+        $jurusan = Jurusan::paginate($perPage);
+
+        return view('admin.jurusan.index', compact('jurusan'), [
+            'title' => 'Data Kelas & Jurusan',
+        ]);
     }
+
 
     public function create()
     {

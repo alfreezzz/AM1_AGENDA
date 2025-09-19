@@ -36,6 +36,8 @@ class KelasController extends Controller
         // Ambil nilai pencarian dari request
         $search = $request->input('search');
 
+        $perPage = $request->input('per_page', 25);
+
         // Query untuk data kelas
         $kelas = Kelas::where('jurusan_id', $jurusan->id) // Gunakan ID jurusan
             ->with('jurusan')
@@ -44,8 +46,11 @@ class KelasController extends Controller
             })
             ->orderByRaw("FIELD(kelas, 'X', 'XI', 'XII')")
             ->orderBy('kelas_id', 'asc')
-            ->paginate(50)               // <-- paginate 10 per halaman
-            ->appends(['search' => $search]);  // <-- bawa query pencarian di URL
+            ->paginate($perPage) // paginate sesuai request
+            ->appends([
+                'search'   => $search,
+                'per_page' => $perPage, // <-- bawa juga per_page di query string
+            ]);
 
         return view('admin.kelas.index', compact('kelas', 'jurusan', 'search'))
             ->with('title', 'Data Kelas untuk Jurusan ' . $jurusan->jurusan_id);
