@@ -138,7 +138,7 @@
                         </tbody>
                     </table>
                     <div class="my-4 px-4">
-                        {{ $user->links() }}
+                        {{ $user->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

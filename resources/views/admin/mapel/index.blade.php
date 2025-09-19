@@ -82,7 +82,7 @@
                     </tbody>
                 </table>
                 <div class="my-4 px-4">
-                    {{ $mapel->links() }}
+                    {{ $mapel->links('pagination::tailwind') }}
                 </div>
             </div>
         @endif

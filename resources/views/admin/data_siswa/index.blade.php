@@ -88,7 +88,7 @@
                         </tbody>
                     </table>
                     <div class="my-4 px-4">
-                        {{ $data_siswa->links() }}
+                        {{ $data_siswa->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>
