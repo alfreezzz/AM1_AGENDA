@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade')->onUpdate('cascade');
             $table->string('slug')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -87,11 +87,31 @@ class JadwalPelajaranController extends Controller
             'thn_ajaran' => 'required|string',
         ]);
 
+        $conflicts = [];
+        foreach ($validatedData['jam_ke'] as $jam) {
+            $exists = JadwalPelajaran::where('kelas_id', $validatedData['kelas_id'])
+                ->where('hari', $validatedData['hari'])
+                ->whereJsonContains('jam_ke', $jam)
+                ->exists();
+
+            if ($exists) {
+                $conflicts[] = $jam;
+            }
+        }
+
+        if (!empty($conflicts)) {
+            return back()->withErrors([
+                'jam_ke' => "Jam ke " . implode(', ', $conflicts) . " sudah terpakai di kelas ini pada hari {$validatedData['hari']}."
+            ])->withInput();
+        }
+
         $validatedData['jam_ke'] = json_encode($validatedData['jam_ke']);
         JadwalPelajaran::create($validatedData);
 
         return redirect('jadwal_pelajaran')->with('success', 'Jadwal berhasil ditambahkan');
     }
+
+
     public function getGuruByKelas($kelas_id)
     {
         $guru = DB::table('guru_kelas')
@@ -152,6 +172,25 @@ class JadwalPelajaranController extends Controller
             'guru_id' => 'required|integer',
             'thn_ajaran' => 'required|string',
         ]);
+
+        $conflicts = [];
+        foreach ($validated['jam_ke'] as $jam) {
+            $exists = JadwalPelajaran::where('kelas_id', $validated['kelas_id'])
+                ->where('hari', $validated['hari'])
+                ->whereJsonContains('jam_ke', $jam)
+                ->where('id', '!=', $id) // biar ga cek diri sendiri
+                ->exists();
+
+            if ($exists) {
+                $conflicts[] = $jam;
+            }
+        }
+
+        if (!empty($conflicts)) {
+            return back()->withErrors([
+                'jam_ke' => "Jam ke " . implode(', ', $conflicts) . " sudah terpakai di kelas ini pada hari {$validated['hari']}."
+            ])->withInput();
+        }
 
         $validated['jam_ke'] = json_encode($request->jam_ke);
         DB::table('jadwal_pelajarans')->where('id', $id)->update($validated);

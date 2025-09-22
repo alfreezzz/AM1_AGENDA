@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    
+
     public function up(): void
     {
         Schema::create('jadwal_pelajarans', function (Blueprint $table) {
@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json('jam_ke');
             $table->string('thn_ajaran');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

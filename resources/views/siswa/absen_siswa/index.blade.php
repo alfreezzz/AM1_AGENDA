@@ -56,7 +56,7 @@
                                     ($grade !== 'XI' || !Str::startsWith(trim($item->kelas), 'XII')) && 
                                     ($grade !== 'X' || (!Str::startsWith(trim($item->kelas), 'XI') && !Str::startsWith(trim($item->kelas), 'XII'))))
                                     
-                                    <a href="{{ url('agenda/kelas/' . $item->slug) }}" 
+                                    <a href="{{ url('absen_siswa/kelas/' . $item->slug) }}" 
                                         class="relative overflow-hidden transition-all duration-300 transform bg-white shadow-lg group rounded-xl hover:shadow-2xl hover:-translate-y-1">
                                         
                                         <!-- Gradient overlay untuk hover effect -->
@@ -65,21 +65,12 @@
                                         <!-- Badge untuk Jadwal Hari Ini - posisi absolute di pojok kanan atas -->
                                         @if(auth()->user()->role === 'Guru' && $item->harus_diisi)
                                             <div class="absolute z-10 top-3 right-3">
-                                                @if($item->sudah_diisi)
-                                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full shadow-lg border border-white/20">
-                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                                        </svg>
-                                                        Selesai
-                                                    </span>
-                                                @else
-                                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-lg border border-white/20 animate-pulse">
-                                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                                        </svg>
-                                                        Hari Ini
-                                                    </span>
-                                                @endif
+                                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-lg border border-white/20 animate-pulse">
+                                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    Hari Ini
+                                                </span>
                                             </div>
                                         @endif
                                         

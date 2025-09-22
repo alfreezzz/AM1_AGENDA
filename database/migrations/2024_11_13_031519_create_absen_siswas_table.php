@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('keterangan');
             $table->string('surat_sakit')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

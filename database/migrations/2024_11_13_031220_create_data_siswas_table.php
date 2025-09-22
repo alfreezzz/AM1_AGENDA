@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('gender');
             $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

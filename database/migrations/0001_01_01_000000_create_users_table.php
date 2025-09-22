@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('kode_guru')->unsigned()->nullable(); // Kelas ID bisa null
             $table->string('role'); // Menambahkan kolom role
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('sessions', function (Blueprint $table) {

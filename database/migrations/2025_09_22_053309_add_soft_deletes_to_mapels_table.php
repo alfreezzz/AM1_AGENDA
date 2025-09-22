@@ -11,12 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_gurus', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_guru');
-            $table->string('kode_guru');
-            $table->string('gender');
-            $table->timestamps();
+        Schema::table('mapels', function (Blueprint $table) {
             $table->softDeletes();
         });
     }
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_gurus');
+        Schema::table('mapels', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };
