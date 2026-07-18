@@ -18,7 +18,6 @@ return new class extends Migration
             $table->json('jam_ke');
             $table->string('thn_ajaran');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

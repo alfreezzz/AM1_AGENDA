@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('kode_guru');
             $table->string('gender');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

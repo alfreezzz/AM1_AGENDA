@@ -814,7 +814,6 @@ class ComposerStaticInit36108f4255203d87a185799cd14dc3fb
         'App\\Http\\Middleware\\ClearNotification' => __DIR__ . '/../..' . '/app/Http/Middleware/ClearNotification.php',
         'App\\Http\\Middleware\\RoleMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/RoleMiddleware.php',
         'App\\Listeners\\SendAbsensiNotification' => __DIR__ . '/../..' . '/app/Listeners/SendAbsensiNotification.php',
-        'App\\Livewire\\DataSiswaTable' => __DIR__ . '/../..' . '/app/Livewire/DataSiswaTable.php',
         'App\\Models\\Absen_guru' => __DIR__ . '/../..' . '/app/Models/Absen_guru.php',
         'App\\Models\\Absen_siswa' => __DIR__ . '/../..' . '/app/Models/Absen_siswa.php',
         'App\\Models\\Absensiswa_Guru' => __DIR__ . '/../..' . '/app/Models/Absensiswa_Guru.php',

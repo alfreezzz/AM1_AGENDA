@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('jurusan_id')->unique();
             $table->string('slug')->unique();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

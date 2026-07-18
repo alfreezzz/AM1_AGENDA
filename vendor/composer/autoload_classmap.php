@@ -30,7 +30,6 @@ return array(
     'App\\Http\\Middleware\\ClearNotification' => $baseDir . '/app/Http/Middleware/ClearNotification.php',
     'App\\Http\\Middleware\\RoleMiddleware' => $baseDir . '/app/Http/Middleware/RoleMiddleware.php',
     'App\\Listeners\\SendAbsensiNotification' => $baseDir . '/app/Listeners/SendAbsensiNotification.php',
-    'App\\Livewire\\DataSiswaTable' => $baseDir . '/app/Livewire/DataSiswaTable.php',
     'App\\Models\\Absen_guru' => $baseDir . '/app/Models/Absen_guru.php',
     'App\\Models\\Absen_siswa' => $baseDir . '/app/Models/Absen_siswa.php',
     'App\\Models\\Absensiswa_Guru' => $baseDir . '/app/Models/Absensiswa_Guru.php',

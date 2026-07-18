@@ -22,7 +22,6 @@ return new class extends Migration
             $table->unsignedBigInteger('added_by')->nullable(); // Tambahkan kolom di sini
             $table->foreign('added_by')->references('id')->on('users')->onDelete('cascade'); // Tambahkan relasi
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
